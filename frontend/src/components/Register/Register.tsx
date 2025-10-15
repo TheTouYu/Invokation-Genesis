@@ -1,27 +1,44 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Register = () => {
   return (
     <div className="register-container">
-      <h2>用户注册</h2>
-      <form>
-        <div>
-          <label htmlFor="username">用户名:</label>
-          <input type="text" id="username" name="username" />
+      <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+        <div style={{ 
+          width: '100px', 
+          height: '100px', 
+          margin: '0 auto 15px', 
+          backgroundImage: `url('/Users/developer/GolandProjects/git/cherf/Invokation-Genesis/image.png')`, 
+          backgroundSize: 'cover',
+          borderRadius: '50%',
+          border: '3px solid #ffd700'
+        }}>
+          {/* 图片注释: 注册页面圆形头像使用了指定的image.png */}
         </div>
-        <div>
-          <label htmlFor="email">邮箱:</label>
-          <input type="email" id="email" name="email" />
+        <h2>用户注册</h2>
+      </div>
+      <form style={{ textAlign: 'left', maxWidth: '400px', margin: '0 auto' }}>
+        <div style={{ marginBottom: '15px' }}>
+          <label htmlFor="username" style={{ display: 'block', marginBottom: '5px' }}>用户名:</label>
+          <input type="text" id="username" name="username" placeholder="请输入用户名" />
         </div>
-        <div>
-          <label htmlFor="password">密码:</label>
-          <input type="password" id="password" name="password" />
+        <div style={{ marginBottom: '15px' }}>
+          <label htmlFor="email" style={{ display: 'block', marginBottom: '5px' }}>邮箱:</label>
+          <input type="email" id="email" name="email" placeholder="请输入邮箱地址" />
         </div>
-        <div>
-          <label htmlFor="confirmPassword">确认密码:</label>
-          <input type="password" id="confirmPassword" name="confirmPassword" />
+        <div style={{ marginBottom: '15px' }}>
+          <label htmlFor="password" style={{ display: 'block', marginBottom: '5px' }}>密码:</label>
+          <input type="password" id="password" name="password" placeholder="请输入密码" />
         </div>
-        <button type="submit">注册</button>
+        <div style={{ marginBottom: '20px' }}>
+          <label htmlFor="confirmPassword" style={{ display: 'block', marginBottom: '5px' }}>确认密码:</label>
+          <input type="password" id="confirmPassword" name="confirmPassword" placeholder="请再次输入密码" />
+        </div>
+        <button type="submit" style={{ width: '100%', marginBottom: '15px' }}>注册</button>
+        <div style={{ textAlign: 'center' }}>
+          <p>已有账号？ <Link to="/login" style={{ color: '#ffd700' }}>立即登录</Link></p>
+        </div>
       </form>
     </div>
   );

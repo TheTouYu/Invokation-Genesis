@@ -5,37 +5,39 @@ import { Card as CardInterface, CardType, DiceType } from '../../types/game';
 const CardContainer = styled.div<{ cardType: CardType }>`
   width: 120px;
   height: 160px;
-  border: 2px solid #ccc;
-  border-radius: 8px;
+  border: 2px solid var(--border, #ccc);
+  border-radius: 12px;
   padding: 8px;
   margin: 4px;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  background: var(--card-background, linear-gradient(135deg, #2c3e50, #4a235a));
+  color: var(--text-primary, white);
   
   &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+    transform: translateY(-8px) scale(1.05);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.4);
     cursor: pointer;
   }
 
   ${(props) => {
     switch (props.cardType) {
       case CardType.CharacterCard:
-        return 'border-color: #3498db; background-color: #e1f0fa;';
+        return `border: 2px solid var(--accent, #3498db); background: var(--card-background, linear-gradient(135deg, #1a5276, #3498db));`;
       case CardType.Weapon:
-        return 'border-color: #e67e22; background-color: #fae5d3;';
+        return `border: 2px solid var(--accent-secondary, #e67e22); background: var(--card-background, linear-gradient(135deg, #ca6f1e, #e67e22));`;
       case CardType.Artifact:
-        return 'border-color: #9b59b6; background-color: #ead5f3;';
+        return `border: 2px solid var(--accent, #9b59b6); background: var(--card-background, linear-gradient(135deg, #6c3483, #9b59b6));`;
       case CardType.Talent:
-        return 'border-color: #2ecc71; background-color: #d5f5e3;';
+        return `border: 2px solid var(--accent, #2ecc71); background: var(--card-background, linear-gradient(135deg, #27ae60, #2ecc71));`;
       case CardType.Support:
-        return 'border-color: #f1c40f; background-color: #fef9e7;';
+        return `border: 2px solid var(--accent, #f1c40f); background: var(--card-background, linear-gradient(135deg, #d68910, #f1c40f)); color: var(--text-primary, #000);`;
       case CardType.Event:
-        return 'border-color: #e74c3c; background-color: #fadbd8;';
+        return `border: 2px solid var(--accent, #e74c3c); background: var(--card-background, linear-gradient(135deg, #cd6155, #e74c3c));`;
       default:
-        return 'border-color: #95a5a6; background-color: #f5f5f5;';
+        return `border: 2px solid var(--border, #95a5a6); background: var(--card-background, linear-gradient(135deg, #7f8c8d, #95a5a6));`;
     }
   }}
 `;
@@ -54,6 +56,7 @@ const CardTitle = styled.h3`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  flex-grow: 1;
 `;
 
 const CardCost = styled.div`
@@ -66,6 +69,7 @@ const CostElement = styled.div<{ color: string }>`
   height: 16px;
   border-radius: 50%;
   background-color: ${(props) => props.color};
+  border: 1px solid rgba(255, 255, 255, 0.5);
 `;
 
 const CardBody = styled.div`
@@ -77,16 +81,17 @@ const CardBody = styled.div`
 `;
 
 const CardDescription = styled.p`
-  font-size: 10px;
-  color: #333;
+  font-size: 9px;
+  color: var(--text-secondary, #ecf0f1);
   margin: 0;
   text-align: center;
+  height: 50px;
+  overflow: hidden;
 `;
 
 const CardImage = styled.div`
-  width: 60px;
-  height: 60px;
-  background-color: #ddd;
+  width: 70px;
+  height: 70px;
   border-radius: 8px;
   margin-bottom: 8px;
   display: flex;
@@ -94,6 +99,8 @@ const CardImage = styled.div`
   align-items: center;
   font-size: 12px;
   color: #666;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 `;
 
 interface CardProps {
@@ -147,11 +154,16 @@ const Card: React.FC<CardProps> = ({ card, onClick, disabled }) => {
       <CardBody>
         {card.imageUrl ? (
           <CardImage>
+            {/* 图片注释: 卡牌图片使用了从后端传来的图片URL */}
             <img src={card.imageUrl} alt={card.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           </CardImage>
         ) : (
-          <CardImage>
-            CARD IMG
+          <CardImage style={{ 
+            backgroundImage: `url('/Users/developer/GolandProjects/git/cherf/Invokation-Genesis/image.png')`, 
+            backgroundSize: 'cover',
+            backgroundPosition: 'center'
+          }}>
+            {/* 图片注释: 当没有卡牌图片时，使用指定的默认图片image.png */}
           </CardImage>
         )}
         <CardDescription>{card.description}</CardDescription>
