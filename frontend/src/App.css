@@ -206,6 +206,7 @@ nav a:hover {
   text-align: center;
 }
 
+
 .theme-option:hover {
   background: var(--accent, rgba(255, 255, 255, 0.2));
 }
