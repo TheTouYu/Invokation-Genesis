@@ -3,7 +3,7 @@
 """
 from dataclasses import dataclass, field
 from typing import List, Dict, Optional
-from models.enums import ElementType, CardType, GamePhase, SkillType, CharacterStatus, DamageType
+from models.enums import ElementType, CardType, GamePhase, SkillType, CharacterStatus, DamageType, PlayerAction
 from typing import Any
 
 
@@ -33,6 +33,15 @@ class CharacterCard(Card):
     element_type: ElementType = ElementType.NONE  # 角色元素类型
     weapon_type: str = ""  # 武器类型
     status: CharacterStatus = CharacterStatus.ALIVE  # 当前状态
+    # 角色状态和效果相关
+    element_attached: Optional[ElementType] = None  # 附着的元素
+    weapon: Optional[Card] = None  # 装备的武器
+    artifact: Optional[Card] = None  # 装备的圣遗物
+    talent: Optional[Card] = None  # 装备的天赋
+    character_statuses: List[Dict[str, Any]] = field(default_factory=list)  # 角色状态
+    is_alive: bool = True  # 是否存活
+    shield: int = 0  # 护盾值
+    survive_at_hp: bool = False  # 免于被击倒机制
     
     def __post_init__(self):
         """初始化后设置card_type为角色卡"""
@@ -57,6 +66,16 @@ class PlayerState:
     max_support_size: int = 4  # 最大支援牌数量
     max_summon_size: int = 4  # 最大召唤物数量
     round_passed: bool = False  # 本回合是否已行动
+    # 新增属性
+    has_used_elemental_tuning: bool = False  # 本回合是否已使用元素调和
+    can_change_active_character: bool = True  # 是否可以切换角色
+    dice_count_limit: int = 16  # 骰子数量上限
+    # 游戏阶段状态
+    has_reroll_option_used: bool = False  # 是否已使用重投选项
+    has_card_replace_option_used: bool = False  # 是否已使用手牌替换选项
+    # 特殊状态
+    is_quick_action: bool = True  # 是否为快速行动
+    plunge_attack_available: bool = False  # 下落攻击是否可用
 
 
 @dataclass
@@ -73,6 +92,18 @@ class GameState:
     game_log: List[str] = field(default_factory=list)  # 游戏日志
     is_game_over: bool = False  # 游戏是否结束
     winner: Optional[str] = None  # 获胜玩家ID
+    # 新增属性
+    first_player_index: int = 0  # 先手玩家索引
+    last_action_type: Optional[PlayerAction] = None  # 上一个行动类型
+    quick_action_available: bool = True  # 是否可以继续快速行动
+    action_queue: List[Dict[str, Any]] = field(default_factory=list)  # 行动队列
+    # 元素反应相关
+    damage_queue: List[Dict[str, Any]] = field(default_factory=list)  # 伤害队列
+    # 特殊阶段状态
+    has_players_drawn_initial_cards: bool = False  # 是否已抽取初始手牌
+    can_replace_initial_cards: bool = True  # 是否可以替换初始手牌
+    # 其他特殊机制
+    dice_omni_count: int = 0  # 万能元素骰数量
 
 
 @dataclass

@@ -18,6 +18,8 @@ class ElementType(Enum):
     PHYSICAL = "物理"
     OMNI = "万能"  # 万能元素骰
     NONE = "无"
+    CRYSTAL = "晶体"  # 任意元素（非物理、非万能）
+    SAME = "同色"  # 与当前角色相同元素
 
 
 class CardType(Enum):
@@ -82,6 +84,11 @@ class PlayerAction(Enum):
     SWITCH_CHARACTER = "切换角色"
     PASS = "结束回合"
     REROLL_DICE = "重投骰子"
+    ELEMENTAL_TUNING = "元素调和"
+    REPLACE_CARDS = "替换手牌"
+    # 行动类型分类
+    QUICK_ACTION = "快速行动"
+    COMBAT_ACTION = "战斗行动"
 
 
 class DamageType(Enum):
@@ -91,6 +98,7 @@ class DamageType(Enum):
     PHYSICAL = "物理伤害"
     ELEMENTAL = "元素伤害"
     HEAL = "治疗"
+    PIERCING = "穿透伤害"
 
 
 class ZoneType(Enum):

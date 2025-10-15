@@ -1,33 +1,45 @@
 # Project Summary
 
 ## Overall Goal
-Create a complete Genshin Impact Card Game (七圣召唤) implementation with backend services, authentication, game logic, and frontend components following a structured 12-week development plan.
+Implement a comprehensive Genshin Impact Card Game (七圣召唤) deck builder system with advanced filtering, search capabilities, and UI enhancements
 
 ## Key Knowledge
-- **Technology Stack**: Python Flask backend, React frontend, SQLAlchemy ORM, JWT authentication
-- **Architecture**: REST API with WebSocket support for multiplayer, modular models for game entities
-- **File Structure**: Models in /models/, API endpoints in /api/, frontend in /frontend/
-- **Database**: SQLite for development (planned to switch to PostgreSQL), with User, CardData, Deck, GameHistory models
-- **Build Commands**: `uv run python app.py` to start server, `bash test_auth.sh` for auth testing
+- **Technology Stack**: Flask backend with Python, HTML/CSS/JavaScript frontend
+- **Data Sources**: card_data/*.json files containing character, equipment, event, and support cards
+- **Core Files**: `/Users/wonder/bindolabs/ys_qs/api/deck_builder.py` contains the main deck builder functionality
+- **Build/Run**: Use `uv run python` to execute Python scripts
+- **API Endpoints**: 
+  - `/deck-builder` - main deck builder page
+  - `/api/cards/filter` - card filtering with search and filters
+  - `/api/deck/validate` - deck validation
+  - `/api/characters/filters` - character filter options
+  - `/api/cards/tags` - available card tags
 
 ## Recent Actions
-- Completed phase 1.2 of development plan: User authentication system
-- Implemented user registration, login, and profile APIs in api/auth.py
-- Created proper database models with relationships in models/db_models.py
-- Fixed Flask-SQLAlchemy circular import issues by creating an init_models_db function
-- Successfully tested authentication functionality with JWT tokens
-- Addressed several runtime errors related to database initialization
+- **Basic Deck Builder**: Implemented card selection interface with search and filtering
+- **Character Filters**: Added dedicated UI for character cards with country/element/weapon filters
+- **Action Card Filters**: Improved filtering for non-character cards with cost and multi-tag filtering
+- **UI Enhancements**: Applied modern styling with gradients, shadows, and interactive effects
+- **Multi-Keyword Search**: Implemented space-separated search that matches keywords across all card fields (name, description, skills)
+- **Expanded Character UI**: Created detailed character cards showing full skill information
+- **Tag Button UI**: Replaced checkboxes with aesthetic tag buttons that have visual feedback
+- **Backend API Improvements**: Enhanced filtering logic to support multi-keyword search and skill content matching
+- **Quick Search Buttons**: Added specialized search buttons for common terms (充能, 天赋, 舍弃, 夜魂值, 手牌)
 
 ## Current Plan
-1. [DONE] Set up database models and basic API endpoints
-2. [DONE] Implement user authentication system with JWT
-3. [DONE] Create authentication API endpoints and test them
-4. [IN PROGRESS] Resolve Flask-SQLAlchemy initialization issues
-5. [TODO] Continue with phase 1.3: Game engine core implementation
-6. [TODO] Implement WebSocket communication system for multiplayer
-7. [TODO] Create React frontend components and Redux store
+- [DONE] Implement basic deck builder functionality with card selection
+- [DONE] Add character-specific filtering (country/element/weapon)
+- [DONE] Implement action card filtering with cost and multi-tag support
+- [DONE] Add comprehensive search functionality (multi-keyword, across all fields)
+- [DONE] Improve UI design and styling for better user experience
+- [DONE] Replace checkbox tag selection with aesthetic tag buttons
+- [DONE] Ensure all search functionality works in backend API
+- [DONE] Display full character skill information in expanded UI
+- [DONE] Add quick search buttons for common terms
+- [TODO] Implement any additional requested features or UI improvements
+- [TODO] Add comprehensive testing for all functionality
 
 ---
 
 ## Summary Metadata
-**Update time**: 2025-10-14T09:37:19.652Z 
+**Update time**: 2025-10-15T07:47:47.774Z 
