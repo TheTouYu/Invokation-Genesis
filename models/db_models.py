@@ -7,13 +7,19 @@ from flask_sqlalchemy import SQLAlchemy
 
 # db 对象将在应用创建后被初始化
 db = None
+_initialized = False
 
 def init_models_db(sqlalchemy_db):
     """
     初始化模型中的 db 对象
     此函数应在应用工厂中调用，以确保模型定义使用正确的 db 实例
     """
-    global db
+    global db, _initialized
+    
+    if _initialized:
+        return  # 已经初始化过了，直接返回
+    
+    _initialized = True
     db = sqlalchemy_db
 
     # 定义模型类
@@ -48,15 +54,24 @@ def init_models_db(sqlalchemy_db):
         id = db.Column(db.String, primary_key=True, default=lambda: str(uuid.uuid4()))
         name = db.Column(db.String(100), nullable=False)  # 卡牌名称
         card_type = db.Column(db.String(50), nullable=False)  # 卡牌类型
-        sub_type = db.Column(db.String(50))  # 子类型（如武器类型、元素类型等）
+        element_type = db.Column(db.String(50))  # 元素类型
         cost = db.Column(db.JSON)  # 费用，存储为JSON格式
         description = db.Column(db.Text)  # 卡牌描述
-        character_name = db.Column(db.String(100))  # 角色名称（如果是角色牌或角色装备牌）
+        character_subtype = db.Column(db.String(100))  # 角色子类型（如果是角色牌或角色装备牌）
         rarity = db.Column(db.Integer)  # 稀有度
         version = db.Column(db.String(20))  # 卡牌版本
         created_at = db.Column(db.DateTime, default=datetime.utcnow)
         updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
         is_active = db.Column(db.Boolean, default=True)
+        
+        # 角色卡特定字段
+        health = db.Column(db.Integer)  # 生命值
+        max_health = db.Column(db.Integer)  # 最大生命值
+        energy = db.Column(db.Integer)  # 当前能量
+        max_energy = db.Column(db.Integer)  # 最大能量
+        weapon_type = db.Column(db.String(50))  # 武器类型
+        skills = db.Column(db.JSON)  # 技能列表，存储为JSON格式
+        image_url = db.Column(db.String(255))  # 卡牌图片URL
         
         def to_dict(self):
             """将模型实例转换为字典"""
@@ -64,15 +79,23 @@ def init_models_db(sqlalchemy_db):
                 'id': self.id,
                 'name': self.name,
                 'card_type': self.card_type,
-                'sub_type': self.sub_type,
+                'element_type': self.element_type,
                 'cost': self.cost,
                 'description': self.description,
-                'character_name': self.character_name,
+                'character_subtype': self.character_subtype,
                 'rarity': self.rarity,
                 'version': self.version,
                 'created_at': self.created_at.isoformat() if self.created_at else None,
                 'updated_at': self.updated_at.isoformat() if self.updated_at else None,
-                'is_active': self.is_active
+                'is_active': self.is_active,
+                # 角色卡特定字段
+                'health': self.health,
+                'max_health': self.max_health,
+                'energy': self.energy,
+                'max_energy': self.max_energy,
+                'weapon_type': self.weapon_type,
+                'skills': self.skills,
+                'image_url': self.image_url
             }
 
 
@@ -85,7 +108,7 @@ def init_models_db(sqlalchemy_db):
         id = db.Column(db.String, primary_key=True, default=lambda: str(uuid.uuid4()))
         name = db.Column(db.String(100), nullable=False)  # 卡组名称
         user_id = db.Column(db.String, db.ForeignKey('users.id'), nullable=False)  # 所属用户
-        card_ids = db.Column(db.JSON)  # 卡牌ID列表，存储为JSON格式
+        cards = db.Column(db.JSON)  # 卡牌ID列表，存储为JSON格式
         is_public = db.Column(db.Boolean, default=False)  # 是否公开
         created_at = db.Column(db.DateTime, default=datetime.utcnow)
         updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

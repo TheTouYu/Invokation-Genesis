@@ -18,6 +18,8 @@ class ElementType(Enum):
     PHYSICAL = "物理"
     OMNI = "万能"  # 万能元素骰
     NONE = "无"
+    CRYSTAL = "晶体"  # 任意元素（非物理、非万能）
+    SAME = "同色"  # 与当前角色相同元素
 
 
 class CardType(Enum):
