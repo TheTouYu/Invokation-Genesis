@@ -188,18 +188,29 @@ def create_deck():
         if not name:
             return jsonify({'error': '卡组名称不能为空'}), 400
         
-        # 验证卡牌数量是否符合规则（30张卡，最多3张角色卡）
-        if len(card_list) != 30:
-            return jsonify({'error': '卡组必须包含30张卡牌'}), 400
+        # 使用新的验证系统验证卡组
+        # 首先，通过card_ids获取完整卡牌信息
+        cards_from_db = CardData.query.filter(CardData.id.in_(card_list)).all()
         
-        # 验证角色卡数量
-        character_cards = CardData.query.filter(
-            CardData.id.in_(card_list),
-            CardData.card_type == '角色牌'
-        ).all()
+        # 将数据库中的卡牌数据转换为卡片对象用于验证
+        from utils.deck_validator import validate_deck_api
+        # 将数据库中的卡片转换为API验证函数需要的格式
+        card_data_for_validation = []
+        for card in cards_from_db:
+            card_data = {
+                'id': card.id,
+                'name': card.name,
+                'card_type': card.card_type,
+                'cost': json.loads(card.cost) if card.cost else [],
+                'description': card.description,
+                'character_subtype': card.character_subtype
+            }
+            card_data_for_validation.append(card_data)
         
-        if len(character_cards) != 3:
-            return jsonify({'error': '卡组必须包含3张角色卡'}), 400
+        # 进行详细验证
+        validation_result = validate_deck_api(card_data_for_validation)
+        if not validation_result['is_valid']:
+            return jsonify({'error': '卡组验证失败', 'details': validation_result['errors']}), 400
         
         # 创建卡组
         deck = Deck(
@@ -245,18 +256,29 @@ def update_deck(deck_id):
         description = data.get('description', deck.description)
         card_list = data.get('cards', json.loads(deck.cards) if deck.cards else [])
         
-        # 验证卡牌数量
-        if len(card_list) != 30:
-            return jsonify({'error': '卡组必须包含30张卡牌'}), 400
+        # 使用新的验证系统验证卡组
+        # 首先，通过card_ids获取完整卡牌信息
+        cards_from_db = CardData.query.filter(CardData.id.in_(card_list)).all()
         
-        # 验证角色卡数量
-        character_cards = CardData.query.filter(
-            CardData.id.in_(card_list),
-            CardData.card_type == '角色牌'
-        ).all()
+        # 将数据库中的卡牌数据转换为卡片对象用于验证
+        from utils.deck_validator import validate_deck_api
+        # 将数据库中的卡片转换为API验证函数需要的格式
+        card_data_for_validation = []
+        for card in cards_from_db:
+            card_data = {
+                'id': card.id,
+                'name': card.name,
+                'card_type': card.card_type,
+                'cost': json.loads(card.cost) if card.cost else [],
+                'description': card.description,
+                'character_subtype': card.character_subtype
+            }
+            card_data_for_validation.append(card_data)
         
-        if len(character_cards) != 3:
-            return jsonify({'error': '卡组必须包含3张角色卡'}), 400
+        # 进行详细验证
+        validation_result = validate_deck_api(card_data_for_validation)
+        if not validation_result['is_valid']:
+            return jsonify({'error': '卡组验证失败', 'details': validation_result['errors']}), 400
         
         # 更新卡组
         deck.name = name
@@ -346,3 +368,39 @@ def get_deck(deck_id):
         }), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+
+@cards_bp.route('/decks/validate', methods=['POST'])
+@jwt_required()
+def validate_deck():
+    """
+    验证卡组是否符合规则
+    """
+    try:
+        data = request.get_json()
+        card_list = data.get('cards', [])
+        
+        # 通过card_ids获取完整卡牌信息
+        cards_from_db = CardData.query.filter(CardData.id.in_(card_list)).all()
+        
+        # 将数据库中的卡牌数据转换为卡片对象用于验证
+        from utils.deck_validator import validate_deck_api
+        # 将数据库中的卡片转换为API验证函数需要的格式
+        card_data_for_validation = []
+        for card in cards_from_db:
+            card_data = {
+                'id': card.id,
+                'name': card.name,
+                'card_type': card.card_type,
+                'cost': json.loads(card.cost) if card.cost else [],
+                'description': card.description,
+                'character_subtype': card.character_subtype
+            }
+            card_data_for_validation.append(card_data)
+        
+        # 进行详细验证
+        validation_result = validate_deck_api(card_data_for_validation)
+        
+        return jsonify(validation_result), 200
+    except Exception as e:
+        return jsonify({'error': str(e), 'is_valid': False, 'errors': ['验证过程中发生错误']}), 500

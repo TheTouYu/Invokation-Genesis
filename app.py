@@ -51,9 +51,15 @@ def create_app():
         
         try:
             from api.local_game import local_game_bp
-            app.register_blueprint(local_game_bp, url_prefix='/api/local-game')
+            app.register_blueprint(local_game_bp, url_prefix='/api')
         except ImportError as e:
             logging.warning(f"Could not import local game blueprint: {e}")
+        
+        try:
+            from api.deck_builder import register_deck_builder_routes
+            register_deck_builder_routes(app)
+        except ImportError as e:
+            logging.warning(f"Could not import deck builder blueprint: {e}")
 
     # API endpoints for character data
     try:

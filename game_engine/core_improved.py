@@ -4,8 +4,6 @@
 from typing import Dict, List, Optional, Any
 from models.game_models import GameState, PlayerState, Card, CharacterCard
 from models.enums import GamePhase, PlayerAction, ElementType, CharacterStatus, DamageType
-from game_engine.element_reactions import ElementReactionSystem
-from game_engine.deck_validation import DeckValidationSystem
 import logging
 
 
@@ -16,8 +14,6 @@ class GameEngine:
     
     def __init__(self):
         self.game_states: Dict[str, GameState] = {}  # 存储游戏会话状态
-        self.element_reaction_system = ElementReactionSystem()  # 元素反应系统
-        self.deck_validation_system = DeckValidationSystem()  # 卡组验证系统
         logging.basicConfig(level=logging.INFO)
         self.logger = logging.getLogger(__name__)
 
@@ -25,18 +21,6 @@ class GameEngine:
         """
         创建新的游戏状态，包含初始手牌和初始手牌替换机制
         """
-        # 首先验证卡组
-        validation_result1 = self.deck_validation_system.validate_deck(deck1)
-        validation_result2 = self.deck_validation_system.validate_deck(deck2)
-        
-        if not validation_result1["is_valid"]:
-            self.logger.error(f"Player {player1_id} deck validation failed: {validation_result1['errors']}")
-            return None  # 返回None表示创建失败
-        
-        if not validation_result2["is_valid"]:
-            self.logger.error(f"Player {player2_id} deck validation failed: {validation_result2['errors']}")
-            return None  # 返回None表示创建失败
-        
         import random
         
         # 初始化玩家手牌（每个玩家抽5张）
@@ -286,19 +270,6 @@ class GameEngine:
         """
         处理结束阶段的逻辑
         """
-        # 处理结束阶段触发的卡牌效果（从先手牌手开始）
-        # 先处理当前先手玩家的效果
-        first_player = game_state.players[game_state.first_player_index]
-        # 这里可以处理先手玩家的结束阶段效果
-        
-        # 再处理后手玩家的效果
-        second_player_index = 1 - game_state.first_player_index
-        second_player = game_state.players[second_player_index]
-        # 这里可以处理后手玩家的结束阶段效果
-        
-        # 应用状态效果（如燃烧、绽放等持续效果）
-        self._apply_status_effects(game_state)
-        
         # 每位牌手从自己的牌堆中抓2张牌
         for player in game_state.players:
             # 抓2张牌
@@ -387,12 +358,6 @@ class GameEngine:
             self.logger.error(f"Failed to pay cost for skill {skill_id}")
             return game_state
 
-        # 检查出战角色是否被冻结、眩晕等状态影响，无法使用技能
-        for status in active_character.character_statuses:
-            if status.get('name') in ['Frozen', 'Stun']:  # 冻结、眩晕状态
-                self.logger.error(f"Character {active_character.name} is in status {status.get('name')} and cannot use skill")
-                return game_state
-
         # 记录到游戏日志
         game_state.game_log.append(f"玩家 {player.player_id} 使用了技能 {skill.get('name', skill_id)}")
         
@@ -403,12 +368,6 @@ class GameEngine:
         skill_type = skill.get('skill_type', '')
         if skill_type in ['NORMAL_ATTACK', 'ELEMENTAL_SKILL']:
             active_character.energy = min(active_character.energy + 1, active_character.max_energy)
-
-        # 检查是否为重击（当前骰子数为偶数时，普通攻击变为重击）
-        is_heavy_attack = False
-        if len(player.dice) % 2 == 0 and skill_type == 'NORMAL_ATTACK':
-            is_heavy_attack = True
-            game_state.game_log.append(f"触发重击效果！")
 
         # 处理技能效果（简化处理，实际需要实现完整的伤害计算）
         damage = skill.get('damage', 0)
@@ -423,21 +382,17 @@ class GameEngine:
             if target_character and target_character.is_alive:
                 # 应用元素附着
                 if element_application:
-                    self.element_reaction_system.apply_element_attachment(target_character, element_application)
-                
-                # 如果是重击，增加伤害
-                if is_heavy_attack:
-                    damage = damage + 1  # 重击增加1点伤害
+                    target_character.element_attached = element_application
                 
                 # 应用伤害
-                actual_damage = self._apply_damage(target_character, damage, damage_type, element_application)
+                self._apply_damage(target_character, damage, damage_type)
                 
                 # 检查是否击倒角色
                 if target_character.health <= 0:
                     self._knock_out_character(game_state, target_player_index)
                     game_state.game_log.append(f"角色 {target_character.name} 被击倒！")
                 
-                game_state.game_log.append(f"对角色 {target_character.name} 造成了 {actual_damage} 点{damage_type.value}伤害")
+                game_state.game_log.append(f"对角色 {target_character.name} 造成了 {damage} 点{damage_type.value}伤害")
         
         return game_state
 
@@ -461,16 +416,6 @@ class GameEngine:
         if not card_to_play:
             self.logger.warning(f"Card {card_id} not found in player's hand")
             return game_state
-
-        # 检查是否为秘传卡，每场对局只能使用一张
-        if '秘传' in card_to_play.name or 'Legacy' in card_to_play.name:
-            if not hasattr(player, 'used_legacy_card'):
-                player.used_legacy_card = False
-            if player.used_legacy_card:
-                self.logger.error(f"Player {player.player_id} has already used a Legacy card this game")
-                return game_state
-            # 标记已使用秘传卡
-            player.used_legacy_card = True
 
         # 检查卡牌费用
         if not self._can_pay_cost(player, card_to_play.cost):
@@ -517,57 +462,13 @@ class GameEngine:
             else:
                 # 按规则需要先选择一张支援牌弃置
                 game_state.game_log.append(f"支援区已满，无法放置新的支援牌")
-                game_state.game_log.append(f"请选择一张支援牌进行弃置")
                 # 将卡牌返回手牌
                 player.hand_cards.append(card_to_play)
                 return game_state
         elif card_to_play.card_type == 'EVENT':
             # 处理事件卡效果
             game_state.game_log.append(f"玩家 {player.player_id} 打出了事件卡 {card_to_play.name}")
-            
-            # 检查是否有复苏效果的料理，一回合内只能打出一张
-            if '复苏' in card_to_play.description:
-                if not hasattr(player, 'used_recharge_food_this_round'):
-                    player.used_recharge_food_this_round = False
-                if player.used_recharge_food_this_round:
-                    game_state.game_log.append(f"本回合已使用过复苏效果的料理，无法再次使用")
-                    # 将卡牌返回手牌
-                    player.hand_cards.append(card_to_play)
-                    return game_state
-                else:
-                    player.used_recharge_food_this_round = True
-            
-            # 处理特定的事件卡效果（如料理、治疗、护盾等）
-            if '料理' in card_to_play.description or '治疗' in card_to_play.description:
-                # 找到出战角色并治疗
-                active_character = self._get_active_character(player)
-                if active_character:
-                    # 检查角色是否处于饱腹状态（如果是料理卡）
-                    if '料理' in card_to_play.description and hasattr(active_character, 'has_full_stomach') and active_character.has_full_stomach:
-                        game_state.game_log.append(f"角色 {active_character.name} 已处于饱腹状态，料理无效")
-                    else:
-                        # 通常料理或治疗卡会恢复生命值
-                        heal_amount = 2  # 通常料理恢复2点生命值
-                        original_health = active_character.health
-                        active_character.health = min(active_character.health + heal_amount, active_character.max_health)
-                        actual_heal = active_character.health - original_health
-                        game_state.game_log.append(f"角色 {active_character.name} 恢复了 {actual_heal} 点生命值")
-                        
-                        # 标记角色进入饱腹状态（如果是料理卡）
-                        if '料理' in card_to_play.description:
-                            active_character.has_full_stomach = True
-            
-            # 处理生成护盾的事件卡
-            elif '护盾' in card_to_play.description:
-                active_character = self._get_active_character(player)
-                if active_character:
-                    # 通常护盾卡会提供1-2点护盾
-                    shield_amount = 2  # 示例值
-                    current_max_shield = getattr(active_character, 'max_shield', 2)  # 默认最大护盾为2
-                    active_character.shield = min(active_character.shield + shield_amount, current_max_shield)
-                    game_state.game_log.append(f"角色 {active_character.name} 获得了 {shield_amount} 点护盾")
-            
-            # 添加其他事件卡效果处理...
+            # 实现事件卡效果...
         else:
             # 其他类型的卡牌处理
             game_state.game_log.append(f"玩家 {player.player_id} 打出了卡牌 {card_to_play.name}")
@@ -592,11 +493,6 @@ class GameEngine:
             old_index = player.active_character_index
             old_character = player.characters[old_index] if old_index < len(player.characters) else None
             
-            # 检查是否可以切换角色
-            if not player.can_change_active_character:
-                self.logger.error(f"Player {player.player_id} cannot switch character due to status effect")
-                return game_state
-
             # 切换角色需要支付1个任意元素骰
             switch_cost = [ElementType.CRYSTAL]  # 任意元素骰
 
@@ -619,12 +515,8 @@ class GameEngine:
             # 增加行动次数
             game_state.round_actions += 1
             
-            # 标记下落攻击可用（切换角色后下一次近战攻击变为下落攻击）
-            # 这里我们用一个标志来表示
-            if not hasattr(player, 'plunge_attack_available'):
-                player.plunge_attack_available = True
-            else:
-                player.plunge_attack_available = True
+            # 如果是下落攻击（切换角色后第一次普通攻击）
+            # 这里我们标记当前玩家可以执行下落攻击，实际实现需要更复杂的逻辑
         else:
             self.logger.warning(f"Invalid character index {new_character_index}")
         
@@ -707,12 +599,6 @@ class GameEngine:
             character = player.characters[player.active_character_index]
             if character.is_alive:  # 只有存活的角色才能是出战角色
                 return character
-            else:
-                # 如果当前出战角色已死亡，查找下一个存活的角色
-                for i, char in enumerate(player.characters):
-                    if char.is_alive:
-                        player.active_character_index = i
-                        return char
         return None
 
     def _can_pay_cost(self, player: PlayerState, cost: List[Any]) -> bool:
@@ -842,118 +728,16 @@ class GameEngine:
         
         return True
 
-    def _apply_damage(self, character: CharacterCard, damage: int, damage_type: DamageType, source_element: Optional[ElementType] = None, is_physical_hit: bool = False) -> int:
+    def _apply_damage(self, character: CharacterCard, damage: int, damage_type: DamageType) -> None:
         """
-        应用伤害到角色，支持元素反应计算
-        返回实际造成的伤害
+        应用伤害到角色
         """
         if damage_type == DamageType.HEAL:
             # 治疗效果
             character.health = min(character.health + abs(damage), character.max_health)
-            return abs(damage)
         else:
-            # 检查角色是否有护盾
-            shield_absorption = min(damage, getattr(character, 'shield', 0))
-            remaining_damage = damage - shield_absorption
-            
-            # 如果有护盾，先扣除护盾
-            if shield_absorption > 0:
-                character.shield -= shield_absorption
-            
-            # 如果伤害被完全抵消，直接返回
-            if remaining_damage <= 0:
-                return 0
-            
-            # 计算元素反应
-            actual_damage = remaining_damage
-            if source_element and source_element != ElementType.PHYSICAL:
-                # 检查是否与角色身上的元素产生反应
-                reaction_type, effect_info = self.element_reaction_system.handle_element_attachment(character, source_element)
-                if reaction_type:
-                    actual_damage, reaction_effects = self.element_reaction_system.calculate_reaction_damage(remaining_damage, reaction_type)
-                    # 应用额外效果
-                    if reaction_effects.get("additional_effect") == "force_character_switch":
-                        # 超载反应强制切换角色，这里简化处理
-                        pass
-                    elif reaction_effects.get("additional_effect") == "spread_damage_to_other_enemies":
-                        # 扩散伤害反应，对其他敌人造成伤害
-                        spread_damage = reaction_effects.get("spread_damage", 0)
-                        # 这里需要实现对其他角色的伤害逻辑
-                        pass
-                    elif reaction_effects.get("additional_effect") == "create_status":
-                        # 创建状态效果，如燃烧、绽放等
-                        status_name = reaction_effects.get("status_name")
-                        duration = reaction_effects.get("duration", 1)
-                        # 添加到角色的状态列表中
-                        character.character_statuses.append({
-                            'name': status_name,
-                            'duration': duration,
-                            'effect': reaction_effects  # 保存效果参数
-                        })
-            else:
-                # 物理伤害或其他情况
-                # 特殊情况：冻结角色受到物理或火元素伤害时，伤害增加2点并移除冻结状态
-                if character.element_attached == ElementType.CRYO and (source_element == ElementType.PHYSICAL or source_element == ElementType.PYRO):
-                    actual_damage = remaining_damage + 2
-                    # 移除冻结状态，这里我们简单处理为移除元素附着
-                    self.element_reaction_system.remove_element_attachment(character)
-            
-            # 应用穿透伤害（忽略护盾和减伤）
-            if damage_type == DamageType.PIERCING:
-                character.health -= remaining_damage
-                actual_damage = remaining_damage  # Update actual damage for piercing
-            else:
-                # 应用最终伤害
-                character.health -= actual_damage
-            
-            # 检查是否触发免于被击倒机制
-            if character.health <= 0:
-                if hasattr(character, 'survive_at_hp') and character.survive_at_hp:
-                    # 角色免于被击倒，恢复到1生命值
-                    character.health = 1
-                    character.survive_at_hp = False
-                else:
-                    # 角色被击倒，但此时我们不切换角色，只是设置状态
-                    # 角色被击倒的完整处理应该在其他地方进行
-                    character.is_alive = False
-                    character.status = CharacterStatus.DEAD
-            
-            return actual_damage
-    
-    def _apply_status_effects(self, game_state: GameState) -> None:
-        """
-        应用状态效果，如燃烧烈焰、草原核等
-        """
-        for player in game_state.players:
-            for i, character in enumerate(player.characters):
-                # 处理角色身上的状态效果
-                for status in character.character_statuses[:]:  # 使用副本，因为可能要移除状态
-                    if 'effect' in status:
-                        effect = status['effect']
-                        effect_type = effect.get('additional_effect')
-                        
-                        # 持续伤害类状态（如燃烧）
-                        if effect_type == 'create_status' and effect.get('damage_per_turn', 0) > 0:
-                            damage_per_turn = effect.get('damage_per_turn', 0)
-                            # 对角色造成持续伤害
-                            self._apply_damage(character, damage_per_turn, DamageType.ELEMENTAL)
-                            
-                            # 检查是否击倒角色
-                            if character.health <= 0:
-                                self._knock_out_character(game_state, game_state.players.index(player))
-                                game_state.game_log.append(f"角色 {character.name} 因状态效果被击倒！")
-                        
-                        # 更新状态的持续时间
-                        status['duration'] -= 1
-                        
-                        # 如果持续时间为0，移除状态
-                        if status['duration'] <= 0:
-                            character.character_statuses.remove(status)
-                
-                # 处理出战角色的特殊状态
-                if i == player.active_character_index:
-                    # 这里可以处理出战角色的特殊效果
-                    pass
+            # 伤害效果
+            character.health -= damage
 
     def _knock_out_character(self, game_state: GameState, player_index: int) -> None:
         """
@@ -963,15 +747,6 @@ class GameEngine:
         active_character = self._get_active_character(player)
         
         if active_character:
-            # 检查是否有"免于被击倒"机制（例如某些角色的天赋或效果）
-            if hasattr(active_character, 'survive_at_hp') and active_character.survive_at_hp and active_character.health <= 0:
-                # 角色免于被击倒，恢复到特定生命值
-                active_character.health = 1  # 或者其他指定的生命值
-                # 移除免于被击倒标记
-                active_character.survive_at_hp = False
-                game_state.game_log.append(f"角色 {active_character.name} 免于被击倒！")
-                return  # 不执行击倒逻辑
-            
             # 标记角色死亡
             active_character.is_alive = False
             active_character.status = CharacterStatus.DEAD
