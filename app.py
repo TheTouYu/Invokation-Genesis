@@ -2,26 +2,26 @@ from flask import Flask, jsonify
 import logging
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
-from flask_sqlalchemy import SQLAlchemy
 from flask_socketio import SocketIO
 import os
 
-# 初始化扩展
-db = SQLAlchemy()
+# 导入数据库管理器
+from database_manager import db_manager
 socketio = SocketIO(cors_allowed_origins="*")
 
 def create_app():
     app = Flask(__name__)
     
-    # 配置
+    # 配置 - let database manager handle the database URI
     app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY', 'super-secret-key-for-development')
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///game.db')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     
-    # 初始化扩展
+    # 初始化数据库管理器
+    db = db_manager.init_app(app)
+    
+    # 初始化其他扩展
     CORS(app)  # 启用CORS
     jwt = JWTManager(app)
-    db.init_app(app)
     socketio.init_app(app)
     
     # 配置日志
@@ -423,10 +423,7 @@ def create_app():
 
     return app
 
-# 创建应用实例
-app = create_app()
-
+# 应用实例在运行时创建，而不是在导入时创建
 if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()  # 创建数据库表
+    app = create_app()
     socketio.run(app, host="0.0.0.0", port=5000, debug=True)
