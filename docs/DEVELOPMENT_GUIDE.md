@@ -77,9 +77,41 @@ ys_qs/
 └── README.md           # 项目主文档
 ```
 
-## Working with the Data Access Layer (DAL)
+## Working with the Data Access Layer (DAL) and Database Manager
 
-The project uses a Data Access Layer (DAL) to abstract database operations. All database interactions should go through the DAL rather than direct SQLAlchemy queries to maintain consistency and improve maintainability.
+The project uses a Data Access Layer (DAL) combined with a centralized Database Manager to abstract database operations. All database interactions should go through the DAL rather than direct SQLAlchemy queries to maintain consistency and improve maintainability.
+
+### Database Manager Pattern
+
+The project uses a `DatabaseManager` class in `database_manager.py` to centralize database connections and avoid circular imports. To access the database instance, use:
+
+```python
+from database_manager import db_manager
+db = db_manager.get_db()
+```
+
+### Model Container Pattern
+
+Database models are managed through a `ModelContainer` in `models/db_models.py` to avoid circular imports. Models can be accessed via:
+
+```python
+from models.db_models import model_container
+User = model_container.User
+CardData = model_container.CardData
+Deck = model_container.Deck
+GameHistory = model_container.GameHistory
+```
+
+In API files, use the lazy loading pattern:
+
+```python
+def get_models():
+    from models.db_models import model_container
+    return model_container.User, model_container.CardData, model_container.Deck
+
+# Usage in functions
+User, CardData, Deck = get_models()
+```
 
 ### Using the DAL in Your Code
 
@@ -111,6 +143,7 @@ games = db_dal.game_history.get_games_by_user(user_id)
 2. **Handle errors appropriately**: DAL methods will return appropriate success/failure indicators or raise exceptions
 3. **Use transactions when needed**: The DAL handles transaction management internally for individual operations, but for complex operations spanning multiple DAL calls, consider wrapping them in a transaction
 4. **Keep business logic separate**: The DAL should only handle data access; business logic should remain in service layers
+5. **Use database manager for direct DB access**: When you need direct database access (not through DAL), use `db_manager.get_db()` instead of importing `db` directly
 
 ### Creating New DAL Methods
 
@@ -120,6 +153,7 @@ When adding new functionality that requires database access:
 2. Follow the existing pattern with proper error handling and logging
 3. Use type hints and docstrings for consistency
 4. Test the new DAL method separately
+5. Update the model container if new models are added
 
 ## 编码规范
 
