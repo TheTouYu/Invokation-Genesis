@@ -54,24 +54,15 @@ def init_models_db(sqlalchemy_db):
         id = db.Column(db.String, primary_key=True, default=lambda: str(uuid.uuid4()))
         name = db.Column(db.String(100), nullable=False, index=True)  # 卡牌名称
         card_type = db.Column(db.String(50), nullable=False, index=True)  # 卡牌类型
-        sub_type = db.Column(db.String(50), index=True)  # 子类型（如武器类型、元素类型等）
+        character_subtype = db.Column(db.String(50), index=True)  # 子类型（如武器类型、元素类型等）
+        element_type = db.Column(db.String(50), index=True)  # 元素类型
         cost = db.Column(db.JSON)  # 费用，存储为JSON格式
         description = db.Column(db.Text)  # 卡牌描述
-        character_name = db.Column(db.String(100), index=True)  # 角色名称（如果是角色牌或角色装备牌）
         rarity = db.Column(db.Integer, index=True)  # 稀有度
         version = db.Column(db.String(20))  # 卡牌版本
         created_at = db.Column(db.DateTime, default=datetime.utcnow, index=True)
         updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
         is_active = db.Column(db.Boolean, default=True, index=True)
-        
-        # 角色卡特定字段
-        health = db.Column(db.Integer)  # 生命值
-        max_health = db.Column(db.Integer)  # 最大生命值
-        energy = db.Column(db.Integer)  # 当前能量
-        max_energy = db.Column(db.Integer)  # 最大能量
-        weapon_type = db.Column(db.String(50))  # 武器类型
-        skills = db.Column(db.JSON)  # 技能列表，存储为JSON格式
-        image_url = db.Column(db.String(255))  # 卡牌图片URL
         
         def to_dict(self):
             """将模型实例转换为字典"""
@@ -108,7 +99,7 @@ def init_models_db(sqlalchemy_db):
         id = db.Column(db.String, primary_key=True, default=lambda: str(uuid.uuid4()))
         name = db.Column(db.String(100), nullable=False)  # 卡组名称
         user_id = db.Column(db.String, db.ForeignKey('users.id'), nullable=False, index=True)  # 所属用户
-        card_ids = db.Column(db.JSON)  # 卡牌ID列表，存储为JSON格式
+        cards = db.Column(db.JSON)  # 卡牌ID列表，存储为JSON格式
         is_public = db.Column(db.Boolean, default=False, index=True)  # 是否公开
         created_at = db.Column(db.DateTime, default=datetime.utcnow, index=True)
         updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
