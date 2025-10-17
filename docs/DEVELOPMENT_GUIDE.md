@@ -41,6 +41,8 @@ python import_card_data.py
 bash start_dev.sh
 ```
 
+**重要说明**: `run_dev_server.py`中的数据库初始化方式已更新，现在使用`database_manager.create_tables()`方法替代原来的`db.create_all()`方法。这种方式更加符合项目的架构设计，通过中央化的数据库管理器来处理数据库初始化，确保了一致性和可维护性。
+
 ## 项目结构
 
 ```

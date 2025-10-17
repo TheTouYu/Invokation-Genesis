@@ -82,7 +82,7 @@ API使用标准的HTTP状态码和JSON格式的错误响应：
 - 错误 (401): `{"message": "Invalid credentials."}`
 
 **内部实现**
-此端点使用 `db_dal.users.get_user_by_username()` 方法验证用户凭据，通过数据访问层确保安全的用户认证。
+此端点使用 `db_dal.users.get_user_by_username()` 方法验证用户凭据，通过数据访问层确保安全的用户认证。数据库初始化通过`database_manager.create_tables()`方法完成，确保了数据库的一致性和可维护性。
 
 ### GET /api/auth/profile
 获取当前认证用户的信息（使用DAL层处理数据库操作）。
@@ -98,7 +98,7 @@ API使用标准的HTTP状态码和JSON格式的错误响应：
 - 错误 (404): `{"message": "User not found."}`
 
 **内部实现**
-此端点使用 `db_dal.users.get_user_by_id()` 方法获取用户信息，通过数据访问层确保安全的数据访问。
+此端点使用 `db_dal.users.get_user_by_id()` 方法获取用户信息，通过数据访问层确保安全的数据访问。数据库初始化通过`database_manager.create_tables()`方法完成，确保了数据库的一致性和可维护性。
 
 ## 卡牌系统接口
 
@@ -185,7 +185,7 @@ API使用标准的HTTP状态码和JSON格式的错误响应：
 - 成功 (200): 返回卡组列表
 
 **内部实现**
-此端点使用 `db_dal.decks.get_decks_by_user()` 方法获取用户卡组列表，通过数据访问层确保安全的数据访问和权限控制。
+此端点使用 `db_dal.decks.get_decks_by_user()` 方法获取用户卡组列表，通过数据访问层确保安全的数据访问和权限控制。数据库初始化通过`database_manager.create_tables()`方法完成，确保了数据库的一致性和可维护性。
 
 ### POST /api/decks
 创建一个新的卡组（使用DAL层处理数据库操作）。
@@ -203,7 +203,7 @@ API使用标准的HTTP状态码和JSON格式的错误响应：
 - 错误 (400): `{"error": "卡组验证失败", "details": ["错误详情"]}`
 
 **内部实现**
-此端点使用 `db_dal.decks.create_deck()` 方法执行创建操作，通过数据访问层确保数据一致性并提供错误处理。
+此端点使用 `db_dal.decks.create_deck()` 方法执行创建操作，通过数据访问层确保数据一致性并提供错误处理。数据库初始化通过`database_manager.create_tables()`方法完成，确保了数据库的一致性和可维护性。
 
 ### PUT /api/decks/{deck_id}
 更新指定ID的卡组（使用DAL层处理数据库操作）。
@@ -226,7 +226,7 @@ API使用标准的HTTP状态码和JSON格式的错误响应：
 - 错误 (400): `{"error": "卡组验证失败", "details": ["错误详情"]}`
 
 **内部实现**
-此端点使用 `db_dal.decks.update_deck()` 方法执行更新操作，通过数据访问层确保数据一致性并提供错误处理。
+此端点使用 `db_dal.decks.update_deck()` 方法执行更新操作，通过数据访问层确保数据一致性并提供错误处理。数据库初始化通过`database_manager.create_tables()`方法完成，确保了数据库的一致性和可维护性。
 
 ### DELETE /api/decks/{deck_id}
 删除指定ID的卡组（使用DAL层处理数据库操作）。
@@ -241,7 +241,7 @@ API使用标准的HTTP状态码和JSON格式的错误响应：
 - 错误 (404): `{"error": "卡组不存在或无权限访问"}`
 
 **内部实现**
-此端点使用 `db_dal.decks.delete_deck()` 方法执行删除操作，通过数据访问层确保数据一致性和事务处理。
+此端点使用 `db_dal.decks.delete_deck()` 方法执行删除操作，通过数据访问层确保数据一致性和事务处理。数据库初始化通过`database_manager.create_tables()`方法完成，确保了数据库的一致性和可维护性。
 
 ### GET /api/decks/{deck_id}
 获取指定ID的卡组详细信息（使用DAL层处理数据库操作）。
@@ -256,7 +256,7 @@ API使用标准的HTTP状态码和JSON格式的错误响应：
 - 错误 (404): `{"error": "卡组不存在或无权限访问"}`
 
 **内部实现**
-此端点使用 `db_dal.decks.get_deck_by_id()` 方法获取卡组数据，通过数据访问层确保安全的数据访问。
+此端点使用 `db_dal.decks.get_deck_by_id()` 方法获取卡组数据，通过数据访问层确保安全的数据访问。数据库初始化通过`database_manager.create_tables()`方法完成，确保了数据库的一致性和可维护性。
 
 ### POST /api/decks/validate
 验证卡组是否符合游戏规则。
