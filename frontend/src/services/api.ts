@@ -9,6 +9,18 @@ const api = axios.create({
   },
 });
 
+// 添加类型定义
+interface RegisterUserData {
+  username: string;
+  password: string;
+  email?: string;
+}
+
+interface LoginUserData {
+  username: string;
+  password: string;
+}
+
 export const apiService = {
   // Cards API
   getCharacters: () => api.get('/characters'),
@@ -22,9 +34,9 @@ export const apiService = {
     api.post(`/local-game/${sessionId}/action`, action),
 
   // Authentication API
-  register: (userData: { username: string; password: string }) => 
+  register: (userData: RegisterUserData) => 
     api.post('/auth/register', userData),
-  login: (userData: { username: string; password: string }) => 
+  login: (userData: LoginUserData) => 
     api.post('/auth/login', userData),
   getProfile: () => api.get('/auth/profile'),
 

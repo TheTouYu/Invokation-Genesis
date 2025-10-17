@@ -96,6 +96,7 @@ python app.py
 # 启动前端开发服务器（在frontend目录下）
 cd frontend
 npm start
+## 前端代码修改之后，调用npm build |head -n 50验证是否编译通过
 ```
 
 ## 开发规范
@@ -130,11 +131,13 @@ npm start
 ## API 接口
 
 ### 认证相关
+
 - POST `/api/auth/register` - 用户注册
 - POST `/api/auth/login` - 用户登录
 - GET `/api/auth/profile` - 获取用户信息
 
 ### 游戏相关
+
 - GET `/api/characters` - 获取角色卡牌数据
 - GET `/api/equipments` - 获取装备卡牌数据
 - GET `/api/supports` - 获取支援卡牌数据
@@ -149,6 +152,7 @@ npm start
 ## 游戏规则
 
 根据项目中的核心规则文档，游戏包括以下主要机制：
+
 - 8个骰子投掷阶段
 - 行动阶段中的战斗行动和快速行动
 - 角色切换机制
