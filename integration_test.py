@@ -24,7 +24,14 @@ def generate_test_token():
 
     with app.app_context():
         # 导入模型并创建测试用户
-        from models.db_models import User, db
+        from models.db_models import User
+from database_manager import db_manager
+
+# 为兼容性，创建一个db引用
+def get_db():
+    return db_manager.get_db()
+
+db = get_db()
 
         # 检查是否已存在测试用户
         existing_user = User.query.filter_by(username="integration_test_user").first()

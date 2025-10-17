@@ -272,7 +272,7 @@ def import_all_cards():
 def update_cards_from_source():
     """便捷函数：从源数据更新卡牌数据"""
     from app import create_app
-    from database_manager import db_manager; db = db_manager.get_db()
+    from models.db_models import db
     app = create_app()
     
     with app.app_context():

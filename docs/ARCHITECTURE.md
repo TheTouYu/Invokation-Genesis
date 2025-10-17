@@ -111,8 +111,9 @@ DAL组件结构：
 ### 4. 数据访问模块 (`database_manager.py` 和 `dal.py`)
 实现数据访问层和数据库管理功能。
 
-- **database_manager.py**: 数据库连接管理器，处理数据库初始化和连接池
+- **database_manager.py**: 数据库连接管理器，处理数据库初始化、连接池和集中化数据库访问。提供 `db_manager.get_db()` 方法获取数据库实例，避免循环导入问题。
 - **dal.py**: 数据访问层实现，提供各种数据访问对象（DAL）
+- **models/db_models.py**: 使用 ModelContainer 模式管理数据库模型，通过 `model_container` 实例访问模型类，支持延迟初始化和避免循环导入。
 
 ### 5. 卡牌数据模块 (`card_data/`)
 存储所有卡牌的JSON数据文件。
@@ -182,26 +183,50 @@ DAL组件结构：
 - **password_hash**: VARCHAR
 - **email**: VARCHAR
 - **created_at**: DATETIME
+- **updated_at**: DATETIME
+- **is_active**: BOOLEAN
+
+#### card_data 表
+- **id**: UUID (主键)
+- **name**: VARCHAR
+- **card_type**: VARCHAR
+- **character_subtype**: VARCHAR
+- **element_type**: VARCHAR
+- **cost**: JSON
+- **description**: TEXT
+- **rarity**: INTEGER
+- **version**: VARCHAR
+- **created_at**: DATETIME
+- **updated_at**: DATETIME
+- **is_active**: BOOLEAN
+- **health**: INTEGER (角色卡专用)
+- **max_health**: INTEGER (角色卡专用)
+- **energy**: INTEGER (角色卡专用)
+- **max_energy**: INTEGER (角色卡专用)
+- **weapon_type**: VARCHAR (角色卡专用)
+- **skills**: JSON (角色卡专用)
+- **image_url**: VARCHAR (角色卡专用)
 
 #### decks 表
 - **id**: UUID (主键)
 - **user_id**: UUID (外键)
 - **name**: VARCHAR
 - **description**: TEXT
+- **cards**: JSON (卡牌ID列表)
+- **is_public**: BOOLEAN
 - **created_at**: DATETIME
 - **updated_at**: DATETIME
 
-#### deck_cards 表 (多对多关联表)
-- **deck_id**: UUID (外键)
-- **card_id**: VARCHAR (外键)
-- **quantity**: INTEGER
-
-#### game_sessions 表
+#### game_histories 表
 - **id**: UUID (主键)
-- **user_id**: UUID (外键)
-- **deck_id**: UUID (外键)
-- **opponent_type**: VARCHAR
-- **game_state**: JSON
+- **player1_id**: UUID (外键)
+- **player2_id**: UUID (外键)
+- **winner_id**: UUID (外键)
+- **deck1_id**: UUID (外键)
+- **deck2_id**: UUID (外键)
+- **game_data**: JSON
+- **game_result**: VARCHAR
+- **duration**: INTEGER
 - **created_at**: DATETIME
 - **updated_at**: DATETIME
 

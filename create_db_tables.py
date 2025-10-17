@@ -2,7 +2,13 @@
 手动创建数据库表
 """
 from app import create_app
-from models.db_models import db
+from database_manager import db_manager
+
+# 为兼容性，创建一个db引用
+def get_db():
+    return db_manager.get_db()
+
+db = get_db()
 from sqlalchemy import text
 
 def create_tables_manually():

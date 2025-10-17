@@ -15,11 +15,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy()
 db.init_app(app)
 
-# 重置初始化标记
-from models.db_models import _initialized, init_models_db
-_initialized = False  # 手动重置标记
-
-# 重新初始化模型
+# 初始化模型
+from models.db_models import init_models_db
 init_models_db(db)
 
 def verify_and_fix_schema():

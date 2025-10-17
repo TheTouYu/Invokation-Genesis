@@ -20,7 +20,13 @@ def main():
     
     # Initialize database tables
     with app.app_context():
-        from models.db_models import db
+        from database_manager import db_manager
+
+# 为兼容性，创建一个db引用
+def get_db():
+    return db_manager.get_db()
+
+db = get_db()
         db.create_all()
     
     # Run the server

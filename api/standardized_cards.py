@@ -7,7 +7,6 @@ import json
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from dal import db_dal
-from models.db_models import CardData, Deck
 from sqlalchemy import or_, and_
 from typing import Dict, Any, List
 import random
@@ -15,8 +14,12 @@ from utils.card_data_processor import load_card_data_from_db
 
 cards_bp = Blueprint("standardized_cards", __name__)
 
+def get_models():
+    from models.db_models import model_container
+    return model_container.CardData, model_container.Deck
 
-def extract_card_info(card: CardData) -> Dict[str, Any]:
+
+def extract_card_info(card) -> Dict[str, Any]:
     """
     从CardData对象中提取标准化的卡牌信息
     统一处理所有卡牌类型的数据格式
@@ -268,6 +271,7 @@ def get_all_cards():
         )  # 限制最大每页数量
 
         # 构建查询
+        CardData, Deck = get_models()
         query = CardData.query.filter(CardData.is_active == True)
 
         # 应用过滤条件
@@ -301,6 +305,7 @@ def get_card_by_id(card_id):
     根据ID获取特定卡牌信息
     """
     try:
+        CardData, Deck = get_models()
         card = CardData.query.filter_by(id=card_id, is_active=True).first()
         if not card:
             return jsonify({"error": "卡牌不存在"}), 404
@@ -318,6 +323,7 @@ def get_card_types():
     获取所有卡牌类型列表
     """
     try:
+        CardData, Deck = get_models()
         types = (
             db.session.query(CardData.card_type)
             .filter(CardData.is_active == True)
@@ -337,6 +343,7 @@ def get_card_elements():
     获取所有元素类型列表
     """
     try:
+        CardData, Deck = get_models()
         elements = (
             db.session.query(CardData.element_type)
             .filter(CardData.is_active == True)
@@ -356,6 +363,7 @@ def get_card_countries():
     获取所有国家列表
     """
     try:
+        CardData, Deck = get_models()
         # 从weapon_type和character_subtype字段中提取国家信息
         cards = CardData.query.filter(CardData.is_active == True).all()
         countries = set()
@@ -397,6 +405,7 @@ def get_weapon_types():
     获取所有武器类型列表
     """
     try:
+        CardData, Deck = get_models()
         # 从weapon_type字段中提取武器类型
         weapon_types = (
             db.session.query(CardData.weapon_type)
@@ -502,6 +511,7 @@ def get_random_cards():
     - count: 获取数量 (默认 1)
     """
     try:
+        CardData, Deck = get_models()
         # 获取查询参数
         filters = {
             "type": request.args.get("type"),
@@ -668,6 +678,7 @@ def filter_cards_endpoint():
     此接口兼容原有的deck_builder过滤方式，但使用数据库作为数据源
     """
     try:
+        CardData, Deck = get_models()
         # 获取查询参数 (兼容原有接口参数)
         filters = {
             "type": request.args.get("type"),
@@ -828,6 +839,7 @@ def create_deck():
     创建新的卡组
     """
     try:
+        CardData, Deck = get_models()
         current_user_id = get_jwt_identity()
         data = request.get_json()
 
@@ -929,6 +941,7 @@ def update_deck(deck_id):
     更新卡组
     """
     try:
+        CardData, Deck = get_models()
         current_user_id = get_jwt_identity()
         data = request.get_json()
 
@@ -1054,6 +1067,7 @@ def get_deck_by_id(deck_id):
     获取特定卡组详情
     """
     try:
+        CardData, Deck = get_models()
         current_user_id = get_jwt_identity()
 
         deck = db_dal.decks.get_deck_by_id(deck_id)
@@ -1233,6 +1247,7 @@ def validate_deck():
     验证卡组是否符合规则
     """
     try:
+        CardData, Deck = get_models()
         data = request.get_json()
         card_list = data.get("cards", [])
 

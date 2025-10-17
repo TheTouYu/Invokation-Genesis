@@ -30,11 +30,21 @@ def create_app():
     # 在应用上下文中导入模型和蓝图
     with app.app_context():
         # 初始化模型中的 db 实例（如果尚未初始化）
-        from models.db_models import init_models_db
+        from models.db_models import init_models_db, model_container
         init_models_db(db)
 
+        # 更新模块中的模型引用
+        from models import db_models
+        db_models.User = model_container.User
+        db_models.CardData = model_container.CardData
+        db_models.Deck = model_container.Deck
+        db_models.GameHistory = model_container.GameHistory
+
         # 导入模型以确保它们被注册到 SQLAlchemy
-        from models.db_models import User, CardData, Deck, GameHistory
+        User = model_container.User
+        CardData = model_container.CardData
+        Deck = model_container.Deck
+        GameHistory = model_container.GameHistory
         
         # 导入并注册蓝图
         try:

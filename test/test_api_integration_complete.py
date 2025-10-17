@@ -5,7 +5,14 @@ API集成测试
 import pytest
 import json
 from app import create_app
-from models.db_models import db, CardData, User, Deck
+from database_manager import db_manager
+from models.db_models import CardData, User, Deck
+
+# 为兼容性，创建一个db引用
+def get_db():
+    return db_manager.get_db()
+
+db = get_db()
 from werkzeug.security import generate_password_hash
 from flask_jwt_extended import create_access_token
 
