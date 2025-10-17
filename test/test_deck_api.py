@@ -6,7 +6,7 @@ import pytest
 import json
 import uuid
 from app import create_app
-from models.db_models import db, CardData, User, Deck
+from models.db_models import db, CardData, User, Deck, init_models_db
 from werkzeug.security import generate_password_hash
 from flask_jwt_extended import create_access_token
 
@@ -20,6 +20,8 @@ def client():
     app.config['JWT_SECRET_KEY'] = 'test-secret-key'
 
     with app.app_context():
+        # 初始化模型
+        init_models_db(db)
         db.create_all()
 
     with app.test_client() as client:

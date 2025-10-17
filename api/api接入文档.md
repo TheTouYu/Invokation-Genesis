@@ -998,6 +998,74 @@
     9     ]
    10   }'
 
+  7. 卡组验证 - /api/deck/validate (POST)
+  卡组构建器专用验证端点，验证一个卡组组成是否符合游戏规则。
+
+  请求信息
+   - 方法: POST
+   - URL: /api/deck/validate
+   - 认证: 需要在请求头中包含JWT令牌
+
+  请求体参数
+
+  ┌─────────────┬──────────┬──────┬─────────────────────────────────────┐
+  │ 参数名      │ 类型     │ 必需 │ 描述                                │
+  ├─────────────┼──────────┼──────┼─────────────────────────────────────┤
+  │ characters  │ string[] │ 否   │ 角色卡ID列表                        │
+  │ cards       │ string[] │ 否   │ 卡牌ID列表                          │
+  │ deck_name   │ string   │ 否   │ 卡组名称                            │
+  └─────────────┴──────────┴──────┴─────────────────────────────────────┘
+
+
+  响应
+   - 成功响应 (200):
+
+    1   {
+    2     "valid": true,
+    3     "rules": {
+    4       "character_count": true,
+    5       "character_count_msg": "角色数量符合要求",
+    6       "deck_size": true,
+    7       "deck_size_msg": "卡组大小符合要求",
+    8       "character_limit": true,
+    9       "character_limit_msg": "角色限制符合要求",
+   10       "card_limit": true,
+   11       "card_limit_msg": "卡牌限制符合要求",
+   12       "elemental_synergy": true,
+   13       "elemental_synergy_msg": "元素协同符合要求"
+   14     },
+   15     "errors": [],
+   16     "suggestions": []
+   17   }
+
+   - 错误响应 (400):
+
+    1   {
+    2     "valid": false,
+    3     "rules": {},
+    4     "errors": ["验证过程中出现错误: 错误详情"],
+    5     "suggestions": []
+    6   }
+
+  示例请求
+
+    1 curl -X POST "http://localhost:5000/api/deck/validate" \
+    2   -H "Content-Type: application/json" \
+    3   -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." \
+    4   -d '{
+    5     "characters": [
+    6       "char-id-1",
+    7       "char-id-2",
+    8       "char-id-3"
+    9     ],
+   10     "cards": [
+   11       "card-id-1",
+   12       "card-id-2",
+   13       "card-id-3"
+   14     ],
+   15     "deck_name": "测试卡组"
+   16   }'
+
   游戏接口
 
   1. 开始本地游戏 - /api/local-game/start (POST)
