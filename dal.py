@@ -5,19 +5,26 @@ This module provides a centralized interface for all database operations
 
 from typing import List, Optional, Dict, Any
 from database_manager import db_manager
-from models.db_models import User, CardData, Deck, GameHistory
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy import and_, or_, desc
 import logging
+
+
+# Dynamically import models after db initialization
+def _get_models():
+    """Get models after database initialization"""
+    from models.db_models import User, CardData, Deck, GameHistory
+    return User, CardData, Deck, GameHistory
 
 
 class UserDAL:
     """Data Access Layer for User operations"""
     
     @staticmethod
-    def create_user(username: str, email: str, password_hash: str) -> User:
+    def create_user(username: str, email: str, password_hash: str) -> object:
         """Create a new user"""
         try:
+            User, CardData, Deck, GameHistory = _get_models()
             user = User(
                 username=username,
                 email=email,
@@ -32,27 +39,30 @@ class UserDAL:
             raise
     
     @staticmethod
-    def get_user_by_id(user_id: str) -> Optional[User]:
+    def get_user_by_id(user_id: str) -> Optional[object]:
         """Get user by ID"""
         try:
+            User, CardData, Deck, GameHistory = _get_models()
             return User.query.filter_by(id=user_id).first()
         except SQLAlchemyError as e:
             logging.error(f"Error getting user by ID: {e}")
             return None
     
     @staticmethod
-    def get_user_by_username(username: str) -> Optional[User]:
+    def get_user_by_username(username: str) -> Optional[object]:
         """Get user by username"""
         try:
+            User, CardData, Deck, GameHistory = _get_models()
             return User.query.filter_by(username=username).first()
         except SQLAlchemyError as e:
             logging.error(f"Error getting user by username: {e}")
             return None
     
     @staticmethod
-    def get_user_by_email(email: str) -> Optional[User]:
+    def get_user_by_email(email: str) -> Optional[object]:
         """Get user by email"""
         try:
+            User, CardData, Deck, GameHistory = _get_models()
             return User.query.filter_by(email=email).first()
         except SQLAlchemyError as e:
             logging.error(f"Error getting user by email: {e}")
@@ -62,6 +72,7 @@ class UserDAL:
     def update_user(user_id: str, **kwargs) -> bool:
         """Update user fields"""
         try:
+            User, CardData, Deck, GameHistory = _get_models()
             user = User.query.filter_by(id=user_id).first()
             if not user:
                 return False
@@ -81,6 +92,7 @@ class UserDAL:
     def delete_user(user_id: str) -> bool:
         """Delete user"""
         try:
+            User, CardData, Deck, GameHistory = _get_models()
             user = User.query.filter_by(id=user_id).first()
             if not user:
                 return False
@@ -98,9 +110,10 @@ class CardDataDAL:
     """Data Access Layer for CardData operations"""
     
     @staticmethod
-    def create_card(**kwargs) -> CardData:
+    def create_card(**kwargs) -> object:
         """Create a new card"""
         try:
+            User, CardData, Deck, GameHistory = _get_models()
             card = CardData(**kwargs)
             db_manager.db.session.add(card)
             db_manager.db.session.commit()
@@ -111,18 +124,20 @@ class CardDataDAL:
             raise
     
     @staticmethod
-    def get_card_by_id(card_id: str) -> Optional[CardData]:
+    def get_card_by_id(card_id: str) -> Optional[object]:
         """Get card by ID"""
         try:
+            User, CardData, Deck, GameHistory = _get_models()
             return CardData.query.filter_by(id=card_id).first()
         except SQLAlchemyError as e:
             logging.error(f"Error getting card by ID: {e}")
             return None
     
     @staticmethod
-    def get_cards_by_type(card_type: str, limit: Optional[int] = None) -> List[CardData]:
+    def get_cards_by_type(card_type: str, limit: Optional[int] = None) -> List[object]:
         """Get cards by type"""
         try:
+            User, CardData, Deck, GameHistory = _get_models()
             query = CardData.query.filter_by(card_type=card_type)
             if limit:
                 query = query.limit(limit)
@@ -132,18 +147,20 @@ class CardDataDAL:
             return []
     
     @staticmethod
-    def get_cards_by_rarity(rarity: int) -> List[CardData]:
+    def get_cards_by_rarity(rarity: int) -> List[object]:
         """Get cards by rarity"""
         try:
+            User, CardData, Deck, GameHistory = _get_models()
             return CardData.query.filter_by(rarity=rarity).all()
         except SQLAlchemyError as e:
             logging.error(f"Error getting cards by rarity: {e}")
             return []
     
     @staticmethod
-    def search_cards(query_str: str) -> List[CardData]:
+    def search_cards(query_str: str) -> List[object]:
         """Search cards by name or description"""
         try:
+            User, CardData, Deck, GameHistory = _get_models()
             search = f"%{query_str}%"
             return CardData.query.filter(
                 or_(
@@ -159,6 +176,7 @@ class CardDataDAL:
     def update_card(card_id: str, **kwargs) -> bool:
         """Update card fields"""
         try:
+            User, CardData, Deck, GameHistory = _get_models()
             card = CardData.query.filter_by(id=card_id).first()
             if not card:
                 return False
@@ -179,13 +197,14 @@ class DeckDAL:
     """Data Access Layer for Deck operations"""
     
     @staticmethod
-    def create_deck(name: str, user_id: str, cards: List[str], description: str = "", is_public: bool = False) -> Deck:
+    def create_deck(name: str, user_id: str, cards: List[str], description: str = "", is_public: bool = False) -> object:
         """Create a new deck"""
         try:
+            User, CardData, Deck, GameHistory = _get_models()
             deck = Deck(
                 name=name,
                 user_id=user_id,
-                card_ids=cards,
+                cards=cards,
                 description=description,
                 is_public=is_public
             )
@@ -198,27 +217,30 @@ class DeckDAL:
             raise
     
     @staticmethod
-    def get_deck_by_id(deck_id: str) -> Optional[Deck]:
+    def get_deck_by_id(deck_id: str) -> Optional[object]:
         """Get deck by ID"""
         try:
+            User, CardData, Deck, GameHistory = _get_models()
             return Deck.query.filter_by(id=deck_id).first()
         except SQLAlchemyError as e:
             logging.error(f"Error getting deck by ID: {e}")
             return None
     
     @staticmethod
-    def get_decks_by_user(user_id: str) -> List[Deck]:
+    def get_decks_by_user(user_id: str) -> List[object]:
         """Get all decks for a user"""
         try:
+            User, CardData, Deck, GameHistory = _get_models()
             return Deck.query.filter_by(user_id=user_id).all()
         except SQLAlchemyError as e:
             logging.error(f"Error getting decks by user: {e}")
             return []
     
     @staticmethod
-    def get_public_decks(limit: Optional[int] = None) -> List[Deck]:
+    def get_public_decks(limit: Optional[int] = None) -> List[object]:
         """Get all public decks"""
         try:
+            User, CardData, Deck, GameHistory = _get_models()
             query = Deck.query.filter_by(is_public=True)
             if limit:
                 query = query.limit(limit)
@@ -231,6 +253,7 @@ class DeckDAL:
     def update_deck(deck_id: str, **kwargs) -> bool:
         """Update deck fields"""
         try:
+            User, CardData, Deck, GameHistory = _get_models()
             deck = Deck.query.filter_by(id=deck_id).first()
             if not deck:
                 return False
@@ -250,6 +273,7 @@ class DeckDAL:
     def delete_deck(deck_id: str) -> bool:
         """Delete deck"""
         try:
+            User, CardData, Deck, GameHistory = _get_models()
             deck = Deck.query.filter_by(id=deck_id).first()
             if not deck:
                 return False
@@ -276,9 +300,10 @@ class GameHistoryDAL:
         deck2_id: Optional[str] = None,
         game_result: Optional[str] = None,
         duration: Optional[int] = None
-    ) -> GameHistory:
+    ) -> object:
         """Create a new game history record"""
         try:
+            User, CardData, Deck, GameHistory = _get_models()
             game_history = GameHistory(
                 player1_id=player1_id,
                 player2_id=player2_id,
@@ -298,18 +323,20 @@ class GameHistoryDAL:
             raise
     
     @staticmethod
-    def get_game_history_by_id(game_id: str) -> Optional[GameHistory]:
+    def get_game_history_by_id(game_id: str) -> Optional[object]:
         """Get game history by ID"""
         try:
+            User, CardData, Deck, GameHistory = _get_models()
             return GameHistory.query.filter_by(id=game_id).first()
         except SQLAlchemyError as e:
             logging.error(f"Error getting game history by ID: {e}")
             return None
     
     @staticmethod
-    def get_games_by_user(user_id: str) -> List[GameHistory]:
+    def get_games_by_user(user_id: str) -> List[object]:
         """Get games where user participated (either as player1 or player2)"""
         try:
+            User, CardData, Deck, GameHistory = _get_models()
             return GameHistory.query.filter(
                 or_(GameHistory.player1_id == user_id, GameHistory.player2_id == user_id)
             ).order_by(desc(GameHistory.created_at)).all()
@@ -318,18 +345,20 @@ class GameHistoryDAL:
             return []
     
     @staticmethod
-    def get_games_by_winner(winner_id: str) -> List[GameHistory]:
+    def get_games_by_winner(winner_id: str) -> List[object]:
         """Get games won by a specific user"""
         try:
+            User, CardData, Deck, GameHistory = _get_models()
             return GameHistory.query.filter_by(winner_id=winner_id).order_by(desc(GameHistory.created_at)).all()
         except SQLAlchemyError as e:
             logging.error(f"Error getting games by winner: {e}")
             return []
     
     @staticmethod
-    def get_recent_games(limit: int = 10) -> List[GameHistory]:
+    def get_recent_games(limit: int = 10) -> List[object]:
         """Get recent games"""
         try:
+            User, CardData, Deck, GameHistory = _get_models()
             return GameHistory.query.order_by(desc(GameHistory.created_at)).limit(limit).all()
         except SQLAlchemyError as e:
             logging.error(f"Error getting recent games: {e}")

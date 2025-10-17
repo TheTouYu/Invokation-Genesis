@@ -18,6 +18,7 @@ dependencies = [
     "psycopg2-binary>=2.9.11",
     "flask-jwt-extended>=4.7.1",
     "flask-socketio>=5.5.1",
+    "pytest>=8.4.2",
 ]
 
 [[tool.uv.index]]

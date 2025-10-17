@@ -6,7 +6,8 @@
 import json
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from models.db_models import CardData, Deck, db
+from dal import db_dal
+from models.db_models import CardData, Deck
 from sqlalchemy import or_, and_
 from typing import Dict, Any, List
 import random
@@ -800,7 +801,7 @@ def get_user_decks():
     try:
         current_user_id = get_jwt_identity()
 
-        decks = Deck.query.filter_by(user_id=current_user_id).all()
+        decks = db_dal.decks.get_decks_by_user(current_user_id)
 
         result = []
         for deck in decks:
@@ -809,7 +810,7 @@ def get_user_decks():
                     "id": deck.id,
                     "name": deck.name,
                     "description": deck.description,
-                    "cards": json.loads(deck.cards) if deck.cards else [],
+                    "cards": json.loads(deck.card_ids) if deck.card_ids else [],
                     "created_at": deck.created_at.isoformat(),
                     "updated_at": deck.updated_at.isoformat(),
                 }
@@ -839,6 +840,7 @@ def create_deck():
 
         # 使用新的验证系统验证卡组
         # 首先，通过card_ids获取完整卡牌信息
+        # Note: For now, we'll continue using direct query for card validation to avoid breaking existing validation logic
         cards_from_db = CardData.query.filter(CardData.id.in_(card_list)).all()
 
         # 将数据库中的卡牌数据转换为卡片对象用于验证
@@ -892,35 +894,35 @@ def create_deck():
                 {"error": "卡组验证失败", "details": validation_result["errors"]}
             ), 400
 
-        # 创建卡组
-        deck = Deck(
-            user_id=current_user_id,
-            name=name,
-            description=description,
-            cards=json.dumps(card_list),
-        )
+        # 创建卡组 using the data access layer
+        try:
+            deck = db_dal.decks.create_deck(
+                name=name,
+                user_id=current_user_id,
+                cards=card_list,
+                description=description
+            )
 
-        db.session.add(deck)
-        db.session.commit()
+            return jsonify(
+                {
+                    "message": "卡组创建成功",
+                    "deck": {
+                        "id": deck.id,
+                        "name": deck.name,
+                        "description": deck.description,
+                        "cards": card_list,
+                        "created_at": deck.created_at.isoformat(),
+                    },
+                }
+            ), 201
+        except Exception as e:
+            return jsonify({"error": f"创建卡组失败: {str(e)}"}), 500
 
-        return jsonify(
-            {
-                "message": "卡组创建成功",
-                "deck": {
-                    "id": deck.id,
-                    "name": deck.name,
-                    "description": deck.description,
-                    "cards": card_list,
-                    "created_at": deck.created_at.isoformat(),
-                },
-            }
-        ), 201
     except Exception as e:
-        db.session.rollback()
         return jsonify({"error": str(e)}), 500
 
 
-@cards_bp.route("/decks/<int:deck_id>", methods=["PUT"])
+@cards_bp.route("/decks/<string:deck_id>", methods=["PUT"])
 @jwt_required()
 def update_deck(deck_id):
     """
@@ -930,17 +932,17 @@ def update_deck(deck_id):
         current_user_id = get_jwt_identity()
         data = request.get_json()
 
-        deck = Deck.query.filter_by(id=deck_id, user_id=current_user_id).first()
-        if not deck:
+        deck = db_dal.decks.get_deck_by_id(deck_id)
+        if not deck or deck.user_id != current_user_id:
             return jsonify({"error": "卡组不存在或无权限访问"}), 404
 
         name = data.get("name", deck.name)
         description = data.get("description", deck.description)
-        card_list = data.get("cards", json.loads(deck.cards) if deck.cards else [])
+        card_list = data.get("cards", json.loads(deck.card_ids) if deck.card_ids else [])
 
         # 使用新的验证系统验证卡组
         # 首先，通过card_ids获取完整卡牌信息
-        cards_from_db = CardData.query.filter(CardData.id.in_(card_list)).all()
+        cards_from_db = CardData.query.filter(CardData.id.in_(card_list)).all()  # Still using direct query for validation
 
         # 将数据库中的卡牌数据转换为卡片对象用于验证
         from utils.deck_validator import validate_deck_api
@@ -993,31 +995,36 @@ def update_deck(deck_id):
                 {"error": "卡组验证失败", "details": validation_result["errors"]}
             ), 400
 
-        # 更新卡组
-        deck.name = name
-        deck.description = description
-        deck.cards = json.dumps(card_list)
+        # 更新卡组 using data access layer
+        success = db_dal.decks.update_deck(
+            deck_id=deck_id,
+            name=name,
+            description=description,
+            card_ids=card_list
+        )
 
-        db.session.commit()
+        if not success:
+            return jsonify({"error": "更新卡组失败"}), 500
 
+        updated_deck = db_dal.decks.get_deck_by_id(deck_id)
         return jsonify(
             {
                 "message": "卡组更新成功",
                 "deck": {
-                    "id": deck.id,
-                    "name": deck.name,
-                    "description": deck.description,
-                    "cards": card_list,
-                    "updated_at": deck.updated_at.isoformat(),
+                    "id": updated_deck.id,
+                    "name": updated_deck.name,
+                    "description": updated_deck.description,
+                    "cards": json.loads(updated_deck.card_ids) if updated_deck.card_ids else [],
+                    "created_at": updated_deck.created_at.isoformat(),
+                    "updated_at": updated_deck.updated_at.isoformat(),
                 },
             }
         ), 200
     except Exception as e:
-        db.session.rollback()
         return jsonify({"error": str(e)}), 500
 
 
-@cards_bp.route("/decks/<int:deck_id>", methods=["DELETE"])
+@cards_bp.route("/decks/<string:deck_id>", methods=["DELETE"])
 @jwt_required()
 def delete_deck(deck_id):
     """
@@ -1026,20 +1033,21 @@ def delete_deck(deck_id):
     try:
         current_user_id = get_jwt_identity()
 
-        deck = Deck.query.filter_by(id=deck_id, user_id=current_user_id).first()
-        if not deck:
+        deck = db_dal.decks.get_deck_by_id(deck_id)
+        if not deck or deck.user_id != current_user_id:
             return jsonify({"error": "卡组不存在或无权限访问"}), 404
 
-        db.session.delete(deck)
-        db.session.commit()
+        success = db_dal.decks.delete_deck(deck_id)
+
+        if not success:
+            return jsonify({"error": "删除卡组失败"}), 500
 
         return jsonify({"message": "卡组删除成功"}), 200
     except Exception as e:
-        db.session.rollback()
         return jsonify({"error": str(e)}), 500
 
 
-@cards_bp.route("/decks/<int:deck_id>", methods=["GET"])
+@cards_bp.route("/decks/<string:deck_id>", methods=["GET"])
 @jwt_required()
 def get_deck_by_id(deck_id):
     """
@@ -1048,17 +1056,17 @@ def get_deck_by_id(deck_id):
     try:
         current_user_id = get_jwt_identity()
 
-        deck = Deck.query.filter_by(id=deck_id, user_id=current_user_id).first()
-        if not deck:
+        deck = db_dal.decks.get_deck_by_id(deck_id)
+        if not deck or deck.user_id != current_user_id:
             return jsonify({"error": "卡组不存在或无权限访问"}), 404
 
         # 获取卡组中的卡牌详情
-        card_list = json.loads(deck.cards) if deck.cards else []
+        card_list = json.loads(deck.card_ids) if deck.card_ids else []
 
         # 根据卡ID获取完整的卡牌信息
-        cards = CardData.query.filter(CardData.id.in_(card_list)).all()
+        cards_query = CardData.query.filter(CardData.id.in_(card_list)).all()
         card_details = []
-        for card in cards:
+        for card in cards_query:  # Note: This still uses direct query to avoid changing too much at once
             # 根据卡牌类型来决定cost和description的来源
             card_cost = json.loads(card.cost) if card.cost else []
             card_description = card.description or ""
