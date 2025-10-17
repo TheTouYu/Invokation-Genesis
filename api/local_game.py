@@ -4,7 +4,15 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from game_engine.core import GameEngine
-from models.db_models import User, Deck, CardData, db
+from models.db_models import model_container
+# 延迟导入，确保模型已初始化
+def get_models():
+    return model_container.User, model_container.CardData, model_container.Deck
+
+# 从SQLAlchemy获取db实例而非直接导入
+from database_manager import db_manager
+def get_db():
+    return db_manager.get_db()
 from models.game_models import Card, CharacterCard
 from models.enums import PlayerAction, ElementType, CardType
 import json
@@ -36,6 +44,7 @@ def start_local_game():
             return jsonify({'error': '必须选择一个卡组'}), 400
         
         # 获取用户和对手的卡组
+        User, CardData, Deck = get_models()
         user_deck = Deck.query.filter_by(id=deck_id, user_id=current_user_id).first()
         if not user_deck:
             return jsonify({'error': '卡组不存在或无权限访问'}), 404
@@ -70,6 +79,7 @@ def start_local_game():
             return jsonify({'error': '多人游戏尚未实现，请选择AI对手'}), 400
         
         # 解析用户卡组
+        User, CardData, Deck = get_models()
         user_card_list = json.loads(user_deck.cards) if user_deck.cards else []
         user_cards_data = CardData.query.filter(CardData.id.in_(user_card_list)).all()
         
@@ -88,7 +98,7 @@ def start_local_game():
         local_game_sessions[game_session_id] = {
             'player_id': current_user_id,
             'opponent_type': opponent_type,
-            'game_started_at': db.func.now()
+            'game_started_at': get_db().func.now()
         }
         
         # 获取初始游戏状态

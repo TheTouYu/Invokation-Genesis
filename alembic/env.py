@@ -19,7 +19,7 @@ import sys
 import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from models.db_models import db
+from database_manager import db_manager; db = db_manager.get_db()
 config.set_main_option('sqlalchemy.url', 'sqlite:///instance/game.db')
 target_metadata = db.metadata
 

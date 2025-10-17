@@ -9,7 +9,14 @@ from datetime import datetime, timedelta
 # 添加项目根目录到Python路径
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from app import create_app, db
+from app import create_app
+from database_manager import db_manager
+
+# 为兼容性，创建一个db引用
+def get_db():
+    return db_manager.get_db()
+
+db = get_db()
 
 def generate_test_token(user_id="test_user_1", username="test_user", email="test@example.com"):
     """

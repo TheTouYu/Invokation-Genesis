@@ -34,7 +34,7 @@ class CardDataImporter:
         """导入角色卡数据"""
         print("🔄 开始导入角色卡数据...")
         
-        from models.db_models import db
+        from database_manager import db_manager; db = db_manager.get_db()
         CardData = self._get_card_data_class()
         
         characters_data = self.load_json_data(characters_path)
@@ -75,7 +75,7 @@ class CardDataImporter:
     
     def import_action_cards(self, cards_data: List[Dict[str, Any]], card_type: str):
         """导入行动卡（事件、装备、支援）数据"""
-        from models.db_models import db
+        from database_manager import db_manager; db = db_manager.get_db()
         CardData = self._get_card_data_class()
         imported_count = 0
         
@@ -113,7 +113,7 @@ class CardDataImporter:
         """导入事件卡数据"""
         print("🔄 开始导入事件卡数据...")
         
-        from models.db_models import db
+        from database_manager import db_manager; db = db_manager.get_db()
         
         events_data = self.load_json_data(events_path)
         if not events_data:
@@ -130,7 +130,7 @@ class CardDataImporter:
         """导入装备卡数据"""
         print("🔄 开始导入装备卡数据...")
         
-        from models.db_models import db
+        from database_manager import db_manager; db = db_manager.get_db()
         
         equipments_data = self.load_json_data(equipments_path)
         if not equipments_data:
@@ -147,7 +147,7 @@ class CardDataImporter:
         """导入支援卡数据"""
         print("🔄 开始导入支援卡数据...")
         
-        from models.db_models import db
+        from database_manager import db_manager; db = db_manager.get_db()
         
         supports_data = self.load_json_data(supports_path)
         if not supports_data:
@@ -178,7 +178,7 @@ class CardDataImporter:
         """从源数据更新数据库中的卡牌数据"""
         print("🔄 开始更新卡牌数据...")
         
-        from models.db_models import db
+        from database_manager import db_manager; db = db_manager.get_db()
         CardData = self._get_card_data_class()
         
         # 从JSON文件读取最新数据
@@ -261,7 +261,7 @@ class CardDataImporter:
 def import_all_cards():
     """便捷函数：导入所有卡牌数据"""
     from app import create_app
-    from models.db_models import db
+    from database_manager import db_manager; db = db_manager.get_db()
     app = create_app()
     
     with app.app_context():
@@ -272,7 +272,7 @@ def import_all_cards():
 def update_cards_from_source():
     """便捷函数：从源数据更新卡牌数据"""
     from app import create_app
-    from models.db_models import db
+    from database_manager import db_manager; db = db_manager.get_db()
     app = create_app()
     
     with app.app_context():

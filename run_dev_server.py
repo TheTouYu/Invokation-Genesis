@@ -4,8 +4,8 @@
 
 import os
 import sys
-from app import create_app, db, socketio
-from models.db_models import User
+from app import create_app, socketio
+from database_manager import db_manager
 
 
 def setup_dev_environment():
@@ -21,6 +21,7 @@ def setup_dev_environment():
 
     # 创建数据库表
     with app.app_context():
+        db = db_manager.get_db()
         db.create_all()
         print("数据库表创建完成")
 
