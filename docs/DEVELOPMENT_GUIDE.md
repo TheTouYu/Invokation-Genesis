@@ -60,6 +60,17 @@ ys_qs/
 ├── dev_tools/           # 开发工具
 │   └── generate_test_token.py  # 生成测试令牌
 ├── docs/                # 项目文档
+├── frontend/            # 前端代码 (React + TypeScript)
+│   ├── public/          # 静态资源
+│   ├── src/             # 源代码
+│   │   ├── components/  # React组件
+│   │   ├── pages/       # 页面组件
+│   │   ├── hooks/       # 自定义Hooks
+│   │   ├── utils/       # 工具函数
+│   │   ├── services/    # API服务
+│   │   └── styles/      # 样式文件
+│   ├── package.json     # npm依赖
+│   └── tsconfig.json    # TypeScript配置
 ├── game_engine/         # 游戏引擎核心
 │   ├── core.py          # 主游戏引擎
 │   ├── element_reactions.py    # 元素反应系统

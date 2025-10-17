@@ -10,10 +10,10 @@
 - **包管理**: uv (推荐) 或 pip
 - **测试**: pytest
 
-### 前端 (计划中)
+### 前端
 - **框架**: React with TypeScript
 - **状态管理**: Redux Toolkit
-- **UI库**: Material-UI 或自定义组件
+- **UI库**: Material-UI 或自定义组件，支持主题切换
 - **WebSocket**: socket.io-client
 - **构建工具**: Vite 或 Webpack
 
