@@ -1,0 +1,9 @@
+{
+  "checkpointing": true,
+  "summarizeToolOutput": {
+    "run_shell_command": {
+      "tokenBudget": 2000
+    },
+    "loadMemoryFromIncludeDirectories": true
+  }
+}
