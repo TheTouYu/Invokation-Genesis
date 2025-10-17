@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import re
 from .utis import _parse_costs
 
+
 def clean_description(desc_html: str) -> str:
     # 替换常见图标
     desc_html = re.sub(r"卡牌UI-图标-单手剑\.png", "[单手剑]", desc_html)
@@ -21,12 +22,19 @@ def parse_equipments(html: str):
     return _parse_cards(tab)
 
 
+DOMAIN = "https://patchwiki.biligame.com/images"
+
+
 def _parse_cards(container):
     cards = container.select(".kapai-data")
     results = []
     for card in cards:
         name_tag = card.select_one(".data-topbox a")
         name = name_tag.get_text(strip=True) if name_tag else "未知装备"
+
+        # 修复点：安全获取并清理 src
+        img_tag = card.select_one(".kapai-box img")
+        name_url = img_tag.get("alt").strip() if img_tag and img_tag.get("src") else ""
 
         info_divs = card.select(".data-topbox .flex-col > div")
         card_type = info_divs[0].get_text(strip=True) if len(info_divs) > 0 else ""
@@ -50,6 +58,7 @@ def _parse_cards(container):
         results.append(
             {
                 "name": name,
+                "name_url": name_url,
                 "type": card_type,  # "装备牌"
                 "category": category,  # "行动牌"
                 "detail_type": detail,  # "武器 单手剑"
@@ -57,6 +66,3 @@ def _parse_cards(container):
             }
         )
     return results
-
-
-

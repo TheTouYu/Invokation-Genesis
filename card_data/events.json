@@ -1,135 +1,170 @@
 [
   {
-    "category": "事件牌行动牌",
+    "id": "8baee1c9-b8fc-4f4f-8f5e-99150441cb90",
     "name": "「狂欢节奏」",
+    "name_url": "https://patchwiki.biligame.com/images/ys/f/fb/5bple70dk8d5x05vd9dg0z4bbkn231u.png",
+    "card_type": "「狂欢节奏」",
+    "type": "「狂欢节奏」",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
     "skills": [
       {
+        "name": "技能说明",
+        "description": "抓2张牌，如果我方手牌中的「 武器」牌或「 圣遗物」牌数量大于1张，则各生成1个 万能元素 。",
         "cost": [
           {
             "type": "无色",
             "value": 2
           }
-        ],
-        "description": "抓2张牌，如果我方手牌中的「 武器」牌或「 圣遗物」牌数量大于1张，则各生成1个 万能元素 。",
-        "name": "技能说明"
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "「狂欢节奏」"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌",
+    "id": "af7379e6-7e92-44bd-b34f-d74cbb601cc6",
     "name": "「邪龙」的苏醒",
+    "name_url": "https://patchwiki.biligame.com/images/ys/e/ef/e4n134l4j4i0khn8vc4t826pq0smxzi.png",
+    "card_type": "「邪龙」的苏醒",
+    "type": "「邪龙」的苏醒",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
     "skills": [
       {
+        "name": "技能说明",
+        "description": "召唤 「邪龙」 。 本场对局中，我方支援区每弃置1张卡牌，则 「邪龙」 可用次数+1；我方召唤区每弃置1张卡牌，则 「邪龙」 效果量+1。（可叠加，最多叠加到5） （ 「邪龙」 ： 结束阶段： 造成1点 穿透伤害 。 可用次数：1 ）",
         "cost": [
           {
             "type": "象形",
             "value": 2
           }
-        ],
-        "description": "召唤 「邪龙」 。 本场对局中，我方支援区每弃置1张卡牌，则 「邪龙」 可用次数+1；我方召唤区每弃置1张卡牌，则 「邪龙」 效果量+1。（可叠加，最多叠加到5） （ 「邪龙」 ： 结束阶段： 造成1点 穿透伤害 。 可用次数：1 ）",
-        "name": "技能说明"
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "「邪龙」的苏醒"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌",
+    "id": "7e8e63ac-497d-4b73-8ecb-0224245e9274",
     "name": "「魔女M的祝福」",
+    "name_url": "https://patchwiki.biligame.com/images/ys/f/f3/kllg4r72pjo0p1a5xyzroznc05une9v.png",
+    "card_type": "「魔女M的祝福」",
+    "type": "「魔女M的祝福」",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          }
-        ],
+        "name": "技能说明",
         "description": "选择并弃置一个我方召唤物，将其可用次数转化为至多2个不同类型的基础元素骰，如果其可用次数不低于3，则额外治疗我方受伤最多的角色2点。",
-        "name": "技能说明"
-      }
-    ],
-    "subtype": "事件牌",
-    "type": "「魔女M的祝福」"
-  },
-  {
-    "category": "事件牌行动牌",
-    "name": "旁白的注脚",
-    "skills": [
-      {
         "cost": [
           {
             "type": "象形",
             "value": 0
           }
-        ],
+        ]
+      }
+    ],
+    "element_type": ""
+  },
+  {
+    "id": "a9c7aafb-7a68-4a05-822b-928955abc01f",
+    "name": "旁白的注脚",
+    "name_url": "https://patchwiki.biligame.com/images/ys/8/8b/1dmn9x792y1eu2j41f21oxwavyewdvx.png",
+    "card_type": "旁白的注脚",
+    "type": "旁白的注脚",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
+    "skills": [
+      {
+        "name": "技能说明",
         "description": "双方召唤 积木小人 。 （ 积木小人 ： 结束阶段： 造成1点 物理伤害 。 可用次数：2 ）",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "旁白的注脚"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌",
+    "id": "99018c3b-8c8b-436c-bd5b-92329e1a4504",
     "name": "很棒，哥们。",
-    "skills": [
-      {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 1
-          }
-        ],
-        "description": "抓1张「 特技」牌，下次打出「 特技」牌后，生成1个 万能元素 。",
-        "name": "技能说明"
-      }
-    ],
-    "subtype": "事件牌",
-    "type": "很棒，哥们。"
-  },
-  {
+    "name_url": "https://patchwiki.biligame.com/images/ys/3/30/e0v2ck422yezb6wj663y3f7d8bj9adf.png",
+    "card_type": "很棒，哥们。",
+    "type": "很棒，哥们。",
     "category": "事件牌行动牌",
+    "subtype": "事件牌",
+    "skills": [
+      {
+        "name": "技能说明",
+        "description": "抓1张「 特技」牌，下次打出「 特技」牌后，生成1个 万能元素 。",
+        "cost": [
+          {
+            "type": "象形",
+            "value": 1
+          }
+        ]
+      }
+    ],
+    "element_type": ""
+  },
+  {
+    "id": "2e377bf5-e9bc-41f7-bbe4-231a521dc109",
     "name": "收获时间",
+    "name_url": "https://patchwiki.biligame.com/images/ys/b/ba/4kksvs4p4kdi0fcrb0kr8tbduquh583.png",
+    "card_type": "收获时间",
+    "type": "收获时间",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 1
-          }
-        ],
+        "name": "技能说明",
         "description": "从3张随机「 料理」牌中 挑选 1张。 结束阶段： 生成一张 收获时间 ，随机置入我方牌组。",
-        "name": "技能说明"
-      }
-    ],
-    "subtype": "事件牌",
-    "type": "收获时间"
-  },
-  {
-    "category": "事件牌行动牌料理",
-    "name": "丰稔之赐",
-    "skills": [
-      {
         "cost": [
           {
             "type": "象形",
             "value": 1
           }
-        ],
-        "description": "治疗目标角色1点，目标角色之后2次 准备技能 时：治疗自身1点。 （每回合每个角色最多食用1次「 料理」）",
-        "name": "技能说明"
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "丰稔之赐"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌秘传",
-    "name": "为「死」而战",
+    "id": "63557818-cbb6-4c2a-96fa-579c48c88015",
+    "name": "丰稔之赐",
+    "name_url": "https://patchwiki.biligame.com/images/ys/c/c0/rk0lkobckcb4nwnyc8n158es0ty23s2.png",
+    "card_type": "丰稔之赐",
+    "type": "丰稔之赐",
+    "category": "事件牌行动牌料理",
+    "subtype": "事件牌",
     "skills": [
       {
+        "name": "技能说明",
+        "description": "治疗目标角色1点，目标角色之后2次 准备技能 时：治疗自身1点。 （每回合每个角色最多食用1次「 料理」）",
+        "cost": [
+          {
+            "type": "象形",
+            "value": 1
+          }
+        ]
+      }
+    ],
+    "element_type": ""
+  },
+  {
+    "id": "44a70d27-9670-4c0e-a31d-f81079ea0930",
+    "name": "为「死」而战",
+    "name_url": "https://patchwiki.biligame.com/images/ys/a/ae/b1nq2ux1znlnk25oniy78dvm0cn587e.png",
+    "card_type": "为「死」而战",
+    "type": "为「死」而战",
+    "category": "事件牌行动牌秘传",
+    "subtype": "事件牌",
+    "skills": [
+      {
+        "name": "技能说明",
+        "description": "抓1张牌。 我方场上每存在一个被击倒的角色： 我方剩余全体角色+2最大生命上限。",
         "cost": [
           {
             "type": "象形",
@@ -139,865 +174,1023 @@
             "type": "其他",
             "value": 0
           }
-        ],
-        "description": "抓1张牌。 我方场上每存在一个被击倒的角色： 我方剩余全体角色+2最大生命上限。",
-        "name": "技能说明"
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "为「死」而战"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌",
+    "id": "19226503-b168-4e79-bd73-3c9088356f5a",
     "name": "健身的成果",
+    "name_url": "https://patchwiki.biligame.com/images/ys/7/76/ob6qxgwh03f31lv60g3pqt2u0mha93m.png",
+    "card_type": "健身的成果",
+    "type": "健身的成果",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
     "skills": [
       {
+        "name": "技能说明",
+        "description": "选一个我方角色， 我方其他角色准备技能时： 所选角色下次 元素战技 少花费1个元素骰。（至多触发2次，不可叠加）",
         "cost": [
           {
             "type": "象形",
             "value": 0
           }
-        ],
-        "description": "选一个我方角色， 我方其他角色准备技能时： 所选角色下次 元素战技 少花费1个元素骰。（至多触发2次，不可叠加）",
-        "name": "技能说明"
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "健身的成果"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌天赋",
+    "id": "75479757-9c26-45a4-9886-5937200ec1de",
     "name": "子弹的戏法",
+    "name_url": "https://patchwiki.biligame.com/images/ys/b/b8/4zw9u82pggjjryuxzmjy38qrg942kjm.png",
+    "card_type": "子弹的戏法",
+    "type": "子弹的戏法",
+    "category": "事件牌行动牌天赋",
+    "subtype": "事件牌",
     "skills": [
       {
+        "name": "技能说明",
+        "description": "快速行动： 我方 恰斯卡 在场时，对该角色打出。将一张 追影弹 加入手牌。 牌组中包含恰斯卡，才能加入牌组)",
         "cost": [
           {
             "type": "风",
             "value": 1
           }
-        ],
-        "description": "快速行动： 我方 恰斯卡 在场时，对该角色打出。将一张 追影弹 加入手牌。 牌组中包含恰斯卡，才能加入牌组)",
-        "name": "技能说明"
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "子弹的戏法"
+    "element_type": "风"
   },
   {
-    "category": "事件牌行动牌",
+    "id": "24189a60-28bb-4e72-9eb2-c3491624a5c6",
     "name": "火与战争",
+    "name_url": "https://patchwiki.biligame.com/images/ys/8/87/dhw7hr2hf04908eq6zapzbh6f9f6xqs.png",
+    "card_type": "火与战争",
+    "type": "火与战争",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 1
-          }
-        ],
+        "name": "技能说明",
         "description": "选一个我方角色，使其附属 「重燃」 为1的 还魂诗 。（本回合内该角色被击倒时，消耗等同于 「重燃」 的元素骰，使角色 免于被击倒 ，并治疗该角色到1点生命值，然后 「重燃」 +1） （牌组包含至少2个「 纳塔」角色，才能加入牌组）",
-        "name": "技能说明"
-      }
-    ],
-    "subtype": "事件牌",
-    "type": "火与战争"
-  },
-  {
-    "category": "事件牌行动牌",
-    "name": "飞行队出击！",
-    "skills": [
-      {
-        "cost": [
-          {
-            "type": "无色",
-            "value": 3
-          }
-        ],
-        "description": "随机 舍弃 至多2张原本元素骰费用最高的手牌，随后抓牌直至手牌中有4张牌。 此牌在手牌被舍弃后： 抓1张牌。",
-        "name": "技能说明"
-      }
-    ],
-    "subtype": "事件牌",
-    "type": "飞行队出击！"
-  },
-  {
-    "category": "事件牌行动牌",
-    "name": "困困冥想术",
-    "skills": [
-      {
         "cost": [
           {
             "type": "象形",
             "value": 1
           }
-        ],
-        "description": "从随机3张特技牌中 挑选 1张。 我方下次打出不属于初始卡组的牌少花费2个元素骰。",
-        "name": "技能说明"
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "困困冥想术"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌料理",
-    "name": "纵声欢唱",
+    "id": "12f32792-d84f-4473-82ae-00b4be1ab6c3",
+    "name": "飞行队出击！",
+    "name_url": "https://patchwiki.biligame.com/images/ys/b/b0/rviicyd0kbod0m6eo179gdpi0stnudh.png",
+    "card_type": "飞行队出击！",
+    "type": "飞行队出击！",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
     "skills": [
       {
+        "name": "技能说明",
+        "description": "随机 舍弃 至多2张原本元素骰费用最高的手牌，随后抓牌直至手牌中有4张牌。 此牌在手牌被舍弃后： 抓1张牌。",
         "cost": [
           {
             "type": "无色",
             "value": 3
           }
-        ],
-        "description": "所有我方角色获得 饱腹 ，抓3张牌，下2次切换角色少花费1个元素骰。 （每回合每个角色最多食用1次「 料理」）",
-        "name": "技能说明"
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "纵声欢唱"
+    "element_type": ""
   },
   {
+    "id": "b4511297-c95d-4523-9a5e-ce6f550c68bc",
+    "name": "困困冥想术",
+    "name_url": "https://patchwiki.biligame.com/images/ys/5/5b/je0fbiwdo79jh64v5dx5sv80nvxgyyo.png",
+    "card_type": "困困冥想术",
+    "type": "困困冥想术",
     "category": "事件牌行动牌",
-    "name": "以极限之名",
+    "subtype": "事件牌",
     "skills": [
       {
+        "name": "技能说明",
+        "description": "从随机3张特技牌中 挑选 1张。 我方下次打出不属于初始卡组的牌少花费2个元素骰。",
+        "cost": [
+          {
+            "type": "象形",
+            "value": 1
+          }
+        ]
+      }
+    ],
+    "element_type": ""
+  },
+  {
+    "id": "ffbb42a5-b769-4a53-8156-64b18beee8bd",
+    "name": "纵声欢唱",
+    "name_url": "https://patchwiki.biligame.com/images/ys/7/70/q9zf862kgxgclf1mqx23pd3fjo03b19.png",
+    "card_type": "纵声欢唱",
+    "type": "纵声欢唱",
+    "category": "事件牌行动牌料理",
+    "subtype": "事件牌",
+    "skills": [
+      {
+        "name": "技能说明",
+        "description": "所有我方角色获得 饱腹 ，抓3张牌，下2次切换角色少花费1个元素骰。 （每回合每个角色最多食用1次「 料理」）",
+        "cost": [
+          {
+            "type": "无色",
+            "value": 3
+          }
+        ]
+      }
+    ],
+    "element_type": ""
+  },
+  {
+    "id": "76367387-8f71-4591-865e-31c4261b7471",
+    "name": "以极限之名",
+    "name_url": "https://patchwiki.biligame.com/images/ys/c/c4/fuz8lg6kmj5fn8fnuekxh6v4n7howv0.png",
+    "card_type": "以极限之名",
+    "type": "以极限之名",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
+    "skills": [
+      {
+        "name": "技能说明",
+        "description": "交换双方手牌，然后手牌较少的一方抓牌直到手牌数等同于手牌多的一方。",
         "cost": [
           {
             "type": "象形",
             "value": 4
           }
-        ],
-        "description": "交换双方手牌，然后手牌较少的一方抓牌直到手牌数等同于手牌多的一方。",
-        "name": "技能说明"
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "以极限之名"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌料理",
+    "id": "b046fdf4-2999-44fb-969e-13336c42b320",
     "name": "奇瑰之汤",
+    "name_url": "https://patchwiki.biligame.com/images/ys/4/41/odp1n6lc6hnhqcse19mwayb37hf1up1.png",
+    "card_type": "奇瑰之汤",
+    "type": "奇瑰之汤",
+    "category": "事件牌行动牌料理",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 1
-          }
-        ],
+        "name": "技能说明",
         "description": "从3个随机效果中 挑选 1个，对目标角色生效。 （每回合每个角色最多食用1次「 料理」） 随机效果一览： 奇瑰之汤·助佑：本回合中，目标角色下次使用技能时少花费2个元素骰。 奇瑰之汤·宁静：本回合中，目标角色下次受到的伤害-2。 奇瑰之汤·安神：本回合中，目标我方角色受到的伤害-1。（最多生效3次） 奇瑰之汤·疗愈：治疗目标角色2点。 奇瑰之汤·激愤：本回合中，目标角色下一次造成的伤害+2 奇瑰之汤·鼓舞：目标角色获得点额外最大生命值。",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 1
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "奇瑰之汤"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌",
+    "id": "15fff4b9-d82b-4477-bbe4-6ce000e0eec1",
     "name": "小嵴锋龙！发现宝藏！",
+    "name_url": "https://patchwiki.biligame.com/images/ys/7/70/78ebtshx7zmmu6h8r34cgfhssebzazh.png",
+    "card_type": "小嵴锋龙！发现宝藏！",
+    "type": "小嵴锋龙！发现宝藏！",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 1
-          }
-        ],
+        "name": "技能说明",
         "description": "向双方牌组中放入2张 燃素充盈 ，随后双方各抓2张牌。",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 1
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "小嵴锋龙！发现宝藏！"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌料理",
+    "id": "b6647090-61cc-441a-bf21-134f4bb4efd6",
     "name": "温泉时光",
+    "name_url": "https://patchwiki.biligame.com/images/ys/1/1a/7us4q2md955xnddc076v9nmnrmq5erw.png",
+    "card_type": "温泉时光",
+    "type": "温泉时光",
+    "category": "事件牌行动牌料理",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 1
-          }
-        ],
+        "name": "技能说明",
         "description": "治疗目标角色1点，我方场上每有1个召唤物，则额外治疗1点。 （每回合每个角色最多食用1次「 料理」）",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 1
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "温泉时光"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌料理",
+    "id": "0790256f-89e2-4dc7-a2fc-0c4cde984b59",
     "name": "咚咚嘭嘭",
+    "name_url": "https://patchwiki.biligame.com/images/ys/f/ff/df1fd1gpotxuwc9bh9ssr62y9skkuf8.png",
+    "card_type": "咚咚嘭嘭",
+    "type": "咚咚嘭嘭",
+    "category": "事件牌行动牌料理",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 1
-          }
-        ],
+        "name": "技能说明",
         "description": "接下来3次名称不存在于初始牌组中的牌加入我方手牌时，目标我方角色治疗自身1点。 （每回合每个角色最多食用1次「 料理」）",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 1
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "咚咚嘭嘭"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌秘传",
+    "id": "69c01bcd-9fc3-4d41-89be-597a277cc38b",
     "name": "归火圣夜巡礼",
+    "name_url": "https://patchwiki.biligame.com/images/ys/a/af/dhboltqn1sl2bz4r0h8n63gj7ou07lg.png",
+    "card_type": "归火圣夜巡礼",
+    "type": "归火圣夜巡礼",
+    "category": "事件牌行动牌秘传",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          },
-          {
-            "type": "其他",
-            "value": 0
-          }
-        ],
+        "name": "技能说明",
         "description": "在双方场上生成 斗争之火 ，然后我方场上的 斗争之火 的 「斗志」 +1。（ 斗争之火 会将各自阵营对对方造成的伤害记录为 「斗志」 ，每回合行动阶段开始时 「斗志」 较高的一方会清空 「斗志」 ，使当前出战角色在本回合中造成的伤害+1。） （整局游戏只能打出一张「 秘传」卡牌；这张牌一定在你的起始手牌中）",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          },
+          {
+            "type": "其他",
+            "value": 0
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "归火圣夜巡礼"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌",
+    "id": "28b7d195-b4e6-4634-8feb-77f9c1674e6a",
     "name": "燃素充盈",
+    "name_url": "https://patchwiki.biligame.com/images/ys/0/07/9kpmwucrhq2ct48wmgprr9umt29m35r.png",
+    "card_type": "燃素充盈",
+    "type": "燃素充盈",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          }
-        ],
+        "name": "技能说明",
         "description": "本回合我方下次角色消耗「夜魂值」后： 该角色获得1点「夜魂值」。",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "燃素充盈"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌料理",
+    "id": "0665b7ab-8ea5-47cf-92ae-b245058c0696",
     "name": "宝石闪闪",
+    "name_url": "https://patchwiki.biligame.com/images/ys/3/35/jt71nl9ixbaqzyxisx8te1ctp37vwli.png",
+    "card_type": "宝石闪闪",
+    "type": "宝石闪闪",
+    "category": "事件牌行动牌料理",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 1
-          }
-        ],
+        "name": "技能说明",
         "description": "目标角色获得1点额外最大生命值。 （每回合每个角色最多食用1次「 料理」）",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 1
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "宝石闪闪"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌",
+    "id": "95ded422-d77f-441e-9825-2bac56ac6ecc",
     "name": "强劲冲浪拍档！",
+    "name_url": "https://patchwiki.biligame.com/images/ys/b/b3/ipl6nfoi36xcmqkdtfq3tp3qlr0a2rb.png",
+    "card_type": "强劲冲浪拍档！",
+    "type": "强劲冲浪拍档！",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          }
-        ],
+        "name": "技能说明",
         "description": "双方场上至少存在合计2个「召唤物」时，才能打出： 随机触发我方和敌方各1个「召唤物」的「结束阶段」效果。",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "强劲冲浪拍档！"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌",
+    "id": "16912dc9-fc64-4fe9-bd9e-f0a22692434d",
     "name": "镀金旅团的茶歇",
+    "name_url": "https://patchwiki.biligame.com/images/ys/8/80/dtkqn74yte68hp54ooybr2lqy9zzahp.png",
+    "card_type": "镀金旅团的茶歇",
+    "type": "镀金旅团的茶歇",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 2
-          }
-        ],
+        "name": "技能说明",
         "description": "如果我方存在相同元素类型的角色，则从3张「 场地」中挑选张加入手牌； 如果我方存在相同武器类型的角色，则从3张「 道具」中挑选张加入手牌； 如果我方存在相同所属势力的角色，则从3张「 料理」中挑选张加入手牌。",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 2
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "镀金旅团的茶歇"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌料理",
+    "id": "8f8d0951-5dd5-4c2a-99b9-cc4c7c1a599c",
     "name": "龙龙饼干",
+    "name_url": "https://patchwiki.biligame.com/images/ys/4/48/ivndtjnzb6xcg5qbp22w29n0nwk5ccm.png",
+    "card_type": "龙龙饼干",
+    "type": "龙龙饼干",
+    "category": "事件牌行动牌料理",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          }
-        ],
+        "name": "技能说明",
         "description": "本回合中，目标角色下一次使用「 特技」少花费1个元素骰。 （每回合每个角色最多食用1次「 料理」）",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "龙龙饼干"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌秘传",
+    "id": "2d3169b2-6696-4e98-b005-c4e9b6a6b190",
     "name": "赦免宣告",
+    "name_url": "https://patchwiki.biligame.com/images/ys/6/6e/cferx7bzuxpwr821u1k6txxs5hrx1y2.png",
+    "card_type": "赦免宣告",
+    "type": "赦免宣告",
+    "category": "事件牌行动牌秘传",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 1
-          },
-          {
-            "type": "其他",
-            "value": 0
-          }
-        ],
+        "name": "技能说明",
         "description": "治疗目标角色2点。 目标角色免疫冻结、眩晕、石化等无法使用技能的效果，并且该角色为「出战角色」时不会因效果而切换，持续2个回合。 （整局游戏只能打出一张「 秘传」卡牌；这张牌一定在你的起始手牌中）",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 1
+          },
+          {
+            "type": "其他",
+            "value": 0
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "赦免宣告"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌",
+    "id": "0ae265eb-8893-4baa-8293-8ef4ab816272",
     "name": "龙伙伴的聚餐",
+    "name_url": "https://patchwiki.biligame.com/images/ys/6/6d/o0457oqmpdfmg0nnmddtn637nf0ohbm.png",
+    "card_type": "龙伙伴的聚餐",
+    "type": "龙伙伴的聚餐",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          }
-        ],
+        "name": "技能说明",
         "description": "选择一个装备在我方角色的「 特技」装备牌，使其 可用次数 +1。",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "龙伙伴的聚餐"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌",
+    "id": "5d99898e-2e7a-4c7d-8669-0846e52fcc7d",
     "name": "「看到那小子挣钱…」",
+    "name_url": "https://patchwiki.biligame.com/images/ys/e/e6/m8gwi7kp98wv037zmvj4y8lfemwd6y3.png",
+    "card_type": "「看到那小子挣钱…」",
+    "type": "「看到那小子挣钱…」",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          }
-        ],
+        "name": "技能说明",
         "description": "本回合中，每当对方获得2个元素骰，你就获得1个 万能元素 。（此效果提供的元素骰除外）",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "「看到那小子挣钱…」"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌",
+    "id": "4c6644b1-c01c-4df4-afc6-6678cb8318af",
     "name": "噔噔！",
+    "name_url": "https://patchwiki.biligame.com/images/ys/c/c7/kqhd0k3uuwjtvpsaw5u24tl9dvut3v3.png",
+    "card_type": "噔噔！",
+    "type": "噔噔！",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          }
-        ],
+        "name": "技能说明",
         "description": "对我方「出战角色」造成1点 物理伤害 。本回合的结束阶段时，抓1张牌。",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "噔噔！"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌",
+    "id": "50492066-3987-4c55-91d8-b62cee0a2a5d",
     "name": "幻戏倒计时：3",
+    "name_url": "https://patchwiki.biligame.com/images/ys/5/5b/de4hs345yquzrdidupeppz3p3sypx4n.png",
+    "card_type": "幻戏倒计时：3",
+    "type": "幻戏倒计时：3",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 3
-          }
-        ],
+        "name": "技能说明",
         "description": "将我方所有元素骰转换为 万能元素 ，抓4张牌。 此牌在手牌或牌库中被舍弃后： 将张元素骰费用比此牌少1个的「幻戏倒计时」放置到你的牌库顶。",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 3
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "幻戏倒计时：3"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌秘传",
+    "id": "19a5cbc1-0aa1-4e78-a4a9-5702b1b29e22",
     "name": "旧日鏖战",
+    "name_url": "https://patchwiki.biligame.com/images/ys/a/a7/npqmichy6y1gzczdhly696a5uelt8d4.png",
+    "card_type": "旧日鏖战",
+    "type": "旧日鏖战",
+    "category": "事件牌行动牌秘传",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          },
-          {
-            "type": "其他",
-            "value": 0
-          }
-        ],
+        "name": "技能说明",
         "description": "敌方出战角色失去1点 充能 。 （整局游戏只能打出一张「 秘传」卡牌；这张牌一定在你的起始手牌中）",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          },
+          {
+            "type": "其他",
+            "value": 0
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "旧日鏖战"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌",
+    "id": "e2030c8c-12d9-4ed2-869b-0bc561ed9ac6",
     "name": "水与正义",
+    "name_url": "https://patchwiki.biligame.com/images/ys/3/36/gk8k83x72n8nm1bdwadyoaklt2lwsrc.png",
+    "card_type": "水与正义",
+    "type": "水与正义",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "无色",
-            "value": 2
-          }
-        ],
+        "name": "技能说明",
         "description": "平均分配我方未被击倒的角色的生命值，然后治疗所有我方角色1点。 （牌组包含至少2个「 枫丹」角色，才能加入牌组）",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "无色",
+            "value": 2
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "水与正义"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌",
+    "id": "efc83f6a-2bdd-408f-b660-3da429d80756",
     "name": "海中寻宝",
+    "name_url": "https://patchwiki.biligame.com/images/ys/8/85/holw8rjus7di20i1251fogyd653w1as.png",
+    "card_type": "海中寻宝",
+    "type": "海中寻宝",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 2
-          }
-        ],
+        "name": "技能说明",
         "description": "生成6张 海底宝藏 ，随机地置入我方牌库中。",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 2
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "海中寻宝"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌料理",
+    "id": "2c91644b-6cec-420b-b4e8-ca1ae3fe0869",
     "name": "缤纷马卡龙",
+    "name_url": "https://patchwiki.biligame.com/images/ys/6/6b/br15i4lhc8bo8zt18n2maizdkb3l9xa.png",
+    "card_type": "缤纷马卡龙",
+    "type": "缤纷马卡龙",
+    "category": "事件牌行动牌料理",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "无色",
-            "value": 2
-          }
-        ],
+        "name": "技能说明",
         "description": "治疗目标角色1点，该角色接下来3次受到伤害后再治疗其1点。 （每回合每个角色最多食用1次「 料理」）",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "无色",
+            "value": 2
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "缤纷马卡龙"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌",
+    "id": "c9f848ae-b1b9-4811-96e3-208eeda60777",
     "name": "可控性去危害化式定向爆破",
+    "name_url": "https://patchwiki.biligame.com/images/ys/5/5a/g4yrv9d1f3zyh972fevn8dd33rnzn3r.png",
+    "card_type": "可控性去危害化式定向爆破",
+    "type": "可控性去危害化式定向爆破",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 1
-          }
-        ],
+        "name": "技能说明",
         "description": "对方支援区和召唤物区的卡牌数量总和至少为4时，才能打出 ：双方所有召唤物的可用次数-1。",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 1
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "可控性去危害化式定向爆破"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌秘传",
+    "id": "bec6e4c8-4dd5-42c6-829e-cc92dd6557df",
     "name": "抗争之日·碎梦之时",
+    "name_url": "https://patchwiki.biligame.com/images/ys/8/8c/al1uj8cidhpg45x6pq3qmovsg0d8taz.png",
+    "card_type": "抗争之日·碎梦之时",
+    "type": "抗争之日·碎梦之时",
+    "category": "事件牌行动牌秘传",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          },
-          {
-            "type": "其他",
-            "value": 0
-          }
-        ],
+        "name": "技能说明",
         "description": "本回合中，目标我方角色受到的伤害-1。（最多生效4次） （整局游戏只能打出一张「 秘传」卡牌；这张牌一定在你的起始手牌中）",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          },
+          {
+            "type": "其他",
+            "value": 0
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "抗争之日·碎梦之时"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌",
+    "id": "c7f43576-90e5-45f6-a447-5f76c90c50c6",
     "name": "净觉花",
+    "name_url": "https://patchwiki.biligame.com/images/ys/2/21/jtgap3xkq3lsc89p4h7eg5f51n1v3r7.png",
+    "card_type": "净觉花",
+    "type": "净觉花",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          }
-        ],
+        "name": "技能说明",
         "description": "选择一张我方支援区的牌，将其弃置。然后，在我方手牌中随机生成2张支援牌。 本回合中，我方下次打出支援牌时 ：少花费1个元素骰。",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "净觉花"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌",
+    "id": "fa9cc7e5-a707-46f3-a885-ada008146247",
     "name": "机关铸成之链",
+    "name_url": "https://patchwiki.biligame.com/images/ys/2/2c/81hg6cvqiu59rcl7h8kq92vll1xlol3.png",
+    "card_type": "机关铸成之链",
+    "type": "机关铸成之链",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          }
-        ],
+        "name": "技能说明",
         "description": "目标我方角色每次受到伤害或治疗后 ：累积1点「备战度」（最多累积2点）。 我方打出原本费用不多于「备战度」的「 武器」或「 圣遗物」时 ：移除所有「备战度」，以免费打出该牌。",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "机关铸成之链"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌料理",
+    "id": "a05ee80d-f85c-4cf0-a789-6775cfc9ce2f",
     "name": "松茸酿肉卷",
+    "name_url": "https://patchwiki.biligame.com/images/ys/6/65/kv8ibdqu6xksgd7egwfo6q6nyetg14p.png",
+    "card_type": "松茸酿肉卷",
+    "type": "松茸酿肉卷",
+    "category": "事件牌行动牌料理",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 2
-          }
-        ],
+        "name": "技能说明",
         "description": "治疗目标角色2点，3回合内的结束阶段再治疗此角色1点。 （每回合每个角色最多食用1次「 料理」）",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 2
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "松茸酿肉卷"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌",
+    "id": "fa25294b-c8ef-4abf-880c-a12f4ca42a21",
     "name": "坍陷与契机",
+    "name_url": "https://patchwiki.biligame.com/images/ys/d/da/g0t0brig0jwo42mgl08mh893n47gmpr.png",
+    "card_type": "坍陷与契机",
+    "type": "坍陷与契机",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          }
-        ],
+        "name": "技能说明",
         "description": "我方至少剩余8个元素骰，且对方未宣布结束时，才能打出 ：本回合中，双方牌手进行「切换角色」行动时需要额外花费1个元素骰。",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "坍陷与契机"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌天赋 战斗行动",
+    "id": "b0baee2e-db15-441f-9b7b-9f9c92d6b8ed",
     "name": "晦朔千引",
+    "name_url": "https://patchwiki.biligame.com/images/ys/4/46/1628ywoo30pxo1f2z4pwu7s4zo8fxyx.png",
+    "card_type": "晦朔千引",
+    "type": "晦朔千引",
+    "category": "事件牌行动牌天赋 战斗行动",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 2
-          }
-        ],
+        "name": "技能说明",
         "description": "战斗行动 ：我方出战角色为 若陀龙王 时，对该角色打出。使若陀龙王附属 磐岩百相·元素凝晶 ，然后生成每种我方角色所具有的元素类型的元素骰各1个。 （牌组中包含若陀龙王，才能加入牌组）",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 2
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "晦朔千引"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌",
+    "id": "8f0323ad-0c13-4a46-925f-e23175186908",
     "name": "浮烁的四叶印",
+    "name_url": "https://patchwiki.biligame.com/images/ys/d/d9/d4mhmyaitvia664qn3sc39r24zn0iam.png",
+    "card_type": "浮烁的四叶印",
+    "type": "浮烁的四叶印",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          }
-        ],
+        "name": "技能说明",
         "description": "目标角色附属 四叶印 ：每个回合的结束阶段，我方都切换到此角色。",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "浮烁的四叶印"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌料理",
+    "id": "f29798e3-a6e7-422f-af0a-bfe2cfe28ab9",
     "name": "炸鱼薯条",
+    "name_url": "https://patchwiki.biligame.com/images/ys/b/bd/huvjaatt03qlp0ok3jydbu517bthjw1.png",
+    "card_type": "炸鱼薯条",
+    "type": "炸鱼薯条",
+    "category": "事件牌行动牌料理",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "无色",
-            "value": 2
-          }
-        ],
+        "name": "技能说明",
         "description": "本回合中，所有我方角色下次使用技能时少花费1个元素骰。（每回合每个角色最多食用1次「 料理」）",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "无色",
+            "value": 2
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "炸鱼薯条"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌秘传",
+    "id": "a6e36d13-9b1c-47b0-8503-4cf04a0f82b4",
     "name": "裁定之时",
+    "name_url": "https://patchwiki.biligame.com/images/ys/1/1e/12f7ogpfj9ily34pw8tjcmlurt0xcy3.png",
+    "card_type": "裁定之时",
+    "type": "裁定之时",
+    "category": "事件牌行动牌秘传",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 1
-          },
-          {
-            "type": "其他",
-            "value": 0
-          }
-        ],
+        "name": "技能说明",
         "description": "本回合中，对方牌手打出的3张事件牌无效。 （整局游戏只能打出一张「 秘传」卡牌；这张牌一定在你的起始手牌中）",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 1
+          },
+          {
+            "type": "其他",
+            "value": 0
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "裁定之时"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌",
+    "id": "112a5801-b70b-49ca-a19c-2658aafe0e43",
     "name": "野猪公主",
+    "name_url": "https://patchwiki.biligame.com/images/ys/9/98/e9mhpu00tmnrvf2jgng3mlg3j62xoye.png",
+    "card_type": "野猪公主",
+    "type": "野猪公主",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          }
-        ],
+        "name": "技能说明",
         "description": "本回合中，我方每有一张装备在角色身上的「装备牌」被弃置时 ：获得1个 万能元素 。（最多获得2个） （角色被击倒时弃置装备牌，或者覆盖装备「 武器」或「 圣遗物」，都可以触发此效果）",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "野猪公主"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌秘传",
+    "id": "bc124ecf-2f7d-4bae-8d7a-08631c2edef2",
     "name": "万家灶火",
+    "name_url": "https://patchwiki.biligame.com/images/ys/1/1a/0acqmahql8om5jujt4by2tbbjx1ix7q.png",
+    "card_type": "万家灶火",
+    "type": "万家灶火",
+    "category": "事件牌行动牌秘传",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          },
-          {
-            "type": "其他",
-            "value": 0
-          }
-        ],
+        "name": "技能说明",
         "description": "第1回合打出此牌时： 如果我方牌组中初始包含至少2张不同的「 天赋」牌，则抓1张「 天赋」牌。 第2回合及以后打出此牌时： 我方抓 当前的回合数-1 数量的牌。（最多抓4张） （整局游戏只能打出一张「 秘传」卡牌；这张牌一定在你的起始手牌中）",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          },
+          {
+            "type": "其他",
+            "value": 0
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "万家灶火"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌",
+    "id": "46b7d554-a049-4ef2-8ba0-89cb3ae319c6",
     "name": "琴音之诗",
+    "name_url": "https://patchwiki.biligame.com/images/ys/8/8e/5eyhuydf9z4utvqwbptznpjxbc8108n.png",
+    "card_type": "琴音之诗",
+    "type": "琴音之诗",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          }
-        ],
+        "name": "技能说明",
         "description": "将一个我方角色所装备的「 圣遗物」返回手牌。 本回合中，我方下次打出「 圣遗物」手牌时 ：少花费1个元素骰。如果打出此牌前我方未打出过其他行动牌，则改为少花费2个元素骰。",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "琴音之诗"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌",
+    "id": "8dd74ffc-7050-4a0f-8dd5-4f6d74a5cd4c",
     "name": "拳力斗技！",
+    "name_url": "https://patchwiki.biligame.com/images/ys/8/8e/39mjo9myvfqjuf5esguh27qwrkic28c.png",
+    "card_type": "拳力斗技！",
+    "type": "拳力斗技！",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          }
-        ],
+        "name": "技能说明",
         "description": "我方至少剩余8个元素骰，且对方未宣布结束时，才能打出 ：本回合中一位牌手先宣布结束时，未宣布结束的牌手抓2张牌。",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "拳力斗技！"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌秘传",
+    "id": "ae737181-5a06-49da-af6f-e650b26b5c68",
     "name": "自由的新风",
+    "name_url": "https://patchwiki.biligame.com/images/ys/f/f6/puejyl0b06jj2pdkz3y0vyxhuc2p5pm.png",
+    "card_type": "自由的新风",
+    "type": "自由的新风",
+    "category": "事件牌行动牌秘传",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          },
-          {
-            "type": "其他",
-            "value": 0
-          }
-        ],
+        "name": "技能说明",
         "description": "本回合中，轮到我方行动期间有对方角色被击倒时 ：本次行动结束后，我方可以再连续行动一次。 可用次数：1 整局游戏只能打出一张「 秘传」卡牌；这张牌一定在你的起始手牌中)",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          },
+          {
+            "type": "其他",
+            "value": 0
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "自由的新风"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌秘传",
+    "id": "fd38adac-9102-48a7-9828-59d1a7e84d2d",
     "name": "愉舞欢游",
+    "name_url": "https://patchwiki.biligame.com/images/ys/8/84/f7jzh79li6a2utw9hanljjwf3s3zkl0.png",
+    "card_type": "愉舞欢游",
+    "type": "愉舞欢游",
+    "category": "事件牌行动牌秘传",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          },
-          {
-            "type": "其他",
-            "value": 0
-          }
-        ],
+        "name": "技能说明",
         "description": "我方出战角色为 冰 / 水 / 火 / 雷 / 草 时，才能打出： 对我方所有具有元素附着的角色，附着我方出战角色类型的元素。 （整局游戏只能打出一张「 秘传 在一场对局中，每位牌手只能使用一张「秘传」卡牌。 「秘传」卡牌一定在你的起始手牌中。 （当牌组中的「秘传」卡牌数量大于起始手牌数时，秘传卡牌将随机出现在起始手牌中。） 」卡牌：这张牌一定在你的起始手牌中）",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          },
+          {
+            "type": "其他",
+            "value": 0
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "愉舞欢游"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌",
+    "id": "a78bdf23-c075-47ed-9446-ae2a43a3d255",
     "name": "藏锋何处",
+    "name_url": "https://patchwiki.biligame.com/images/ys/9/94/c8uxlfrnqtusb2c0q4t40lf77ufvg4n.png",
+    "card_type": "藏锋何处",
+    "type": "藏锋何处",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          }
-        ],
+        "name": "技能说明",
         "description": "将一个我方角色所装备的「 武器」返回手牌。 本回合中，我方下次打出「 武器」手牌时： 少花费2个元素骰。",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "藏锋何处"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌",
+    "id": "2291fca8-d5b1-476a-a41e-c936506a17d9",
     "name": "大梦的曲调",
+    "name_url": "https://patchwiki.biligame.com/images/ys/0/06/bmma9mj7scrdtfrxygglcs2zpoavf6j.png",
+    "card_type": "大梦的曲调",
+    "type": "大梦的曲调",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          }
-        ],
+        "name": "技能说明",
         "description": "我方下次打出「 武器」或「 圣遗物」手牌时： 少花费1个元素骰。",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "大梦的曲调"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌秘传",
+    "id": "8bba366a-8f45-42dd-94bc-84f7372359ca",
     "name": "旧时庭园",
-    "skills": [
-      {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          },
-          {
-            "type": "其他",
-            "value": 0
-          }
-        ],
-        "description": "我方已有角色装备「 武器」或「 圣遗物」时，才能打出： 本回合中，我方下次打出「 武器」或「 圣遗物」装备时少花费2个元素骰。 （整局游戏只能打出一张「 秘传 在一场对局中，每位牌手只能使用一张「秘传」卡牌。 「秘传」卡牌一定在你的起始手牌中。 （当牌组中的「秘传」卡牌数量大于起始手牌数时，秘传卡牌将随机出现在起始手牌中。） 」卡牌：这张牌一定在你的起始手牌中）",
-        "name": "技能说明"
-      }
-    ],
-    "subtype": "事件牌",
-    "type": "旧时庭园"
-  },
-  {
+    "name_url": "https://patchwiki.biligame.com/images/ys/a/a7/07jjxn7fln266tufflof39w0mq4x46o.png",
+    "card_type": "旧时庭园",
+    "type": "旧时庭园",
     "category": "事件牌行动牌秘传",
-    "name": "磐岩盟契",
+    "subtype": "事件牌",
     "skills": [
       {
+        "name": "技能说明",
+        "description": "我方已有角色装备「 武器」或「 圣遗物」时，才能打出： 本回合中，我方下次打出「 武器」或「 圣遗物」装备时少花费2个元素骰。 （整局游戏只能打出一张「 秘传 在一场对局中，每位牌手只能使用一张「秘传」卡牌。 「秘传」卡牌一定在你的起始手牌中。 （当牌组中的「秘传」卡牌数量大于起始手牌数时，秘传卡牌将随机出现在起始手牌中。） 」卡牌：这张牌一定在你的起始手牌中）",
         "cost": [
           {
             "type": "象形",
@@ -1007,912 +1200,1135 @@
             "type": "其他",
             "value": 0
           }
-        ],
+        ]
+      }
+    ],
+    "element_type": ""
+  },
+  {
+    "id": "eddd7ea1-c483-44be-aca8-5ad202a2e016",
+    "name": "磐岩盟契",
+    "name_url": "https://patchwiki.biligame.com/images/ys/a/a1/b0rtcravqbmzolvsq6cm1xvb6wft1s7.png",
+    "card_type": "磐岩盟契",
+    "type": "磐岩盟契",
+    "category": "事件牌行动牌秘传",
+    "subtype": "事件牌",
+    "skills": [
+      {
+        "name": "技能说明",
         "description": "我方剩余元素骰数量为0时，才能打出： 生成2个不同的基础元素骰。 （整局游戏只能打出一张「 秘传 在一场对局中，每位牌手只能使用一张「秘传」卡牌。 「秘传」卡牌一定在你的起始手牌中。 （当牌组中的「秘传」卡牌数量大于起始手牌数时，秘传卡牌将随机出现在起始手牌中。） 」卡牌：这张牌一定在你的起始手牌中）",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          },
+          {
+            "type": "其他",
+            "value": 0
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "磐岩盟契"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌战斗行动",
+    "id": "cf4eb3d7-109e-499b-bbcf-fe24ba517d9d",
     "name": "下落斩",
+    "name_url": "https://patchwiki.biligame.com/images/ys/4/4a/foyd8u85w8xnt3n0272j8mxmgdbm42m.png",
+    "card_type": "下落斩",
+    "type": "下落斩",
+    "category": "事件牌行动牌战斗行动",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 3
-          }
-        ],
+        "name": "技能说明",
         "description": "战斗行动： 切换到目标角色，然后该角色进行 「普通攻击」 。",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 3
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "下落斩"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌料理",
+    "id": "2527f126-51a4-480d-82d9-e495b9486fda",
     "name": "刺身拼盘",
+    "name_url": "https://patchwiki.biligame.com/images/ys/4/47/svahq8nhshm9fhs8vrnwr403qmj3hzx.png",
+    "card_type": "刺身拼盘",
+    "type": "刺身拼盘",
+    "category": "事件牌行动牌料理",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 1
-          }
-        ],
+        "name": "技能说明",
         "description": "目标角色在本回合结束前，「普通攻击」造成的伤害+1。 （每回合每个角色最多食用1次「 料理」）",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 1
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "刺身拼盘"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌料理",
+    "id": "af60d2cb-a544-43ba-929e-b760dd3a219a",
     "name": "唐杜尔烤鸡",
+    "name_url": "https://patchwiki.biligame.com/images/ys/c/c8/2gh9zi1jjb76o0d9hrtrcz078lun7vz.png",
+    "card_type": "唐杜尔烤鸡",
+    "type": "唐杜尔烤鸡",
+    "category": "事件牌行动牌料理",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "无色",
-            "value": 2
-          }
-        ],
+        "name": "技能说明",
         "description": "本回合中，所有我方角色下一次 「元素战技」 造成的伤害+2。 （每回合每个角色最多食用1次「 料理」）",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "无色",
+            "value": 2
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "唐杜尔烤鸡"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌",
+    "id": "da993a9d-3b73-4971-94a1-9e983089121f",
     "name": "岩与契约",
+    "name_url": "https://patchwiki.biligame.com/images/ys/d/dc/0ue4fmkedb8b4sfdo5x89bx0bocstrl.png",
+    "card_type": "岩与契约",
+    "type": "岩与契约",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "无色",
-            "value": 3
-          }
-        ],
+        "name": "技能说明",
         "description": "下回合行动阶段开始时： 生成3点 万能元素 ，抓1张牌。 （牌组包含至少2个「 璃月」角色，才能加入牌组）",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "无色",
+            "value": 3
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "岩与契约"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌",
+    "id": "da067730-52a7-4dff-b99d-a216669f3a72",
     "name": "愚人众的阴谋",
+    "name_url": "https://patchwiki.biligame.com/images/ys/3/31/fz8y9n1hi96nr596pqqq20wv2aalnhw.png",
+    "card_type": "愚人众的阴谋",
+    "type": "愚人众的阴谋",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 2
-          }
-        ],
+        "name": "技能说明",
         "description": "在对方场上，生成1个随机类型的「 愚人众伏兵 」。 （牌组包含至少2个「 愚人众」角色，才能加入牌组）",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 2
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "愚人众的阴谋"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌料理",
+    "id": "c57641b7-54f4-4cc4-b764-a1d2db60a43d",
     "name": "提瓦特煎蛋",
+    "name_url": "https://patchwiki.biligame.com/images/ys/9/95/1vsducvloxjttzjltsos0i2ynmfloi6.png",
+    "card_type": "提瓦特煎蛋",
+    "type": "提瓦特煎蛋",
+    "category": "事件牌行动牌料理",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 3
-          }
-        ],
+        "name": "技能说明",
         "description": "复苏目标角色，并治疗此角色1点。 （每回合中，最多通过「 料理」复苏1个角色，并且每个角色最多食用1次「 料理」）",
-        "name": "技能说明"
-      }
-    ],
-    "subtype": "事件牌",
-    "type": "提瓦特煎蛋"
-  },
-  {
-    "category": "事件牌行动牌",
-    "name": "永远的友谊",
-    "skills": [
-      {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 2
-          }
-        ],
-        "description": "手牌数小于4的牌手抓牌，直到手牌数各为4张。",
-        "name": "技能说明"
-      }
-    ],
-    "subtype": "事件牌",
-    "type": "永远的友谊"
-  },
-  {
-    "category": "事件牌行动牌",
-    "name": "温妮莎传奇",
-    "skills": [
-      {
         "cost": [
           {
             "type": "象形",
             "value": 3
           }
-        ],
+        ]
+      }
+    ],
+    "element_type": ""
+  },
+  {
+    "id": "c0ddd7fa-9a8d-4a99-86e0-acee5b65f47e",
+    "name": "永远的友谊",
+    "name_url": "https://patchwiki.biligame.com/images/ys/c/c1/a87zy5dnehcfa1zwvob0h91nyx1jumx.png",
+    "card_type": "永远的友谊",
+    "type": "永远的友谊",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
+    "skills": [
+      {
+        "name": "技能说明",
+        "description": "手牌数小于4的牌手抓牌，直到手牌数各为4张。",
+        "cost": [
+          {
+            "type": "象形",
+            "value": 2
+          }
+        ]
+      }
+    ],
+    "element_type": ""
+  },
+  {
+    "id": "e4be5176-698e-4291-a2b9-e81818ee78dc",
+    "name": "温妮莎传奇",
+    "name_url": "https://patchwiki.biligame.com/images/ys/1/1a/3fk0s5sss5pzq2jjlchxi2jxyjdnw7w.png",
+    "card_type": "温妮莎传奇",
+    "type": "温妮莎传奇",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
+    "skills": [
+      {
+        "name": "技能说明",
         "description": "生成4个不同类型的基础元素骰。",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 3
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "温妮莎传奇"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌",
+    "id": "e1acdc23-e4db-4ea9-ac06-df1946028714",
     "name": "草与智慧",
+    "name_url": "https://patchwiki.biligame.com/images/ys/9/99/1ue8i7yely2bhte85f2js3o9ruagg4j.png",
+    "card_type": "草与智慧",
+    "type": "草与智慧",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 1
-          }
-        ],
+        "name": "技能说明",
         "description": "抓1张牌。然后，选择任意手牌替换。 （牌组包含至少2个「 须弥」角色，才能加入牌组）",
-        "name": "技能说明"
-      }
-    ],
-    "subtype": "事件牌",
-    "type": "草与智慧"
-  },
-  {
-    "category": "事件牌行动牌",
-    "name": "重攻击",
-    "skills": [
-      {
         "cost": [
           {
             "type": "象形",
             "value": 1
           }
-        ],
+        ]
+      }
+    ],
+    "element_type": ""
+  },
+  {
+    "id": "cdc679ce-1ecc-4c2c-a194-8cdb23b9efe4",
+    "name": "重攻击",
+    "name_url": "https://patchwiki.biligame.com/images/ys/5/51/4kxjjxt09fr66z712egjpsc4xtypgdt.png",
+    "card_type": "重攻击",
+    "type": "重攻击",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
+    "skills": [
+      {
+        "name": "技能说明",
         "description": "本回合中，当前我方出战角色下次 「普通攻击」 造成的伤害+1。 此次「普通攻击」为重击时： 伤害额外+1。",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 1
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "重攻击"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌",
+    "id": "8986b472-5f3a-4df3-b05e-75b37da48d12",
     "name": "雷与永恒",
+    "name_url": "https://patchwiki.biligame.com/images/ys/7/7e/iusp7gjs2c4ohwe753f6baf2k8gyudf.png",
+    "card_type": "雷与永恒",
+    "type": "雷与永恒",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          }
-        ],
+        "name": "技能说明",
         "description": "将我方所有元素骰转换为 万能元素 。 （牌组包含至少2个「 稻妻」角色，才能加入牌组）",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "雷与永恒"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌",
+    "id": "dc1409ca-b87f-41e2-9267-b9727f3dbf87",
     "name": "风与自由",
+    "name_url": "https://patchwiki.biligame.com/images/ys/a/a0/sayg9ftwgvdzm1wz0ejm7lsebsonl5q.png",
+    "card_type": "风与自由",
+    "type": "风与自由",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          }
-        ],
+        "name": "技能说明",
         "description": "本回合中，轮到我方行动期间有对方角色被击倒时： 本次行动结束后，我方可以再连续行动一次。 可用次数：1 （牌组包含至少2个「 蒙德」角色，才能加入牌组）",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "风与自由"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌料理",
+    "id": "0dc670bc-c807-4156-beab-233fa7ba38c9",
     "name": "黄油蟹蟹",
-    "skills": [
-      {
-        "cost": [
-          {
-            "type": "无色",
-            "value": 2
-          }
-        ],
-        "description": "本回合中，所有我方角色下次受到的伤害-2。 （每回合每个角色最多食用1次「 料理」）",
-        "name": "技能说明"
-      }
-    ],
-    "subtype": "事件牌",
-    "type": "黄油蟹蟹"
-  },
-  {
-    "category": "事件牌行动牌",
-    "name": "一掷乾坤",
-    "skills": [
-      {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          }
-        ],
-        "description": "选择任意元素骰 重投 ，可重投2次。",
-        "name": "技能说明"
-      }
-    ],
-    "subtype": "事件牌",
-    "type": "一掷乾坤"
-  },
-  {
-    "category": "事件牌行动牌",
-    "name": "交给我吧！",
-    "skills": [
-      {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          }
-        ],
-        "description": "我方下次执行「切换角色」行动时： 将此次切换视为「 快速行动 」而非「 战斗行动 」。",
-        "name": "技能说明"
-      }
-    ],
-    "subtype": "事件牌",
-    "type": "交给我吧！"
-  },
-  {
+    "name_url": "https://patchwiki.biligame.com/images/ys/5/5c/159aijgpr42o7jt27zita6oeg1mnlfe.png",
+    "card_type": "黄油蟹蟹",
+    "type": "黄油蟹蟹",
     "category": "事件牌行动牌料理",
-    "name": "仙跳墙",
+    "subtype": "事件牌",
     "skills": [
       {
+        "name": "技能说明",
+        "description": "本回合中，所有我方角色下次受到的伤害-2。 （每回合每个角色最多食用1次「 料理」）",
         "cost": [
           {
             "type": "无色",
             "value": 2
           }
-        ],
+        ]
+      }
+    ],
+    "element_type": ""
+  },
+  {
+    "id": "45e4b8a5-4f63-4456-8376-e4e5652a247d",
+    "name": "一掷乾坤",
+    "name_url": "https://patchwiki.biligame.com/images/ys/f/f3/rvm9ozw86s711ziug0z5l6tzh67nkyb.png",
+    "card_type": "一掷乾坤",
+    "type": "一掷乾坤",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
+    "skills": [
+      {
+        "name": "技能说明",
+        "description": "选择任意元素骰 重投 ，可重投2次。",
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          }
+        ]
+      }
+    ],
+    "element_type": ""
+  },
+  {
+    "id": "f53a2e3b-8508-47c5-ae2e-7b57021a76c6",
+    "name": "交给我吧！",
+    "name_url": "https://patchwiki.biligame.com/images/ys/2/2c/he6762nsf8r8hq034u4zbmrpufw227u.png",
+    "card_type": "交给我吧！",
+    "type": "交给我吧！",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
+    "skills": [
+      {
+        "name": "技能说明",
+        "description": "我方下次执行「切换角色」行动时： 将此次切换视为「 快速行动 」而非「 战斗行动 」。",
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          }
+        ]
+      }
+    ],
+    "element_type": ""
+  },
+  {
+    "id": "89eda67a-ecd3-44d1-94ba-f71491dcd0d5",
+    "name": "仙跳墙",
+    "name_url": "https://patchwiki.biligame.com/images/ys/2/2c/5hmb18yuw0gqx2p91vfhnbeeoapaxey.png",
+    "card_type": "仙跳墙",
+    "type": "仙跳墙",
+    "category": "事件牌行动牌料理",
+    "subtype": "事件牌",
+    "skills": [
+      {
+        "name": "技能说明",
         "description": "本回合中，目标角色下一次 元素爆发 造成的伤害+3。 （每回合每个角色最多食用1次「 料理」）",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "无色",
+            "value": 2
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "仙跳墙"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌元素共鸣",
+    "id": "1d82f8ba-2705-4d1c-8ff6-6cd7926771be",
     "name": "元素共鸣：交织之冰",
+    "name_url": "https://patchwiki.biligame.com/images/ys/5/50/3bahc5ly2cgyau8j6x10wdnyn570xa6.png",
+    "card_type": "元素共鸣：交织之冰",
+    "type": "元素共鸣：交织之冰",
+    "category": "事件牌行动牌元素共鸣",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          }
-        ],
+        "name": "技能说明",
         "description": "生成1个 冰元素骰 。 （牌组包含至少2个 冰元素 角色，才能加入牌组）",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "元素共鸣：交织之冰"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌元素共鸣",
+    "id": "d12ebe21-b9f5-47ce-bf74-d47551dd4908",
     "name": "元素共鸣：交织之岩",
+    "name_url": "https://patchwiki.biligame.com/images/ys/d/d4/55etxhgd7t48yekmn0rp4nor66avtp6.png",
+    "card_type": "元素共鸣：交织之岩",
+    "type": "元素共鸣：交织之岩",
+    "category": "事件牌行动牌元素共鸣",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          }
-        ],
+        "name": "技能说明",
         "description": "生成1个 岩元素骰 。 （牌组包含至少2个 岩元素 角色，才能加入牌组）",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "元素共鸣：交织之岩"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌元素共鸣",
+    "id": "032ddf2d-5a13-4211-a91c-59653c87b517",
     "name": "元素共鸣：交织之水",
+    "name_url": "https://patchwiki.biligame.com/images/ys/6/6a/pcnwedgq304a1q4yk6wad0yp85i4vkz.png",
+    "card_type": "元素共鸣：交织之水",
+    "type": "元素共鸣：交织之水",
+    "category": "事件牌行动牌元素共鸣",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          }
-        ],
+        "name": "技能说明",
         "description": "生成1个 水元素骰 。 （牌组包含至少2个 水元素 角色，才能加入牌组）",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "元素共鸣：交织之水"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌元素共鸣",
+    "id": "8db16315-d305-4279-a032-20b680c5b397",
     "name": "元素共鸣：交织之火",
+    "name_url": "https://patchwiki.biligame.com/images/ys/8/8c/pt6o4ax55fdh2mqh3fo54xg2vz6wi5s.png",
+    "card_type": "元素共鸣：交织之火",
+    "type": "元素共鸣：交织之火",
+    "category": "事件牌行动牌元素共鸣",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          }
-        ],
+        "name": "技能说明",
         "description": "生成1个 火元素骰 。 （牌组包含至少2个 火元素 角色，才能加入牌组）",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "元素共鸣：交织之火"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌元素共鸣",
+    "id": "a4e5a089-da9c-45ce-bb21-d906e595e1cb",
     "name": "元素共鸣：交织之草",
+    "name_url": "https://patchwiki.biligame.com/images/ys/b/b8/2az3vdksctwj85u3n1yd2vgpifnfnh9.png",
+    "card_type": "元素共鸣：交织之草",
+    "type": "元素共鸣：交织之草",
+    "category": "事件牌行动牌元素共鸣",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          }
-        ],
+        "name": "技能说明",
         "description": "生成1个 草元素骰 。 （牌组包含至少2个 草元素 角色，才能加入牌组）",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "元素共鸣：交织之草"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌元素共鸣",
+    "id": "e94a08ec-cac7-4dd4-9ec8-06011befc32d",
     "name": "元素共鸣：交织之雷",
+    "name_url": "https://patchwiki.biligame.com/images/ys/7/73/8c7vqvujw52ldbelsg65h77524aglwg.png",
+    "card_type": "元素共鸣：交织之雷",
+    "type": "元素共鸣：交织之雷",
+    "category": "事件牌行动牌元素共鸣",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          }
-        ],
+        "name": "技能说明",
         "description": "生成1个 雷元素骰 。 （牌组包含至少2个 雷元素 角色，才能加入牌组）",
-        "name": "技能说明"
-      }
-    ],
-    "subtype": "事件牌",
-    "type": "元素共鸣：交织之雷"
-  },
-  {
-    "category": "事件牌行动牌元素共鸣",
-    "name": "元素共鸣：交织之风",
-    "skills": [
-      {
         "cost": [
           {
             "type": "象形",
             "value": 0
           }
-        ],
-        "description": "生成1个 风元素骰 。 （牌组包含至少2个 风元素 角色，才能加入牌组）",
-        "name": "技能说明"
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "元素共鸣：交织之风"
+    "element_type": ""
   },
   {
+    "id": "5b464c8f-52b8-4cca-981c-41e0ed2ae427",
+    "name": "元素共鸣：交织之风",
+    "name_url": "https://patchwiki.biligame.com/images/ys/e/e1/q3it8dewdf23a74mzxmdwhh8ak8op7z.png",
+    "card_type": "元素共鸣：交织之风",
+    "type": "元素共鸣：交织之风",
     "category": "事件牌行动牌元素共鸣",
-    "name": "元素共鸣：坚定之岩",
+    "subtype": "事件牌",
     "skills": [
       {
+        "name": "技能说明",
+        "description": "生成1个 风元素骰 。 （牌组包含至少2个 风元素 角色，才能加入牌组）",
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          }
+        ]
+      }
+    ],
+    "element_type": ""
+  },
+  {
+    "id": "17923883-2fd8-4cfa-b264-adc10fca10a7",
+    "name": "元素共鸣：坚定之岩",
+    "name_url": "https://patchwiki.biligame.com/images/ys/9/98/bkfatmf7knk6ezxa7iey9z8f9i38b1f.png",
+    "card_type": "元素共鸣：坚定之岩",
+    "type": "元素共鸣：坚定之岩",
+    "category": "事件牌行动牌元素共鸣",
+    "subtype": "事件牌",
+    "skills": [
+      {
+        "name": "技能说明",
+        "description": "为我方出战角色提供3点 护盾 。 （牌组包含至少2个 岩元素 角色，才能加入牌组）",
         "cost": [
           {
             "type": "岩",
             "value": 1
           }
-        ],
-        "description": "为我方出战角色提供3点 护盾 。 （牌组包含至少2个 岩元素 角色，才能加入牌组）",
-        "name": "技能说明"
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "元素共鸣：坚定之岩"
+    "element_type": "岩"
   },
   {
-    "category": "事件牌行动牌元素共鸣",
+    "id": "750419fe-5aca-4f92-90b6-4249472e0e40",
     "name": "元素共鸣：强能之雷",
+    "name_url": "https://patchwiki.biligame.com/images/ys/b/bd/swd697eebhh0wd0srjr11r1zd47wb1a.png",
+    "card_type": "元素共鸣：强能之雷",
+    "type": "元素共鸣：强能之雷",
+    "category": "事件牌行动牌元素共鸣",
+    "subtype": "事件牌",
     "skills": [
       {
+        "name": "技能说明",
+        "description": "我方出战角色和下一名充能未满的角色获得1点 充能 。 （牌组包含至少2个 雷元素 角色，才能加入牌组）",
         "cost": [
           {
             "type": "雷",
             "value": 1
           }
-        ],
-        "description": "我方出战角色和下一名充能未满的角色获得1点 充能 。 （牌组包含至少2个 雷元素 角色，才能加入牌组）",
-        "name": "技能说明"
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "元素共鸣：强能之雷"
+    "element_type": "雷"
   },
   {
-    "category": "事件牌行动牌元素共鸣",
+    "id": "f9172c00-f3e9-4884-a4d3-bed4eab44e45",
     "name": "元素共鸣：愈疗之水",
+    "name_url": "https://patchwiki.biligame.com/images/ys/a/ac/lbqn61prci0om6hwjcaxif6tq0sfrwu.png",
+    "card_type": "元素共鸣：愈疗之水",
+    "type": "元素共鸣：愈疗之水",
+    "category": "事件牌行动牌元素共鸣",
+    "subtype": "事件牌",
     "skills": [
       {
+        "name": "技能说明",
+        "description": "治疗我方出战角色2点。然后，治疗所有我方后台角色1点。 （牌组包含至少2个 水元素 角色，才能加入牌组）",
         "cost": [
           {
             "type": "水",
             "value": 1
           }
-        ],
-        "description": "治疗我方出战角色2点。然后，治疗所有我方后台角色1点。 （牌组包含至少2个 水元素 角色，才能加入牌组）",
-        "name": "技能说明"
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "元素共鸣：愈疗之水"
+    "element_type": "水"
   },
   {
-    "category": "事件牌行动牌元素共鸣",
+    "id": "cf2fc925-e67b-4fda-9d24-0b60fe690f51",
     "name": "元素共鸣：热诚之火",
+    "name_url": "https://patchwiki.biligame.com/images/ys/c/c4/9bfd3uroakij311xgcaqq2hd4pq0r60.png",
+    "card_type": "元素共鸣：热诚之火",
+    "type": "元素共鸣：热诚之火",
+    "category": "事件牌行动牌元素共鸣",
+    "subtype": "事件牌",
     "skills": [
       {
+        "name": "技能说明",
+        "description": "本回合中，我方当前出战角色下一次引发 火元素相关反应 时，造成的伤害+3。 （牌组包含至少2个 火元素 角色，才能加入牌组）",
         "cost": [
           {
             "type": "火",
             "value": 1
           }
-        ],
-        "description": "本回合中，我方当前出战角色下一次引发 火元素相关反应 时，造成的伤害+3。 （牌组包含至少2个 火元素 角色，才能加入牌组）",
-        "name": "技能说明"
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "元素共鸣：热诚之火"
+    "element_type": "火"
   },
   {
-    "category": "事件牌行动牌元素共鸣",
+    "id": "d44987ae-85c8-43fc-8d29-e0d31a44858c",
     "name": "元素共鸣：粉碎之冰",
+    "name_url": "https://patchwiki.biligame.com/images/ys/4/43/3l033hhrfkrovbhbts1zo8y9vzuor5w.png",
+    "card_type": "元素共鸣：粉碎之冰",
+    "type": "元素共鸣：粉碎之冰",
+    "category": "事件牌行动牌元素共鸣",
+    "subtype": "事件牌",
     "skills": [
       {
+        "name": "技能说明",
+        "description": "本回合中，我方当前出战角色下一次造成的伤害+2。 （牌组包含至少2个 冰元素 角色，才能加入牌组）",
         "cost": [
           {
             "type": "冰",
             "value": 1
           }
-        ],
-        "description": "本回合中，我方当前出战角色下一次造成的伤害+2。 （牌组包含至少2个 冰元素 角色，才能加入牌组）",
-        "name": "技能说明"
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "元素共鸣：粉碎之冰"
+    "element_type": "冰"
   },
   {
-    "category": "事件牌行动牌元素共鸣",
+    "id": "e3beb0e8-e788-4767-910e-8b30ddc0e944",
     "name": "元素共鸣：蔓生之草",
+    "name_url": "https://patchwiki.biligame.com/images/ys/a/a2/l26r60ehjptrzzr8bmrw04ymi88k8p7.png",
+    "card_type": "元素共鸣：蔓生之草",
+    "type": "元素共鸣：蔓生之草",
+    "category": "事件牌行动牌元素共鸣",
+    "subtype": "事件牌",
     "skills": [
       {
+        "name": "技能说明",
+        "description": "若我方场上存在 燃烧烈焰 / 草原核 或 丰穰之核 / 激化领域 ，则对对方出战角色造成1点 火元素伤害 / 水元素伤害 / 雷元素伤害 。 （牌组包含至少2个 草元素 角色，才能加入牌组）",
         "cost": [
           {
             "type": "草",
             "value": 1
           }
-        ],
-        "description": "若我方场上存在 燃烧烈焰 / 草原核 或 丰穰之核 / 激化领域 ，则对对方出战角色造成1点 火元素伤害 / 水元素伤害 / 雷元素伤害 。 （牌组包含至少2个 草元素 角色，才能加入牌组）",
-        "name": "技能说明"
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "元素共鸣：蔓生之草"
+    "element_type": "草"
   },
   {
-    "category": "事件牌行动牌元素共鸣",
+    "id": "864d2859-fcd7-4a4c-9640-125d1502c206",
     "name": "元素共鸣：迅捷之风",
+    "name_url": "https://patchwiki.biligame.com/images/ys/5/57/qiw0akf7zcmoggm8v1vrtfxajtejkt4.png",
+    "card_type": "元素共鸣：迅捷之风",
+    "type": "元素共鸣：迅捷之风",
+    "category": "事件牌行动牌元素共鸣",
+    "subtype": "事件牌",
     "skills": [
       {
+        "name": "技能说明",
+        "description": "我方下次执行「切换角色」行动时： 将此次切换视为「 快速行动 」而非「 战斗行动 」，并且少花费1个元素骰。 我方下次触发扩散反应时对目标以外的所有敌方角色造成的伤害+1。 （牌组包含至少2个 风元素 角色，才能加入牌组）",
         "cost": [
           {
             "type": "风",
             "value": 1
           }
-        ],
-        "description": "我方下次执行「切换角色」行动时： 将此次切换视为「 快速行动 」而非「 战斗行动 」，并且少花费1个元素骰。 我方下次触发扩散反应时对目标以外的所有敌方角色造成的伤害+1。 （牌组包含至少2个 风元素 角色，才能加入牌组）",
-        "name": "技能说明"
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "元素共鸣：迅捷之风"
+    "element_type": "风"
   },
   {
-    "category": "事件牌行动牌料理",
+    "id": "a73e48f9-8d72-4bef-a154-024146d3c6ad",
     "name": "兽肉薄荷卷",
+    "name_url": "https://patchwiki.biligame.com/images/ys/8/82/nfpta6ilzy1nckqkz2414pz10px61u5.png",
+    "card_type": "兽肉薄荷卷",
+    "type": "兽肉薄荷卷",
+    "category": "事件牌行动牌料理",
+    "subtype": "事件牌",
     "skills": [
       {
+        "name": "技能说明",
+        "description": "目标角色在本回合结束前，之后三次 普通攻击 都少花费1 无色元素 。 （每回合每个角色最多食用1次「 料理」）",
         "cost": [
           {
             "type": "象形",
             "value": 1
           }
-        ],
-        "description": "目标角色在本回合结束前，之后三次 普通攻击 都少花费1 无色元素 。 （每回合每个角色最多食用1次「 料理」）",
-        "name": "技能说明"
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "兽肉薄荷卷"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌料理",
+    "id": "5cc301a9-1169-472f-9d46-e0d526f1e468",
     "name": "北地烟熏鸡",
+    "name_url": "https://patchwiki.biligame.com/images/ys/d/d7/sigirn6wuppjrj7e4sd2okb4xig0o1a.png",
+    "card_type": "北地烟熏鸡",
+    "type": "北地烟熏鸡",
+    "category": "事件牌行动牌料理",
+    "subtype": "事件牌",
     "skills": [
       {
+        "name": "技能说明",
+        "description": "本回合中，目标角色下一次 普通攻击 少花费1 无色元素 。 （每回合每个角色最多食用1次「 料理」）",
         "cost": [
           {
             "type": "象形",
             "value": 0
           }
-        ],
-        "description": "本回合中，目标角色下一次 普通攻击 少花费1 无色元素 。 （每回合每个角色最多食用1次「 料理」）",
-        "name": "技能说明"
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "北地烟熏鸡"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌",
+    "id": "c2fe7b07-8a86-4198-b021-d0b364396904",
     "name": "快快缝补术",
+    "name_url": "https://patchwiki.biligame.com/images/ys/c/cd/7vf3l6ld7gnxejwrlfa9wd3fgbvqqv4.png",
+    "card_type": "快快缝补术",
+    "type": "快快缝补术",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
     "skills": [
       {
+        "name": "技能说明",
+        "description": "选择一个我方「召唤物」，使其「 可用次数 」+1。",
         "cost": [
           {
             "type": "象形",
             "value": 1
           }
-        ],
-        "description": "选择一个我方「召唤物」，使其「 可用次数 」+1。",
-        "name": "技能说明"
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "快快缝补术"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌",
+    "id": "9914e73b-ec24-474f-9d4b-0afdd736ea93",
     "name": "护法之誓",
+    "name_url": "https://patchwiki.biligame.com/images/ys/4/4b/2rjijt6g5zhdul8lw8pdjld2v5n1bfj.png",
+    "card_type": "护法之誓",
+    "type": "护法之誓",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
     "skills": [
       {
+        "name": "技能说明",
+        "description": "消灭所有「召唤物」。（不分敌我！）",
         "cost": [
           {
             "type": "象形",
             "value": 4
           }
-        ],
-        "description": "消灭所有「召唤物」。（不分敌我！）",
-        "name": "技能说明"
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "护法之誓"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌",
+    "id": "ecc0ab2c-9cb1-4802-a901-ea45e329571b",
     "name": "换班时间",
+    "name_url": "https://patchwiki.biligame.com/images/ys/3/3e/q0gj1n4gxmmofxsvvml4ftmuhifj8lm.png",
+    "card_type": "换班时间",
+    "type": "换班时间",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          }
-        ],
+        "name": "技能说明",
         "description": "我方下次执行「切换角色」行动时： 少花费1个元素骰。",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "换班时间"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌",
+    "id": "aa050ae7-90c7-4bff-ac89-bdb5a7185c99",
     "name": "星天之兆",
+    "name_url": "https://patchwiki.biligame.com/images/ys/6/6c/s5qj42emq02or7ky8d7fbhq29ji1vs8.png",
+    "card_type": "星天之兆",
+    "type": "星天之兆",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "无色",
-            "value": 2
-          }
-        ],
+        "name": "技能说明",
         "description": "我方当前出战角色 获得1点 充能 。",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "无色",
+            "value": 2
+          }
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "星天之兆"
+    "element_type": ""
   },
   {
-    "category": "事件牌行动牌",
+    "id": "997ff45d-1edb-4089-a96b-71eeda355120",
     "name": "最好的伙伴！",
+    "name_url": "https://patchwiki.biligame.com/images/ys/3/31/qs88vt79a91in3oi0d5wqx23w5q4ca6.png",
+    "card_type": "最好的伙伴！",
+    "type": "最好的伙伴！",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "无色",
-            "value": 2
-          }
-        ],
+        "name": "技能说明",
         "description": "将所花费的元素骰转换为2个 万能元素 。",
-        "name": "技能说明"
-      }
-    ],
-    "subtype": "事件牌",
-    "type": "最好的伙伴！"
-  },
-  {
-    "category": "事件牌行动牌",
-    "name": "本大爷还没有输！",
-    "skills": [
-      {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          }
-        ],
-        "description": "本回合有我方角色被击倒，才能打出： 生成1个 万能元素 ，我方当前出战角色获得1个 充能 。（每回合中，最多只能打出1张「本大爷还没有输！」。）",
-        "name": "技能说明"
-      }
-    ],
-    "subtype": "事件牌",
-    "type": "本大爷还没有输！"
-  },
-  {
-    "category": "事件牌行动牌",
-    "name": "深渊的呼唤",
-    "skills": [
-      {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 2
-          }
-        ],
-        "description": "召唤一个 随机「丘丘人」召唤物 ！ （牌组包含至少2个「 魔物」角色，才能加入牌组）",
-        "name": "技能说明"
-      }
-    ],
-    "subtype": "事件牌",
-    "type": "深渊的呼唤"
-  },
-  {
-    "category": "事件牌行动牌料理",
-    "name": "烤蘑菇披萨",
-    "skills": [
-      {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 1
-          }
-        ],
-        "description": "治疗目标角色1点，两回合内结束阶段再治疗此角色1点。 （每回合每个角色最多食用1次「 料理」）",
-        "name": "技能说明"
-      }
-    ],
-    "subtype": "事件牌",
-    "type": "烤蘑菇披萨"
-  },
-  {
-    "category": "事件牌行动牌料理",
-    "name": "甜甜花酿鸡",
-    "skills": [
-      {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          }
-        ],
-        "description": "治疗目标角色1点。 （每回合每个角色最多食用1次「 料理」）",
-        "name": "技能说明"
-      }
-    ],
-    "subtype": "事件牌",
-    "type": "甜甜花酿鸡"
-  },
-  {
-    "category": "事件牌行动牌",
-    "name": "白垩之术",
-    "skills": [
-      {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 1
-          }
-        ],
-        "description": "从最多2个我方后台角色身上，转移1点 充能 到我方出战角色。",
-        "name": "技能说明"
-      }
-    ],
-    "subtype": "事件牌",
-    "type": "白垩之术"
-  },
-  {
-    "category": "事件牌行动牌",
-    "name": "神宝迁宫祝词",
-    "skills": [
-      {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          }
-        ],
-        "description": "将一个装备在我方角色的「 圣遗物」装备牌，转移给另一个我方角色。",
-        "name": "技能说明"
-      }
-    ],
-    "subtype": "事件牌",
-    "type": "神宝迁宫祝词"
-  },
-  {
-    "category": "事件牌行动牌料理",
-    "name": "绝云锅巴",
-    "skills": [
-      {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          }
-        ],
-        "description": "本回合中，目标角色下一次 普通攻击 造成的伤害+1。 （每回合每个角色最多食用1次「 料理」）",
-        "name": "技能说明"
-      }
-    ],
-    "subtype": "事件牌",
-    "type": "绝云锅巴"
-  },
-  {
-    "category": "事件牌行动牌料理",
-    "name": "莲花酥",
-    "skills": [
-      {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 1
-          }
-        ],
-        "description": "本回合中，目标角色下次受到的伤害-3。 （每回合中每个角色最多食用1次「 料理」）",
-        "name": "技能说明"
-      }
-    ],
-    "subtype": "事件牌",
-    "type": "莲花酥"
-  },
-  {
-    "category": "事件牌行动牌料理",
-    "name": "蒙德土豆饼",
-    "skills": [
-      {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 1
-          }
-        ],
-        "description": "治疗目标角色2点。 （每回合每个角色最多食用1次「 料理」）",
-        "name": "技能说明"
-      }
-    ],
-    "subtype": "事件牌",
-    "type": "蒙德土豆饼"
-  },
-  {
-    "category": "事件牌行动牌",
-    "name": "诸武精通",
-    "skills": [
-      {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          }
-        ],
-        "description": "将一个装备在我方角色的「 武器」装备牌，转移给另一个武器类型相同的我方角色。",
-        "name": "技能说明"
-      }
-    ],
-    "subtype": "事件牌",
-    "type": "诸武精通"
-  },
-  {
-    "category": "事件牌行动牌",
-    "name": "运筹帷幄",
-    "skills": [
-      {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 1
-          }
-        ],
-        "description": "抓2张牌。",
-        "name": "技能说明"
-      }
-    ],
-    "subtype": "事件牌",
-    "type": "运筹帷幄"
-  },
-  {
-    "category": "事件牌行动牌",
-    "name": "送你一程",
-    "skills": [
-      {
         "cost": [
           {
             "type": "无色",
             "value": 2
           }
-        ],
-        "description": "选择一个敌方「召唤物」，使其「可用次数」-2。",
-        "name": "技能说明"
+        ]
       }
     ],
-    "subtype": "事件牌",
-    "type": "送你一程"
+    "element_type": ""
   },
   {
+    "id": "1820d629-8827-4154-910b-3a26239e3bb7",
+    "name": "本大爷还没有输！",
+    "name_url": "https://patchwiki.biligame.com/images/ys/8/84/c0wiyk9t2qggqcvoucry6whg8jwormy.png",
+    "card_type": "本大爷还没有输！",
+    "type": "本大爷还没有输！",
     "category": "事件牌行动牌",
-    "name": "鹤归之时",
+    "subtype": "事件牌",
     "skills": [
       {
+        "name": "技能说明",
+        "description": "本回合有我方角色被击倒，才能打出： 生成1个 万能元素 ，我方当前出战角色获得1个 充能 。（每回合中，最多只能打出1张「本大爷还没有输！」。）",
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          }
+        ]
+      }
+    ],
+    "element_type": ""
+  },
+  {
+    "id": "fd469d91-4dd0-4ce3-8c44-e68fda54a2b9",
+    "name": "深渊的呼唤",
+    "name_url": "https://patchwiki.biligame.com/images/ys/b/b6/dzwjwsytf7lew7rogo2vk48rj5khfrf.png",
+    "card_type": "深渊的呼唤",
+    "type": "深渊的呼唤",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
+    "skills": [
+      {
+        "name": "技能说明",
+        "description": "召唤一个 随机「丘丘人」召唤物 ！ （牌组包含至少2个「 魔物」角色，才能加入牌组）",
+        "cost": [
+          {
+            "type": "象形",
+            "value": 2
+          }
+        ]
+      }
+    ],
+    "element_type": ""
+  },
+  {
+    "id": "5ee6976a-108c-431f-8fdc-4030e6de3936",
+    "name": "烤蘑菇披萨",
+    "name_url": "https://patchwiki.biligame.com/images/ys/a/a0/ip75smx88tp8mpo1ehy3ehgym9hwbz2.png",
+    "card_type": "烤蘑菇披萨",
+    "type": "烤蘑菇披萨",
+    "category": "事件牌行动牌料理",
+    "subtype": "事件牌",
+    "skills": [
+      {
+        "name": "技能说明",
+        "description": "治疗目标角色1点，两回合内结束阶段再治疗此角色1点。 （每回合每个角色最多食用1次「 料理」）",
         "cost": [
           {
             "type": "象形",
             "value": 1
           }
-        ],
-        "description": "我方下一次使用技能后： 将下一个我方后台角色切换到场上。",
-        "name": "技能说明"
+        ]
       }
     ],
+    "element_type": ""
+  },
+  {
+    "id": "ef303a22-95ac-4adb-b6f0-65907abf66e4",
+    "name": "甜甜花酿鸡",
+    "name_url": "https://patchwiki.biligame.com/images/ys/c/ce/7vjlpf2gz5yr5qmgaqg7i762ppfwxkl.png",
+    "card_type": "甜甜花酿鸡",
+    "type": "甜甜花酿鸡",
+    "category": "事件牌行动牌料理",
     "subtype": "事件牌",
-    "type": "鹤归之时"
+    "skills": [
+      {
+        "name": "技能说明",
+        "description": "治疗目标角色1点。 （每回合每个角色最多食用1次「 料理」）",
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          }
+        ]
+      }
+    ],
+    "element_type": ""
+  },
+  {
+    "id": "420bac73-58b6-4c2e-8d13-c0d66e70776d",
+    "name": "白垩之术",
+    "name_url": "https://patchwiki.biligame.com/images/ys/e/ea/la9ku3oko4w8a7rw2fjj1gbrxmq1xy6.png",
+    "card_type": "白垩之术",
+    "type": "白垩之术",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
+    "skills": [
+      {
+        "name": "技能说明",
+        "description": "从最多2个我方后台角色身上，转移1点 充能 到我方出战角色。",
+        "cost": [
+          {
+            "type": "象形",
+            "value": 1
+          }
+        ]
+      }
+    ],
+    "element_type": ""
+  },
+  {
+    "id": "9719b16b-fac2-423a-a19c-2a052510df53",
+    "name": "神宝迁宫祝词",
+    "name_url": "https://patchwiki.biligame.com/images/ys/e/e9/8wgjaqnxqxalgka8t428ja3b5huoj3d.png",
+    "card_type": "神宝迁宫祝词",
+    "type": "神宝迁宫祝词",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
+    "skills": [
+      {
+        "name": "技能说明",
+        "description": "将一个装备在我方角色的「 圣遗物」装备牌，转移给另一个我方角色。",
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          }
+        ]
+      }
+    ],
+    "element_type": ""
+  },
+  {
+    "id": "3e24c1c9-a62b-4b09-9b02-0c00fa4eef9c",
+    "name": "绝云锅巴",
+    "name_url": "https://patchwiki.biligame.com/images/ys/0/01/jawideb446oo56q18uco8pgeasxcdm6.png",
+    "card_type": "绝云锅巴",
+    "type": "绝云锅巴",
+    "category": "事件牌行动牌料理",
+    "subtype": "事件牌",
+    "skills": [
+      {
+        "name": "技能说明",
+        "description": "本回合中，目标角色下一次 普通攻击 造成的伤害+1。 （每回合每个角色最多食用1次「 料理」）",
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          }
+        ]
+      }
+    ],
+    "element_type": ""
+  },
+  {
+    "id": "4d985d91-f455-4656-b66d-0a55483711d9",
+    "name": "莲花酥",
+    "name_url": "https://patchwiki.biligame.com/images/ys/a/aa/g863l7o8uza67qzk2b12fap7ly45y47.png",
+    "card_type": "莲花酥",
+    "type": "莲花酥",
+    "category": "事件牌行动牌料理",
+    "subtype": "事件牌",
+    "skills": [
+      {
+        "name": "技能说明",
+        "description": "本回合中，目标角色下次受到的伤害-3。 （每回合中每个角色最多食用1次「 料理」）",
+        "cost": [
+          {
+            "type": "象形",
+            "value": 1
+          }
+        ]
+      }
+    ],
+    "element_type": ""
+  },
+  {
+    "id": "650044d1-f1d0-48d3-be13-8692e59177d0",
+    "name": "蒙德土豆饼",
+    "name_url": "https://patchwiki.biligame.com/images/ys/3/32/ox48zjrb7n79sve0z6sibryi60uug4y.png",
+    "card_type": "蒙德土豆饼",
+    "type": "蒙德土豆饼",
+    "category": "事件牌行动牌料理",
+    "subtype": "事件牌",
+    "skills": [
+      {
+        "name": "技能说明",
+        "description": "治疗目标角色2点。 （每回合每个角色最多食用1次「 料理」）",
+        "cost": [
+          {
+            "type": "象形",
+            "value": 1
+          }
+        ]
+      }
+    ],
+    "element_type": ""
+  },
+  {
+    "id": "e35978e5-4f44-4988-be41-5ea55ae480bc",
+    "name": "诸武精通",
+    "name_url": "https://patchwiki.biligame.com/images/ys/6/65/sccjgff9xqj3sutq8sfz54payodi0cb.png",
+    "card_type": "诸武精通",
+    "type": "诸武精通",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
+    "skills": [
+      {
+        "name": "技能说明",
+        "description": "将一个装备在我方角色的「 武器」装备牌，转移给另一个武器类型相同的我方角色。",
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          }
+        ]
+      }
+    ],
+    "element_type": ""
+  },
+  {
+    "id": "8793eb70-2453-4f5c-9db3-95626d425702",
+    "name": "运筹帷幄",
+    "name_url": "https://patchwiki.biligame.com/images/ys/7/7e/kdezoxc2d92bjmk6j0444432p95q4xv.png",
+    "card_type": "运筹帷幄",
+    "type": "运筹帷幄",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
+    "skills": [
+      {
+        "name": "技能说明",
+        "description": "抓2张牌。",
+        "cost": [
+          {
+            "type": "象形",
+            "value": 1
+          }
+        ]
+      }
+    ],
+    "element_type": ""
+  },
+  {
+    "id": "1e284253-6fe3-474e-a7cd-53b7d1e4c4cd",
+    "name": "送你一程",
+    "name_url": "https://patchwiki.biligame.com/images/ys/6/6a/joh02z64r6cakdknq4hqvizqjexl7id.png",
+    "card_type": "送你一程",
+    "type": "送你一程",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
+    "skills": [
+      {
+        "name": "技能说明",
+        "description": "选择一个敌方「召唤物」，使其「可用次数」-2。",
+        "cost": [
+          {
+            "type": "无色",
+            "value": 2
+          }
+        ]
+      }
+    ],
+    "element_type": ""
+  },
+  {
+    "id": "33396f20-0225-404c-b6f6-21f17ec91b7e",
+    "name": "鹤归之时",
+    "name_url": "https://patchwiki.biligame.com/images/ys/8/88/swl2f6pmo0pzubto3nobxnib06oqk9o.png",
+    "card_type": "鹤归之时",
+    "type": "鹤归之时",
+    "category": "事件牌行动牌",
+    "subtype": "事件牌",
+    "skills": [
+      {
+        "name": "技能说明",
+        "description": "我方下一次使用技能后： 将下一个我方后台角色切换到场上。",
+        "cost": [
+          {
+            "type": "象形",
+            "value": 1
+          }
+        ]
+      }
+    ],
+    "element_type": ""
   }
 ]

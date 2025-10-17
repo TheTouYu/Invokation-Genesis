@@ -1,1226 +1,1498 @@
 [
   {
-    "category": "支援牌行动牌伙伴",
+    "id": "dbf82764-595d-4cce-bcb1-5b0af811308c",
     "name": "森林的祝福",
+    "name_url": "https://patchwiki.biligame.com/images/ys/8/84/kguu7exzs7olpikwn0d696sq08dfh7n.png",
+    "card_type": "森林的祝福",
+    "type": "森林的祝福",
+    "category": "支援牌行动牌伙伴",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "无色",
-            "value": 2
-          }
-        ],
+        "name": "技能说明",
         "description": "入场时及我方触发元素反应后： 从 折纸飞鼠 、 跳跳纸蛙 、 折纸胖胖鼠 中随机生成1张加入手牌。",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "无色",
+            "value": 2
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "森林的祝福"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌伙伴",
+    "id": "b9be6ce6-2a83-4a21-8c40-de6a51e7ffa6",
     "name": "预言女神的礼物",
+    "name_url": "https://patchwiki.biligame.com/images/ys/5/5d/sx1j6wmcc9lt1ee1hb9r8jwlyfarklj.png",
+    "card_type": "预言女神的礼物",
+    "type": "预言女神的礼物",
+    "category": "支援牌行动牌伙伴",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "无色",
-            "value": 2
-          }
-        ],
+        "name": "技能说明",
         "description": "入场时： 生成2张手牌 积木小人 ，并生成2张 积木小人 ，随机置入我方牌组中。 我方打出 「希穆兰卡」召唤物 后，使其效果量+1。 可用次数：2",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "无色",
+            "value": 2
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "预言女神的礼物"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌伙伴",
+    "id": "812b92d3-d3a3-49ec-aa6d-9d25c7bf3fb6",
     "name": "阿伽娅",
+    "name_url": "https://patchwiki.biligame.com/images/ys/6/67/0r90jopd0j25aeiimsgqqr1qj82h5a6.png",
+    "card_type": "阿伽娅",
+    "type": "阿伽娅",
+    "category": "支援牌行动牌伙伴",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 1
-          }
-        ],
+        "name": "技能说明",
         "description": "我方使用「 特技」时：少花费1个元素骰。（每回合1次）",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 1
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "阿伽娅"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌伙伴",
+    "id": "7db74d15-36fd-4c58-a362-e3212da6b0ff",
     "name": "瑟琳",
+    "name_url": "https://patchwiki.biligame.com/images/ys/2/28/8vbppiavoai7c9233ou8xuhjzz2ve3x.png",
+    "card_type": "瑟琳",
+    "type": "瑟琳",
+    "category": "支援牌行动牌伙伴",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "无色",
-            "value": 2
-          }
-        ],
+        "name": "技能说明",
         "description": "每回合自动触发1次： 将1张随机的 「美露莘的声援」 放入我方手牌。 可用次数：3",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "无色",
+            "value": 2
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "瑟琳"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌伙伴",
+    "id": "7fbfc2b0-db0a-4eac-a5a5-9cd433f4c1e1",
     "name": "亚瑟先生",
+    "name_url": "https://patchwiki.biligame.com/images/ys/8/8c/d7qodg8q85fle0htt5ezya03793vlxn.png",
+    "card_type": "亚瑟先生",
+    "type": "亚瑟先生",
+    "category": "支援牌行动牌伙伴",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          }
-        ],
+        "name": "技能说明",
         "description": "我方舍弃或调和张牌后： 此牌累积1点 「新闻线索」 。（最多累积到2点） 结束阶段： 如果此牌已累积2点 「新闻线索」 ，则扣除2点，复制对方牌库顶的1张牌加入我方手牌。",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "亚瑟先生"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌伙伴",
+    "id": "097a0a6c-45ab-44b5-9f79-224cde3883de",
     "name": "太郎丸",
+    "name_url": "https://patchwiki.biligame.com/images/ys/e/ec/en6bfbfptdvrtff15v8ryki0ihpmavv.png",
+    "card_type": "太郎丸",
+    "type": "太郎丸",
+    "category": "支援牌行动牌伙伴",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "无色",
-            "value": 2
-          }
-        ],
+        "name": "技能说明",
         "description": "入场时： 生成4张 太郎丸的存款 ，均匀地置入我方牌库中。 我方打出2张太郎丸的存款后： 弃置此牌，召唤 愤怒的太郎丸 。",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "无色",
+            "value": 2
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "太郎丸"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌伙伴",
+    "id": "829b647d-8175-4b2d-8447-b19850e951bc",
     "name": "白手套和渔夫",
+    "name_url": "https://patchwiki.biligame.com/images/ys/c/cc/m10rtlmqwu4huvgsana2grkdcfrtv7v.png",
+    "card_type": "白手套和渔夫",
+    "type": "白手套和渔夫",
+    "category": "支援牌行动牌伙伴",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          }
-        ],
+        "name": "技能说明",
         "description": "结束阶段： 生成1张 「清洁工作」 ，随机将其置入我方牌库顶部5张牌之中。如果此牌的 可用次数 仅剩余1，则抓1张牌。 可用次数：2",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "白手套和渔夫"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌伙伴",
+    "id": "cfc2bf59-93db-4c61-be2b-0215c98a222e",
     "name": "婕德",
+    "name_url": "https://patchwiki.biligame.com/images/ys/0/0f/k0h4d7at8meo5084huo3rw3bpr8h00d.png",
+    "card_type": "婕德",
+    "type": "婕德",
+    "category": "支援牌行动牌伙伴",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 1
-          }
-        ],
+        "name": "技能说明",
         "description": "此牌会记录本场对局中我方支援区弃置卡牌的数量，称为 「阅历」 。（最多6点） 我方角色使用「元素爆发」后： 如果 「阅历」 至少为6，则弃置此牌，对我方出战角色附属 沙与梦 。",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 1
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "婕德"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌伙伴",
+    "id": "660cf87f-9de7-40b6-b2a7-33201bcd11dd",
     "name": "西尔弗和迈勒斯",
+    "name_url": "https://patchwiki.biligame.com/images/ys/9/99/djk8mu4cngw574trc5rjjoom35teay8.png",
+    "card_type": "西尔弗和迈勒斯",
+    "type": "西尔弗和迈勒斯",
+    "category": "支援牌行动牌伙伴",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 1
-          }
-        ],
+        "name": "技能说明",
         "description": "此牌会记录本场对局中敌方角色受到过的元素伤害种类数，称为「侍从的周到」。（最多4点） 结束阶段 ：如果「侍从的周到」至少为3，则弃置此牌，然后抓「侍从的周到」点数的牌。",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 1
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "西尔弗和迈勒斯"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌伙伴",
+    "id": "0d0fccad-bc09-4564-a33f-ccea8bf87a91",
     "name": "玛梅赫",
+    "name_url": "https://patchwiki.biligame.com/images/ys/8/82/t6b51tgdrwuus88djowx3p24n8f4yet.png",
+    "card_type": "玛梅赫",
+    "type": "玛梅赫",
+    "category": "支援牌行动牌伙伴",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          }
-        ],
+        "name": "技能说明",
         "description": "我方打出「玛梅赫」以外的「 料理」/「 场地」/「 伙伴」/「 道具」行动牌后 :随机生成张「玛梅赫」以外的「 料理」/「 场地」/「 伙伴」/「 道具」行动牌，将其加入手牌。（每回合1次） 可用次数：3",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "玛梅赫"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌伙伴",
+    "id": "5c5ddb33-7252-4b38-aeb5-b49dbc3c6a11",
     "name": "弥生七月",
+    "name_url": "https://patchwiki.biligame.com/images/ys/a/a4/lvgzfzygaat6as5njpwhh7edcs5ti2p.png",
+    "card_type": "弥生七月",
+    "type": "弥生七月",
+    "category": "支援牌行动牌伙伴",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 1
-          }
-        ],
+        "name": "技能说明",
         "description": "我方打出「 圣遗物」手牌时 ：少花费1个元素骰；如果我方场上已有2个已装备「 圣遗物」的角色，就额外少花费1个元素骰。（每回合1次）",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 1
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "弥生七月"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌伙伴",
+    "id": "9eff472f-2570-4a5a-b21c-7ad6e325742e",
     "name": "塞塔蕾",
+    "name_url": "https://patchwiki.biligame.com/images/ys/4/47/06ozwfiy5hl4n43ot6rnvllvo6zapvh.png",
+    "card_type": "塞塔蕾",
+    "type": "塞塔蕾",
+    "category": "支援牌行动牌伙伴",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 1
-          }
-        ],
+        "name": "技能说明",
         "description": "我方执行任意行动后，手牌数量为0时： 抓1张牌。 可用次数：3",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 1
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "塞塔蕾"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌伙伴",
+    "id": "2875f10b-3f00-4d75-b793-b6bf43e12c07",
     "name": "老章",
+    "name_url": "https://patchwiki.biligame.com/images/ys/8/8a/epam9y3go7rrng0v6wjshcidvri0390.png",
+    "card_type": "老章",
+    "type": "老章",
+    "category": "支援牌行动牌伙伴",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 1
-          }
-        ],
+        "name": "技能说明",
         "description": "我方打出「 武器」手牌时： 少花费1个元素骰；我方场上每有一个已装备「 武器」的角色，就额外少花费1个元素骰。（每回合一次）",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 1
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "老章"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌伙伴",
+    "id": "9fad719f-5d28-4442-a1a9-ddda92ba7538",
     "name": "拉娜",
+    "name_url": "https://patchwiki.biligame.com/images/ys/0/0a/385js06cs9bd1yhdmzevg9n1ezbb7gk.png",
+    "card_type": "拉娜",
+    "type": "拉娜",
+    "category": "支援牌行动牌伙伴",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 2
-          }
-        ],
+        "name": "技能说明",
         "description": "我方角色使用「元素战技」后： 生成1个我方下一个后台角色类型的元素骰。（每回合1次）",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 2
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "拉娜"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌伙伴",
+    "id": "689b7bc0-68fd-40d2-8ec0-3170e7083d9a",
     "name": "旭东",
+    "name_url": "https://patchwiki.biligame.com/images/ys/4/41/ij8hn8es6vl9iqgi71zdqhho7tai6hd.png",
+    "card_type": "旭东",
+    "type": "旭东",
+    "category": "支援牌行动牌伙伴",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "无色",
-            "value": 2
-          }
-        ],
+        "name": "技能说明",
         "description": "打出「 料理」事件牌时： 少花费2个元素骰。（每回合1次）",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "无色",
+            "value": 2
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "旭东"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌伙伴",
+    "id": "65f5705c-2d22-486e-b48d-964ab68ed851",
     "name": "花散里",
+    "name_url": "https://patchwiki.biligame.com/images/ys/1/17/g19hu0sljvib21lxjjcm6uazjwia4j2.png",
+    "card_type": "花散里",
+    "type": "花散里",
+    "category": "支援牌行动牌伙伴",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          }
-        ],
+        "name": "技能说明",
         "description": "召唤物消失时： 此牌累积1点 「大祓」进度 。（最多累积3点） 我方打出「 武器」或「 圣遗物」装备时： 如果 「大祓」进度 已达到3，则弃置此牌，使打出的卡牌少花费2个元素骰。",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "花散里"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌伙伴",
+    "id": "0176a529-6a9c-4d53-b733-d053c0a29870",
     "name": "迪娜泽黛",
+    "name_url": "https://patchwiki.biligame.com/images/ys/b/bf/8v9u3u65say67odbz2046o2uo12rtze.png",
+    "card_type": "迪娜泽黛",
+    "type": "迪娜泽黛",
+    "category": "支援牌行动牌伙伴",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 1
-          }
-        ],
+        "name": "技能说明",
         "description": "打出「 伙伴」支援牌时 ：少花费1个元素骰。（每回合1次） 打出「 伙伴」支援牌后 ：从牌组中随机抽取1张「 伙伴」支援牌。（整场牌局限制1次)",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 1
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "迪娜泽黛"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌伙伴",
+    "id": "f0b7f45c-e0cf-41d3-b1c7-2215616dddc5",
     "name": "鲸井小弟",
+    "name_url": "https://patchwiki.biligame.com/images/ys/9/94/f6s8pxaz4ggfm83tx5na1j9l2n6qncs.png",
+    "card_type": "鲸井小弟",
+    "type": "鲸井小弟",
+    "category": "支援牌行动牌伙伴",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          }
-        ],
+        "name": "技能说明",
         "description": "行动阶段开始时： 生成1点 万能元素 。然后，如果对方的支援区未满，则将此牌转移到对方的支援区。",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "鲸井小弟"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌伙伴",
+    "id": "eb9f4f75-67c4-4f41-924a-0bba48f243f5",
     "name": "凯瑟琳",
+    "name_url": "https://patchwiki.biligame.com/images/ys/2/2a/i2hef3q17rpztvnpoxq15mrmybm9x49.png",
+    "card_type": "凯瑟琳",
+    "type": "凯瑟琳",
+    "category": "支援牌行动牌伙伴",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 1
-          }
-        ],
+        "name": "技能说明",
         "description": "我方执行「切换角色」行动时： 将此次切换视为「 快速行动 」而非「 战斗行动 」。（每回合1次）",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 1
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "凯瑟琳"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌伙伴",
+    "id": "e89d01be-2413-419d-b011-72350b2f35b9",
     "name": "刘苏",
+    "name_url": "https://patchwiki.biligame.com/images/ys/1/1c/i8xnjwgfujns3aarvhfvva9u70qrmyc.png",
+    "card_type": "刘苏",
+    "type": "刘苏",
+    "category": "支援牌行动牌伙伴",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 1
-          }
-        ],
+        "name": "技能说明",
         "description": "我方切换角色后： 如果切换到的角色没有 充能 ，则使该角色获得1点 充能 。（每回合1次） 可用次数 ：2",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 1
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "刘苏"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌伙伴",
+    "id": "3da500e2-90c2-40ca-b63c-055fd3ac7cbb",
     "name": "卯师傅",
+    "name_url": "https://patchwiki.biligame.com/images/ys/8/82/i1jb34ohukkbdjzkxrspm70c3h768up.png",
+    "card_type": "卯师傅",
+    "type": "卯师傅",
+    "category": "支援牌行动牌伙伴",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 1
-          }
-        ],
+        "name": "技能说明",
         "description": "打出「 料理」事件牌后 ：生成1个随机基础元素骰。（每回合1次） 打出「 料理」事件牌后 ：从牌组中随机抽取1张「 料理」事件牌。（整场牌局限制1次)",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 1
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "卯师傅"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌伙伴",
+    "id": "60378b9e-dfcb-44f2-a1b4-02b2f22319a0",
     "name": "常九爷",
+    "name_url": "https://patchwiki.biligame.com/images/ys/9/96/orvkcrtq8i1hittsu4n8qprv40l1xvg.png",
+    "card_type": "常九爷",
+    "type": "常九爷",
+    "category": "支援牌行动牌伙伴",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          }
-        ],
+        "name": "技能说明",
         "description": "双方角色使用技能后： 如果造成了 物理伤害 、 穿透伤害 或引发了 元素反应 ，此牌累积 1个「灵感」 。 如果此牌已累积 3个「灵感」 ，弃置此牌：抓2张牌。",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "常九爷"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌伙伴",
+    "id": "e1a51d5c-ae5f-47a1-9764-f321504a9598",
     "name": "提米",
+    "name_url": "https://patchwiki.biligame.com/images/ys/f/f6/dmlwqxzxlf7tc89shb4c25hedqh8rmb.png",
+    "card_type": "提米",
+    "type": "提米",
+    "category": "支援牌行动牌伙伴",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          }
-        ],
+        "name": "技能说明",
         "description": "每回合自动触发1次： 此牌累积 1只「鸽子」 。 如果此牌已累积 3只「鸽子」 ，则弃置此牌：抓1张牌，生成一点 万能元素 。",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "提米"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌伙伴",
+    "id": "14ab6bde-2e79-47d6-8556-87d2a00a19fa",
     "name": "派蒙",
+    "name_url": "https://patchwiki.biligame.com/images/ys/4/4b/joxd9fwzb657itakgs1fs4hsrodjo2f.png",
+    "card_type": "派蒙",
+    "type": "派蒙",
+    "category": "支援牌行动牌伙伴",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 3
-          }
-        ],
+        "name": "技能说明",
         "description": "行动阶段开始时： 生成2点 万能元素 。 可用次数 ：2",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 3
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "派蒙"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌伙伴",
+    "id": "73e50850-8836-46ce-9b6d-98b9c9b48afc",
     "name": "瓦格纳",
+    "name_url": "https://patchwiki.biligame.com/images/ys/6/6d/d4vgqr7v9n4jzinjmun9e71mck1ni8t.png",
+    "card_type": "瓦格纳",
+    "type": "瓦格纳",
+    "category": "支援牌行动牌伙伴",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 2
-          }
-        ],
+        "name": "技能说明",
         "description": "入场时 ：此牌附带2个 「锻造原胚」 。如果我方牌组中初始包含至少3种不同的「 武器」牌，则从牌组中随机抽取1张「 武器」牌。 结束阶段： 补充1个 「锻造原胚」 。 打出「 武器」手牌时： 如可能，则支付等同于「 武器」总费用数量的「锻造原胚」，以免费装备此「 武器」。（每回合1次）",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 2
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "瓦格纳"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌伙伴",
+    "id": "832f0efe-f917-4393-bc92-f80168ab7cda",
     "name": "田铁嘴",
+    "name_url": "https://patchwiki.biligame.com/images/ys/1/18/bd6u76qgpzfrxc008arzy7iaob5r9tf.png",
+    "card_type": "田铁嘴",
+    "type": "田铁嘴",
+    "category": "支援牌行动牌伙伴",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "无色",
-            "value": 2
-          }
-        ],
+        "name": "技能说明",
         "description": "结束阶段： 我方一名充能未满的角色获得1点 充能 。（出战角色优先） 可用次数 ：2",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "无色",
+            "value": 2
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "田铁嘴"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌伙伴",
+    "id": "8c0ff3fd-0f23-46f4-a7d6-bac31dd98d6e",
     "name": "立本",
+    "name_url": "https://patchwiki.biligame.com/images/ys/5/51/inx44fpanb4fx2w0bwbqb5gmf9rlxft.png",
+    "card_type": "立本",
+    "type": "立本",
+    "category": "支援牌行动牌伙伴",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          }
-        ],
+        "name": "技能说明",
         "description": "结束阶段： 收集我方未使用的元素骰（每种最多1个）。 行动阶段开始时： 如果此牌已收集3个元素骰，则抓2张牌，生成2点 万能元素 ，然后弃置此牌。",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "立本"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌伙伴",
+    "id": "685a80ec-c458-4cb2-98ec-e95091542bdc",
     "name": "艾琳",
+    "name_url": "https://patchwiki.biligame.com/images/ys/1/17/tgvwx5f4sta58pwpm8uurejbzt4db3i.png",
+    "card_type": "艾琳",
+    "type": "艾琳",
+    "category": "支援牌行动牌伙伴",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 2
-          }
-        ],
+        "name": "技能说明",
         "description": "我方角色使用本回合使用过的技能时： 少花费1个元素骰。（每回合1次）",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 2
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "艾琳"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌伙伴",
+    "id": "16dca734-684d-4b18-9f41-75a3b5c2dfb2",
     "name": "蒂玛乌斯",
-    "skills": [
-      {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 2
-          }
-        ],
-        "description": "入场时 ：此牌附带2个 「合成材料」 。如果我方牌组中初始包含至少6张「 圣遗物」牌，则从牌组中随机抽取1张「 圣遗物」牌。 结束阶段： 补充1个 「合成材料」 。 打出「 圣遗物」手牌时： 如可能，则支付等同于「 圣遗物」总费用数量的「合成材料」，以免费装备此「 圣遗物」。（每回合1次）",
-        "name": "技能说明"
-      }
-    ],
-    "subtype": "支援牌",
-    "type": "蒂玛乌斯"
-  },
-  {
+    "name_url": "https://patchwiki.biligame.com/images/ys/d/df/7wi059bzkmlijuiuarl9jeh0qpsf72r.png",
+    "card_type": "蒂玛乌斯",
+    "type": "蒂玛乌斯",
     "category": "支援牌行动牌伙伴",
+    "subtype": "支援牌",
+    "skills": [
+      {
+        "name": "技能说明",
+        "description": "入场时 ：此牌附带2个 「合成材料」 。如果我方牌组中初始包含至少6张「 圣遗物」牌，则从牌组中随机抽取1张「 圣遗物」牌。 结束阶段： 补充1个 「合成材料」 。 打出「 圣遗物」手牌时： 如可能，则支付等同于「 圣遗物」总费用数量的「合成材料」，以免费装备此「 圣遗物」。（每回合1次）",
+        "cost": [
+          {
+            "type": "象形",
+            "value": 2
+          }
+        ]
+      }
+    ],
+    "element_type": ""
+  },
+  {
+    "id": "14e16c91-a7a9-4984-85a4-ce8d34dad675",
     "name": "阿圆",
+    "name_url": "https://patchwiki.biligame.com/images/ys/7/76/p9jjqrr7zcy0c15wcvg6vks6q2bpv0t.png",
+    "card_type": "阿圆",
+    "type": "阿圆",
+    "category": "支援牌行动牌伙伴",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 2
-          }
-        ],
+        "name": "技能说明",
         "description": "打出「 场地」支援牌时： 少花费2个元素骰。（每回合1次）",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 2
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "阿圆"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌场地",
+    "id": "68c228ed-071b-4a1e-a668-eb60c3ff0193",
     "name": "墨色酒馆",
+    "name_url": "https://patchwiki.biligame.com/images/ys/e/ed/tl8ym4b9fcdoic4mxv13x94d6hrq5rb.png",
+    "card_type": "墨色酒馆",
+    "type": "墨色酒馆",
+    "category": "支援牌行动牌场地",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "无色",
-            "value": 2
-          }
-        ],
+        "name": "技能说明",
         "description": "入场时： 从 折纸飞鼠 、 跳跳纸蛙 、 折纸胖胖鼠 中随机生成1张手牌。 我方宣布结束时： 随机触发我方1个 「希穆兰卡」召唤物 的「结束阶段」效果。 可用次数：3",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "无色",
+            "value": 2
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "墨色酒馆"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌场地",
+    "id": "1e721aaf-8e0b-4cc1-8ff8-991810a10f0c",
     "name": "星轨王城",
+    "name_url": "https://patchwiki.biligame.com/images/ys/4/46/t3506p2gtxw67p2ea01bn1s2z0zb07y.png",
+    "card_type": "星轨王城",
+    "type": "星轨王城",
+    "category": "支援牌行动牌场地",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 2
-          }
-        ],
+        "name": "技能说明",
         "description": "入场时： 生成手牌 积木小人 。 我方角色使用「元素战技」后： 下次打出 积木小人 少花费1个元素骰。（不可叠加） 我方角色使用「元素爆发」后： 下次打出的 积木小人 效果量+1。（不可叠加）",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 2
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "星轨王城"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌场地",
+    "id": "a936418a-2bf0-4b8e-bbda-7491cbd020e5",
     "name": "「沃陆之邦」",
+    "name_url": "https://patchwiki.biligame.com/images/ys/b/b8/bkas4wi9mze3i8gzj0j6nw2fly01kap.png",
+    "card_type": "「沃陆之邦」",
+    "type": "「沃陆之邦」",
+    "category": "支援牌行动牌场地",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "无色",
-            "value": 3
-          }
-        ],
+        "name": "技能说明",
         "description": "我方角色准备技能时： 此角色获得3点 锻炼 。 我方角色切换为出战角色后： 此角色获得2点 锻炼 。（当锻炼层数到达3点时，治疗对应角色1点；当锻炼层数到达5点时，对应角色所造成的伤害+1）",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "无色",
+            "value": 3
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "「沃陆之邦」"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌场地",
+    "id": "9e2e21c2-ca9e-43c3-a623-baac11ebfcf4",
     "name": "「烟谜主」",
+    "name_url": "https://patchwiki.biligame.com/images/ys/a/a3/rz3wipb1ds582xfx40dxdwpes9lk13l.png",
+    "card_type": "「烟谜主」",
+    "type": "「烟谜主」",
+    "category": "支援牌行动牌场地",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          }
-        ],
+        "name": "技能说明",
         "description": "此牌初始具有4点 灵觉 。 我方挑选后： 灵觉 -1。 行动阶段开始时： 若 灵觉 为0，则移除自身，然后从3个随机元素骰费用为2的支援牌中 挑选 一个生成。",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "「烟谜主」"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌场地",
+    "id": "fc15c836-e66c-4c86-817c-a96ee98d1242",
     "name": "「花羽会」",
+    "name_url": "https://patchwiki.biligame.com/images/ys/f/f1/hstlxakh8k2hkqkgs802fnfonkco160.png",
+    "card_type": "「花羽会」",
+    "type": "「花羽会」",
+    "category": "支援牌行动牌场地",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          }
-        ],
+        "name": "技能说明",
         "description": "我方舍弃2张卡牌后： 我方下一个后台角色获得1层“下次切换至前台时，回复1个对应元素的骰子”。（可叠加，每次触发1层）",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "「花羽会」"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌场地",
+    "id": "9d995ffa-7b2a-4507-aa34-ca277726080b",
     "name": "「流泉之众」",
+    "name_url": "https://patchwiki.biligame.com/images/ys/f/f1/g6azmjb9w0btb3u1beiqp5xtfop4vnx.png",
+    "card_type": "「流泉之众」",
+    "type": "「流泉之众」",
+    "category": "支援牌行动牌场地",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 2
-          }
-        ],
+        "name": "技能说明",
         "description": "我方「召唤物」入场时： 使其 可用次数 +1。 可用次数：3",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 2
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "「流泉之众」"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌场地",
+    "id": "db69445c-fde6-432b-8fcc-d5b8333b342e",
     "name": "「悬木人」",
+    "name_url": "https://patchwiki.biligame.com/images/ys/6/61/fa3s3a8a1kusr7b31z9xva2u5yx1rj4.png",
+    "card_type": "「悬木人」",
+    "type": "「悬木人」",
+    "category": "支援牌行动牌场地",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          }
-        ],
+        "name": "技能说明",
         "description": "我方打出名称不存在于本局最初牌组的牌时： 如果打出的牌原本元素骰费用不低于此牌的 「极限运动点」 ，则生成1个随机基础元素骰，然后此牌累积1个 「极限运动点」 。",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "「悬木人」"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌场地",
+    "id": "e7deef34-bfa8-4271-b2a6-d34497e154dc",
     "name": "特佩利舞台",
+    "name_url": "https://patchwiki.biligame.com/images/ys/2/28/gmdsmasnm7e7kolmuv2nf28pqplkttk.png",
+    "card_type": "特佩利舞台",
+    "type": "特佩利舞台",
+    "category": "支援牌行动牌场地",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          }
-        ],
+        "name": "技能说明",
         "description": "我方打出名称不存在于本局最初牌组的牌时： 此牌累积1点 「瞩目」 。 敌方打出名称不存在于本局最初牌组的牌时： 此牌扣除1点 「瞩目」 。 行动阶段开始时： 如果此牌有至少3点 「瞩目」 ，则生成1个随机基础元素骰；如果此牌有至少1点 「瞩目」 ，将1个元素骰转换为 万能元素 。",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "特佩利舞台"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌场地",
+    "id": "82e78160-a900-4431-9129-ecec8226c075",
     "name": "圣火竞技场",
+    "name_url": "https://patchwiki.biligame.com/images/ys/f/fc/ms2fgulju7v5c3c0vx38dax2tbtio8i.png",
+    "card_type": "圣火竞技场",
+    "type": "圣火竞技场",
+    "category": "支援牌行动牌场地",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 2
-          }
-        ],
+        "name": "技能说明",
         "description": "我方使用技能或特技后： 此牌累积1点 「角逐之焰」 。 「角逐之焰」 达到2时：生成1个随机基础元素骰。 达到4时：治疗我方出战角色2点。 达到6时：弃置此牌，使当前的我方出战角色在2回合内造成的伤害+1。",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 2
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "圣火竞技场"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌场地",
+    "id": "f790dd9b-347d-4b15-9f26-6a0afb6a67ef",
     "name": "中央实验室遗址",
+    "name_url": "https://patchwiki.biligame.com/images/ys/c/cd/3nouk6bihhrwr74hzbctx8cilxr1woz.png",
+    "card_type": "中央实验室遗址",
+    "type": "中央实验室遗址",
+    "category": "支援牌行动牌场地",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 1
-          }
-        ],
+        "name": "技能说明",
         "description": "我方舍弃或调和1张牌后： 此牌累积1点 「实验进展」 。每当 「实验进展」 达到3点、 6点、9点时，就获得1个万能元素骰。然后，如果 「实验进展」 至少为9点，则弃置此牌。",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 1
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "中央实验室遗址"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌场地",
+    "id": "6f93b0ae-153b-4b29-8079-448c23997307",
     "name": "赤王陵",
+    "name_url": "https://patchwiki.biligame.com/images/ys/9/93/5hc9qh5j3mtxdh65789u42tkmb0da1j.png",
+    "card_type": "赤王陵",
+    "type": "赤王陵",
+    "category": "支援牌行动牌场地",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 1
-          }
-        ],
+        "name": "技能说明",
         "description": "对方累积抓4张牌后： 弃置此牌，在对方牌库顶生成2张 禁忌知识 。然后直到本回合结束前，对方每抓1张牌，就立刻生成1张 禁忌知识 ，随机地置入对方牌库中。",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 1
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "赤王陵"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌场地",
+    "id": "674e73e0-6ed7-4230-aadc-f735a047fef3",
     "name": "清籁岛",
+    "name_url": "https://patchwiki.biligame.com/images/ys/1/15/0kkduo3e0mvynkna8rtvjdil023hwel.png",
+    "card_type": "清籁岛",
+    "type": "清籁岛",
+    "category": "支援牌行动牌场地",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 1
-          }
-        ],
+        "name": "技能说明",
         "description": "任意阵营的角色受到治疗后： 使该角色附属 悠远雷暴 。（结束阶段受到2点穿透伤害，可用1次） 持续回合：2",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 1
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "清籁岛"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌场地",
+    "id": "a7bf5a76-fddb-41ef-95cb-c7688b060799",
     "name": "梅洛彼得堡",
+    "name_url": "https://patchwiki.biligame.com/images/ys/f/f8/gwtiz0o41kf748mxgqijj4txvwzlls5.png",
+    "card_type": "梅洛彼得堡",
+    "type": "梅洛彼得堡",
+    "category": "支援牌行动牌场地",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 1
-          }
-        ],
+        "name": "技能说明",
         "description": "我方出战角色受到伤害或治疗后： 此牌累积1点「禁令」。（最多累积到4点） 行动阶段开始时： 如果此牌已有4点「禁令」，则消耗4点，在对方场上生成 严格禁令 。（本回合中打出的1张事件牌无效）",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 1
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "梅洛彼得堡"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌场地",
+    "id": "4fc27ad5-40f0-4ea6-b1b9-2558f1a83cce",
     "name": "欧庇克莱歌剧院",
+    "name_url": "https://patchwiki.biligame.com/images/ys/9/94/2bnk06mbcgl81zrtuzykx2511d65u30.png",
+    "card_type": "欧庇克莱歌剧院",
+    "type": "欧庇克莱歌剧院",
+    "category": "支援牌行动牌场地",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 1
-          }
-        ],
+        "name": "技能说明",
         "description": "我方选择行动前 ：如果我方角色所装备卡牌的原本元素骰费用总和不比对方更低，则生成1个出战角色类型的元素骰。（每回合1次） 可用次数：3",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 1
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "欧庇克莱歌剧院"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌场地",
+    "id": "1ed3574e-0b28-4ed2-a6e7-6fbf1984126a",
     "name": "湖中垂柳",
+    "name_url": "https://patchwiki.biligame.com/images/ys/d/d5/aibkal5thptsd486ko6pteavmtwb8dl.png",
+    "card_type": "湖中垂柳",
+    "type": "湖中垂柳",
+    "category": "支援牌行动牌场地",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 1
-          }
-        ],
+        "name": "技能说明",
         "description": "结束阶段 ：如果我方手牌数量不多于2，则抓2张牌。 可用次数：2",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 1
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "湖中垂柳"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌场地",
+    "id": "86b77e52-d632-4bac-bec6-23b8a6738fb6",
     "name": "风龙废墟",
+    "name_url": "https://patchwiki.biligame.com/images/ys/7/79/sr8o4r5kxhcfjtsr8pj17ic3o1iume8.png",
+    "card_type": "风龙废墟",
+    "type": "风龙废墟",
+    "category": "支援牌行动牌场地",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 2
-          }
-        ],
+        "name": "技能说明",
         "description": "入场时 ：从牌组中随机抽取一张「 天赋」牌。 我方打出「 天赋」牌，或我方角色使用原本元素骰消耗至少为4的技能时 ：少花费1个元素骰。（每回合1次） 可用次数：3",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 2
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "风龙废墟"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌场地",
+    "id": "0b05bb53-8146-4b78-8e81-93318512126b",
     "name": "化城郭",
+    "name_url": "https://patchwiki.biligame.com/images/ys/1/10/rc332dxmdyr8s5xvwekf386z13s72pp.png",
+    "card_type": "化城郭",
+    "type": "化城郭",
+    "category": "支援牌行动牌场地",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 1
-          }
-        ],
+        "name": "技能说明",
         "description": "我方选择行动前，元素骰数量为0时 ：生成1个 万能元素 。（每回合1次） 可用次数：3",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 1
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "化城郭"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌场地",
+    "id": "f091b9fd-96c6-40ff-b4f8-1931845dc9b7",
     "name": "黄金屋",
+    "name_url": "https://patchwiki.biligame.com/images/ys/d/d3/bbwpr2whnzlx6t4ju6pkfp71ak07gzf.png",
+    "card_type": "黄金屋",
+    "type": "黄金屋",
+    "category": "支援牌行动牌场地",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          }
-        ],
+        "name": "技能说明",
         "description": "我方打出原本元素骰费用至少为3的「 武器」或「 圣遗物」手牌时： 少花费1个元素骰。（每回合1次） 可用次数：2",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "黄金屋"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌场地",
+    "id": "5425e6df-229f-411b-a5f7-a01d726274f5",
     "name": "天守阁",
+    "name_url": "https://patchwiki.biligame.com/images/ys/2/26/6skj8yr5v0zbkq2kz2vn6sbqqe8v7z7.png",
+    "card_type": "天守阁",
+    "type": "天守阁",
+    "category": "支援牌行动牌场地",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 2
-          }
-        ],
+        "name": "技能说明",
         "description": "行动阶段开始时： 如果我方的元素骰包含5种不同的元素，则生成1个 万能元素 。",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 2
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "天守阁"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌场地",
+    "id": "f45132b7-2ec7-4ed3-99f1-a39479b6e375",
     "name": "桓那兰那",
+    "name_url": "https://patchwiki.biligame.com/images/ys/9/9e/ekozm9xcz6dpdifsdht7zwp616fx1eu.png",
+    "card_type": "桓那兰那",
+    "type": "桓那兰那",
+    "category": "支援牌行动牌场地",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          }
-        ],
+        "name": "技能说明",
         "description": "结束阶段： 收集最多2个未使用的元素骰。 行动阶段开始时： 拿回此牌所收集的元素骰。",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "桓那兰那"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌场地",
+    "id": "73182cbb-3860-482c-a061-cec77eb8a5a3",
     "name": "珊瑚宫",
+    "name_url": "https://patchwiki.biligame.com/images/ys/1/15/mqr7stedsxuas3vp05ptlm7boe7izxb.png",
+    "card_type": "珊瑚宫",
+    "type": "珊瑚宫",
+    "category": "支援牌行动牌场地",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 2
-          }
-        ],
+        "name": "技能说明",
         "description": "结束阶段： 治疗所有我方角色1点。 可用次数：2",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 2
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "珊瑚宫"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌场地",
+    "id": "3dade219-b210-42db-949f-665bb86078e7",
     "name": "镇守之森",
+    "name_url": "https://patchwiki.biligame.com/images/ys/8/84/8lgnwb111k97hxvvtoc0nifk8dd07wn.png",
+    "card_type": "镇守之森",
+    "type": "镇守之森",
+    "category": "支援牌行动牌场地",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 2
-          }
-        ],
+        "name": "技能说明",
         "description": "我方选择行动前： 如果当前元素骰总数为偶数，则我方角色「普通攻击」少花费1个 无色元素 可用次数：4",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 2
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "镇守之森"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌场地",
+    "id": "ff7c5a95-89e7-4c76-831d-2581930bfd86",
     "name": "须弥城",
+    "name_url": "https://patchwiki.biligame.com/images/ys/2/22/dp27zr2m7w03tuj49xtxkc91w9wdn4b.png",
+    "card_type": "须弥城",
+    "type": "须弥城",
+    "category": "支援牌行动牌场地",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 2
-          }
-        ],
+        "name": "技能说明",
         "description": "我方角色使用技能或装备「 天赋」时： 如果我方元素骰数量不多于手牌数量，则少花费1个元素骰。（每回合1次）",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 2
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "须弥城"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌场地",
+    "id": "e659e1e4-2aad-4adf-b0c2-5a23df474c5f",
     "name": "鸣神大社",
+    "name_url": "https://patchwiki.biligame.com/images/ys/2/20/mlwbpr50c9wzzk8joyl4chal4b8764f.png",
+    "card_type": "鸣神大社",
+    "type": "鸣神大社",
+    "category": "支援牌行动牌场地",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "无色",
-            "value": 3
-          }
-        ],
+        "name": "技能说明",
         "description": "我方角色使用技能后： 如果元素骰总数为奇数，则生成1个 万能元素 。（每回合2次）",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "无色",
+            "value": 3
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "鸣神大社"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌场地",
+    "id": "62c6e429-0b6f-4ddb-ae38-eeaaaac1cce3",
     "name": "晨曦酒庄",
+    "name_url": "https://patchwiki.biligame.com/images/ys/5/57/2ljm8vcbzh1ggn2pgl992xhdcsiy709.png",
+    "card_type": "晨曦酒庄",
+    "type": "晨曦酒庄",
+    "category": "支援牌行动牌场地",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "无色",
-            "value": 3
-          }
-        ],
+        "name": "技能说明",
         "description": "我方执行「切换角色」行动时： 少花费1个元素骰。（每回合至多2次）",
-        "name": "技能说明"
-      }
-    ],
-    "subtype": "支援牌",
-    "type": "晨曦酒庄"
-  },
-  {
-    "category": "支援牌行动牌场地",
-    "name": "望舒客栈",
-    "skills": [
-      {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 2
-          }
-        ],
-        "description": "结束阶段： 治疗受伤最多的我方后台角色2点。 可用次数 ：2",
-        "name": "技能说明"
-      }
-    ],
-    "subtype": "支援牌",
-    "type": "望舒客栈"
-  },
-  {
-    "category": "支援牌行动牌场地",
-    "name": "璃月港口",
-    "skills": [
-      {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 2
-          }
-        ],
-        "description": "结束阶段： 抓2张牌。 可用次数 ：2",
-        "name": "技能说明"
-      }
-    ],
-    "subtype": "支援牌",
-    "type": "璃月港口"
-  },
-  {
-    "category": "支援牌行动牌场地",
-    "name": "群玉阁",
-    "skills": [
-      {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          }
-        ],
-        "description": "投掷阶段： 2个元素骰初始总是投出我方出战角色类型的元素。 行动阶段开始时： 如果我方手牌数量不多于3，则弃置此牌，生成1个 万能元素 。",
-        "name": "技能说明"
-      }
-    ],
-    "subtype": "支援牌",
-    "type": "群玉阁"
-  },
-  {
-    "category": "支援牌行动牌场地",
-    "name": "西风大教堂",
-    "skills": [
-      {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 2
-          }
-        ],
-        "description": "结束阶段： 治疗我方出战角色2点。 可用次数 ：2",
-        "name": "技能说明"
-      }
-    ],
-    "subtype": "支援牌",
-    "type": "西风大教堂"
-  },
-  {
-    "category": "支援牌行动牌场地",
-    "name": "骑士团图书馆",
-    "skills": [
-      {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 0
-          }
-        ],
-        "description": "入场时： 选择任意元素骰重投。 投掷阶段： 获得额外一次重投机会。",
-        "name": "技能说明"
-      }
-    ],
-    "subtype": "支援牌",
-    "type": "骑士团图书馆"
-  },
-  {
-    "category": "支援牌行动牌道具",
-    "name": "苦舍桓",
-    "skills": [
-      {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 1
-          }
-        ],
-        "description": "行动阶段开始时： 舍弃 最多2张元素骰费用最高的手牌，每 舍弃 1张，此牌就累积1点 「记忆和梦」 。（最多2点） 我方角色使用技能时： 如果我方本回合未打出过行动牌，则消耗1点 「记忆和梦」 ，以使此技能少花费1个元素骰。",
-        "name": "技能说明"
-      }
-    ],
-    "subtype": "支援牌",
-    "type": "苦舍桓"
-  },
-  {
-    "category": "支援牌行动牌道具",
-    "name": "流明石触媒",
-    "skills": [
-      {
         "cost": [
           {
             "type": "无色",
             "value": 3
           }
-        ],
-        "description": "我方打出行动牌后： 如果此牌在场期间本回合中我方已打出3张行动牌，则抓1张牌并生成1个万能元素骰。（每回合1次） 可用次数：3",
-        "name": "技能说明"
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "流明石触媒"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌道具",
-    "name": "化种匣",
+    "id": "6902be1b-2006-454b-8f00-a621b942e4a8",
+    "name": "望舒客栈",
+    "name_url": "https://patchwiki.biligame.com/images/ys/2/2a/sbjk2mxz7gngu107jmlod9wu1oxlwcs.png",
+    "card_type": "望舒客栈",
+    "type": "望舒客栈",
+    "category": "支援牌行动牌场地",
+    "subtype": "支援牌",
     "skills": [
       {
+        "name": "技能说明",
+        "description": "结束阶段： 治疗受伤最多的我方后台角色2点。 可用次数 ：2",
+        "cost": [
+          {
+            "type": "象形",
+            "value": 2
+          }
+        ]
+      }
+    ],
+    "element_type": ""
+  },
+  {
+    "id": "c63483c1-f370-4071-9d16-07a5275f2be0",
+    "name": "璃月港口",
+    "name_url": "https://patchwiki.biligame.com/images/ys/9/9a/dgrljtiauz2pb2bfyajyqmf77xojvzi.png",
+    "card_type": "璃月港口",
+    "type": "璃月港口",
+    "category": "支援牌行动牌场地",
+    "subtype": "支援牌",
+    "skills": [
+      {
+        "name": "技能说明",
+        "description": "结束阶段： 抓2张牌。 可用次数 ：2",
+        "cost": [
+          {
+            "type": "象形",
+            "value": 2
+          }
+        ]
+      }
+    ],
+    "element_type": ""
+  },
+  {
+    "id": "1c28445a-7329-4cb3-93fb-a03ba61e2344",
+    "name": "群玉阁",
+    "name_url": "https://patchwiki.biligame.com/images/ys/0/0a/6x8h2dpe0q06yvhlcws5cox470yrzol.png",
+    "card_type": "群玉阁",
+    "type": "群玉阁",
+    "category": "支援牌行动牌场地",
+    "subtype": "支援牌",
+    "skills": [
+      {
+        "name": "技能说明",
+        "description": "投掷阶段： 2个元素骰初始总是投出我方出战角色类型的元素。 行动阶段开始时： 如果我方手牌数量不多于3，则弃置此牌，生成1个 万能元素 。",
         "cost": [
           {
             "type": "象形",
             "value": 0
           }
-        ],
+        ]
+      }
+    ],
+    "element_type": ""
+  },
+  {
+    "id": "6d3888e5-9c0c-4bcf-a580-7cb86bf9d255",
+    "name": "西风大教堂",
+    "name_url": "https://patchwiki.biligame.com/images/ys/9/98/sicc61o43rgjhmaif2sed83afi986g4.png",
+    "card_type": "西风大教堂",
+    "type": "西风大教堂",
+    "category": "支援牌行动牌场地",
+    "subtype": "支援牌",
+    "skills": [
+      {
+        "name": "技能说明",
+        "description": "结束阶段： 治疗我方出战角色2点。 可用次数 ：2",
+        "cost": [
+          {
+            "type": "象形",
+            "value": 2
+          }
+        ]
+      }
+    ],
+    "element_type": ""
+  },
+  {
+    "id": "c776c935-100e-406d-95d5-663eaa403136",
+    "name": "骑士团图书馆",
+    "name_url": "https://patchwiki.biligame.com/images/ys/d/d0/2pwb50xcaah1qwlqgqam32ie8z83p1w.png",
+    "card_type": "骑士团图书馆",
+    "type": "骑士团图书馆",
+    "category": "支援牌行动牌场地",
+    "subtype": "支援牌",
+    "skills": [
+      {
+        "name": "技能说明",
+        "description": "入场时： 选择任意元素骰重投。 投掷阶段： 获得额外一次重投机会。",
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          }
+        ]
+      }
+    ],
+    "element_type": ""
+  },
+  {
+    "id": "edf78563-8552-4af9-9a01-61a67e2fca97",
+    "name": "苦舍桓",
+    "name_url": "https://patchwiki.biligame.com/images/ys/d/d1/muaetunya7sniheftoaejih0qxy9q1i.png",
+    "card_type": "苦舍桓",
+    "type": "苦舍桓",
+    "category": "支援牌行动牌道具",
+    "subtype": "支援牌",
+    "skills": [
+      {
+        "name": "技能说明",
+        "description": "行动阶段开始时： 舍弃 最多2张元素骰费用最高的手牌，每 舍弃 1张，此牌就累积1点 「记忆和梦」 。（最多2点） 我方角色使用技能时： 如果我方本回合未打出过行动牌，则消耗1点 「记忆和梦」 ，以使此技能少花费1个元素骰。",
+        "cost": [
+          {
+            "type": "象形",
+            "value": 1
+          }
+        ]
+      }
+    ],
+    "element_type": ""
+  },
+  {
+    "id": "b37ad6a8-34ea-459d-84ab-8764798cc7bb",
+    "name": "流明石触媒",
+    "name_url": "https://patchwiki.biligame.com/images/ys/c/ca/9649wsrgad33gyplf87vgiaziidcgm0.png",
+    "card_type": "流明石触媒",
+    "type": "流明石触媒",
+    "category": "支援牌行动牌道具",
+    "subtype": "支援牌",
+    "skills": [
+      {
+        "name": "技能说明",
+        "description": "我方打出行动牌后： 如果此牌在场期间本回合中我方已打出3张行动牌，则抓1张牌并生成1个万能元素骰。（每回合1次） 可用次数：3",
+        "cost": [
+          {
+            "type": "无色",
+            "value": 3
+          }
+        ]
+      }
+    ],
+    "element_type": ""
+  },
+  {
+    "id": "6447e6e0-4693-4c7f-a088-50f02bf21bd9",
+    "name": "化种匣",
+    "name_url": "https://patchwiki.biligame.com/images/ys/1/1f/3liu4ft0ocloxrr62g1nu9m32lpo809.png",
+    "card_type": "化种匣",
+    "type": "化种匣",
+    "category": "支援牌行动牌道具",
+    "subtype": "支援牌",
+    "skills": [
+      {
+        "name": "技能说明",
         "description": "我方打出原本元素骰费用至少为2的支援牌时 ：少花费1个元素骰。（每回合1次） 可用次数：2",
-        "name": "技能说明"
+        "cost": [
+          {
+            "type": "象形",
+            "value": 0
+          }
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "化种匣"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌道具",
+    "id": "bf5a8620-5fa4-41d1-ac72-aaeec8238e40",
     "name": "留念镜",
+    "name_url": "https://patchwiki.biligame.com/images/ys/f/f0/5rlf7j6bsrwalw8fk0gq1jsapexng3d.png",
+    "card_type": "留念镜",
+    "type": "留念镜",
+    "category": "支援牌行动牌道具",
+    "subtype": "支援牌",
     "skills": [
       {
-        "cost": [
-          {
-            "type": "象形",
-            "value": 1
-          }
-        ],
+        "name": "技能说明",
         "description": "我方打出「 武器」/「 圣遗物」/「 场地」/「 伙伴」手牌时 ：如果本场对局中我方曾经打出过所打出牌的同名卡牌，则少花费2个元素骰。（每回合1次） 可用次数：2",
-        "name": "技能说明"
-      }
-    ],
-    "subtype": "支援牌",
-    "type": "留念镜"
-  },
-  {
-    "category": "支援牌行动牌道具",
-    "name": "寻宝仙灵",
-    "skills": [
-      {
         "cost": [
           {
             "type": "象形",
             "value": 1
           }
-        ],
-        "description": "我方角色使用技能后： 此牌累积 1个「寻宝线索」 。 当此牌已累积 3个「寻宝线索」 时，弃置此牌：抓3张牌。",
-        "name": "技能说明"
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "寻宝仙灵"
+    "element_type": ""
   },
   {
+    "id": "0762da74-5478-4198-aa4d-4e340945d41e",
+    "name": "寻宝仙灵",
+    "name_url": "https://patchwiki.biligame.com/images/ys/5/59/qv92d8bjz0yo20yopiavbxax7545ucl.png",
+    "card_type": "寻宝仙灵",
+    "type": "寻宝仙灵",
     "category": "支援牌行动牌道具",
-    "name": "红羽团扇",
+    "subtype": "支援牌",
     "skills": [
       {
+        "name": "技能说明",
+        "description": "我方角色使用技能后： 此牌累积 1个「寻宝线索」 。 当此牌已累积 3个「寻宝线索」 时，弃置此牌：抓3张牌。",
+        "cost": [
+          {
+            "type": "象形",
+            "value": 1
+          }
+        ]
+      }
+    ],
+    "element_type": ""
+  },
+  {
+    "id": "5efca5b2-8a53-4b65-81b4-bf5f7b633748",
+    "name": "红羽团扇",
+    "name_url": "https://patchwiki.biligame.com/images/ys/5/55/2cin6jrvueqg6dzicu0kucxix3bt22a.png",
+    "card_type": "红羽团扇",
+    "type": "红羽团扇",
+    "category": "支援牌行动牌道具",
+    "subtype": "支援牌",
+    "skills": [
+      {
+        "name": "技能说明",
+        "description": "我方切换角色后： 本回合中，我方执行的下次「切换角色」行动视为「 快速行动 」而非「 战斗行动 」，并且少花费1个元素骰。（每回合1次）",
         "cost": [
           {
             "type": "象形",
             "value": 2
           }
-        ],
-        "description": "我方切换角色后： 本回合中，我方执行的下次「切换角色」行动视为「 快速行动 」而非「 战斗行动 」，并且少花费1个元素骰。（每回合1次）",
-        "name": "技能说明"
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "红羽团扇"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌道具",
+    "id": "61116417-5008-4c24-94ac-fcffefee3398",
     "name": "便携营养袋",
+    "name_url": "https://patchwiki.biligame.com/images/ys/7/74/ncqn0ulqwex355mork7j3iv6mh3ihjs.png",
+    "card_type": "便携营养袋",
+    "type": "便携营养袋",
+    "category": "支援牌行动牌道具",
+    "subtype": "支援牌",
     "skills": [
       {
+        "name": "技能说明",
+        "description": "入场时： 从牌组中随机抽取1张「 料理」事件。 我方打出「 料理」事件牌时： 从牌组中随机抽取1张「 料理」事件。（每回合1次）",
         "cost": [
           {
             "type": "无色",
             "value": 2
           }
-        ],
-        "description": "入场时： 从牌组中随机抽取1张「 料理」事件。 我方打出「 料理」事件牌时： 从牌组中随机抽取1张「 料理」事件。（每回合1次）",
-        "name": "技能说明"
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "便携营养袋"
+    "element_type": ""
   },
   {
-    "category": "支援牌行动牌道具",
+    "id": "79ad6433-85c0-4431-85c9-6e62ad6521be",
     "name": "参量质变仪",
+    "name_url": "https://patchwiki.biligame.com/images/ys/d/dd/q8j6jbtb4sdxegepvofrgwqxlw1z85y.png",
+    "card_type": "参量质变仪",
+    "type": "参量质变仪",
+    "category": "支援牌行动牌道具",
+    "subtype": "支援牌",
     "skills": [
       {
+        "name": "技能说明",
+        "description": "双方角色使用技能后： 如果造成了元素伤害，此牌累积 1个「质变进度」 。 当此牌已累积 3个「质变进度」 时，弃置此牌：生成3个不同的基础元素骰子。",
         "cost": [
           {
             "type": "无色",
             "value": 2
           }
-        ],
-        "description": "双方角色使用技能后： 如果造成了元素伤害，此牌累积 1个「质变进度」 。 当此牌已累积 3个「质变进度」 时，弃置此牌：生成3个不同的基础元素骰子。",
-        "name": "技能说明"
+        ]
       }
     ],
-    "subtype": "支援牌",
-    "type": "参量质变仪"
+    "element_type": ""
   }
 ]

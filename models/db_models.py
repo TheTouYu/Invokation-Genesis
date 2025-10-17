@@ -30,12 +30,12 @@ def init_models_db(sqlalchemy_db):
         __tablename__ = 'users'
 
         id = db.Column(db.String, primary_key=True, default=lambda: str(uuid.uuid4()))
-        username = db.Column(db.String(80), unique=True, nullable=False)
-        email = db.Column(db.String(120), unique=True, nullable=False)
+        username = db.Column(db.String(80), unique=True, nullable=False, index=True)
+        email = db.Column(db.String(120), unique=True, nullable=False, index=True)
         password_hash = db.Column(db.String(255), nullable=False)
-        created_at = db.Column(db.DateTime, default=datetime.utcnow)
+        created_at = db.Column(db.DateTime, default=datetime.utcnow, index=True)
         updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-        is_active = db.Column(db.Boolean, default=True)
+        is_active = db.Column(db.Boolean, default=True, index=True)
 
         # 关联关系
         decks = db.relationship("Deck", back_populates="user")
@@ -52,26 +52,17 @@ def init_models_db(sqlalchemy_db):
         __tablename__ = 'card_data'
 
         id = db.Column(db.String, primary_key=True, default=lambda: str(uuid.uuid4()))
-        name = db.Column(db.String(100), nullable=False)  # 卡牌名称
-        card_type = db.Column(db.String(50), nullable=False)  # 卡牌类型
-        element_type = db.Column(db.String(50))  # 元素类型
+        name = db.Column(db.String(100), nullable=False, index=True)  # 卡牌名称
+        card_type = db.Column(db.String(50), nullable=False, index=True)  # 卡牌类型
+        character_subtype = db.Column(db.String(50), index=True)  # 子类型（如武器类型、元素类型等）
+        element_type = db.Column(db.String(50), index=True)  # 元素类型
         cost = db.Column(db.JSON)  # 费用，存储为JSON格式
         description = db.Column(db.Text)  # 卡牌描述
-        character_subtype = db.Column(db.String(100))  # 角色子类型（如果是角色牌或角色装备牌）
-        rarity = db.Column(db.Integer)  # 稀有度
+        rarity = db.Column(db.Integer, index=True)  # 稀有度
         version = db.Column(db.String(20))  # 卡牌版本
-        created_at = db.Column(db.DateTime, default=datetime.utcnow)
+        created_at = db.Column(db.DateTime, default=datetime.utcnow, index=True)
         updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-        is_active = db.Column(db.Boolean, default=True)
-        
-        # 角色卡特定字段
-        health = db.Column(db.Integer)  # 生命值
-        max_health = db.Column(db.Integer)  # 最大生命值
-        energy = db.Column(db.Integer)  # 当前能量
-        max_energy = db.Column(db.Integer)  # 最大能量
-        weapon_type = db.Column(db.String(50))  # 武器类型
-        skills = db.Column(db.JSON)  # 技能列表，存储为JSON格式
-        image_url = db.Column(db.String(255))  # 卡牌图片URL
+        is_active = db.Column(db.Boolean, default=True, index=True)
         
         def to_dict(self):
             """将模型实例转换为字典"""
@@ -107,10 +98,10 @@ def init_models_db(sqlalchemy_db):
 
         id = db.Column(db.String, primary_key=True, default=lambda: str(uuid.uuid4()))
         name = db.Column(db.String(100), nullable=False)  # 卡组名称
-        user_id = db.Column(db.String, db.ForeignKey('users.id'), nullable=False)  # 所属用户
+        user_id = db.Column(db.String, db.ForeignKey('users.id'), nullable=False, index=True)  # 所属用户
         cards = db.Column(db.JSON)  # 卡牌ID列表，存储为JSON格式
-        is_public = db.Column(db.Boolean, default=False)  # 是否公开
-        created_at = db.Column(db.DateTime, default=datetime.utcnow)
+        is_public = db.Column(db.Boolean, default=False, index=True)  # 是否公开
+        created_at = db.Column(db.DateTime, default=datetime.utcnow, index=True)
         updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
         description = db.Column(db.Text)  # 卡组描述
 
@@ -127,15 +118,15 @@ def init_models_db(sqlalchemy_db):
         __tablename__ = 'game_histories'
 
         id = db.Column(db.String, primary_key=True, default=lambda: str(uuid.uuid4()))
-        player1_id = db.Column(db.String, db.ForeignKey('users.id'), nullable=False)  # 玩家1
-        player2_id = db.Column(db.String, db.ForeignKey('users.id'), nullable=False)  # 玩家2
-        winner_id = db.Column(db.String, db.ForeignKey('users.id'))  # 获胜者
-        deck1_id = db.Column(db.String, db.ForeignKey('decks.id'))  # 玩家1使用的卡组
-        deck2_id = db.Column(db.String, db.ForeignKey('decks.id'))  # 玩家2使用的卡组
+        player1_id = db.Column(db.String, db.ForeignKey('users.id'), nullable=False, index=True)  # 玩家1
+        player2_id = db.Column(db.String, db.ForeignKey('users.id'), nullable=False, index=True)  # 玩家2
+        winner_id = db.Column(db.String, db.ForeignKey('users.id'), index=True)  # 获胜者
+        deck1_id = db.Column(db.String, db.ForeignKey('decks.id'), index=True)  # 玩家1使用的卡组
+        deck2_id = db.Column(db.String, db.ForeignKey('decks.id'), index=True)  # 玩家2使用的卡组
         game_data = db.Column(db.JSON)  # 完整游戏数据，存储为JSON格式
-        game_result = db.Column(db.String(50))  # 游戏结果
+        game_result = db.Column(db.String(50), index=True)  # 游戏结果
         duration = db.Column(db.Integer)  # 游戏时长(秒)
-        created_at = db.Column(db.DateTime, default=datetime.utcnow)
+        created_at = db.Column(db.DateTime, default=datetime.utcnow, index=True)
         updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
         # 关联关系

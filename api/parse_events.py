@@ -46,6 +46,9 @@ def _parse_cards(container):
                 info_divs[2].get_text(strip=True) if len(info_divs) > 2 else ""
             )  # 可能为空
 
+            # 修复点：安全获取并清理 src
+            img_tag = card.select_one(".kapai-box img")
+            name_url = img_tag.get("alt") if img_tag and img_tag.get("src") else ""
             skills = []
             for skill_elem in card.select(".jiNeng"):
                 title_elem = skill_elem.select_one(".jiNeng-title")
@@ -68,6 +71,7 @@ def _parse_cards(container):
             results.append(
                 {
                     "name": name,
+                    "name_url": name_url,
                     "type": card_type,  # "事件牌"
                     "category": category,  # "行动牌"
                     "subtype": subtype,  # 可能为空字符串

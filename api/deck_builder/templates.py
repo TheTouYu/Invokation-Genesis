@@ -1,4 +1,4 @@
-DECK_BUILDER_TEMPLATE = '''
+DECK_BUILDER_TEMPLATE = """
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -369,6 +369,36 @@ DECK_BUILDER_TEMPLATE = '''
         .random-btn:hover {
             background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
         }
+        
+        /* 分页按钮样式 */
+        .pagination button {
+            background: linear-gradient(135deg, #7f8c8d 0%, #95a5a6 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 15px;
+            margin: 0 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .pagination button:hover {
+            background: linear-gradient(135deg, #95a5a6 0%, #bdc3c7 100%);
+            transform: translateY(-1px);
+        }
+        
+        .pagination button:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        
+        .pagination span {
+            font-weight: bold;
+            color: #2c3e50;
+            margin: 0 15px;
+            vertical-align: middle;
+        }
     </style>
 </head>
 <body>
@@ -411,6 +441,11 @@ DECK_BUILDER_TEMPLATE = '''
                 <div id="characterCardSelection" class="card-selection">
                     <!-- 角色卡牌将在这里显示 -->
                 </div>
+                <div id="characterPagination" class="pagination" style="text-align: center; margin-top: 20px; display: none;">
+                    <button onclick="changeCharacterPage(-1)">上一页</button>
+                    <span id="characterPageInfo"></span>
+                    <button onclick="changeCharacterPage(1)">下一页</button>
+                </div>
             </div>
         </div>
         
@@ -449,6 +484,11 @@ DECK_BUILDER_TEMPLATE = '''
                 </div>
                 <div id="cardSelection" class="card-selection">
                     <!-- Cards will be populated here -->
+                </div>
+                <div id="cardPagination" class="pagination" style="text-align: center; margin-top: 20px; display: none;">
+                    <button onclick="changeCardPage(-1)">上一页</button>
+                    <span id="cardPageInfo"></span>
+                    <button onclick="changeCardPage(1)">下一页</button>
                 </div>
             </div>
         </div>
@@ -523,127 +563,75 @@ DECK_BUILDER_TEMPLATE = '''
         
         // Load all cards from backend
         function loadCards() {
-            // Load cards from our custom API endpoints instead of /api/cards
-            Promise.all([
-                fetch('/api/characters').then(r => r.json()).catch(() => []),
-                fetch('/api/equipments').then(r => r.json()).catch(() => []),
-                fetch('/api/events').then(r => r.json()).catch(() => []),
-                fetch('/api/supports').then(r => r.json()).catch(() => [])
-            ])
-            .then(([chars, eqs, events, supports]) => {
-                // Combine all cards into single array
-                allCards = [];
-                
-                // Process character cards
-                if (Array.isArray(chars)) {
-                    allCharacterCards = chars.map(c => ({
-                        id: c.name || c.id,
-                        name: c.name || 'Unknown',
-                        title: c.title || c.region || '',
-                        type: '角色牌',
-                        description: c.description || c.region || '',
-                        country: extractCountry(c.region || ''),
-                        element: extractElement(c),
-                        weapon_type: extractWeaponType(c.region || ''),
-                        skills: c.skills || []
-                    }));
-                }
-                
-                // Process equipment cards
-                if (Array.isArray(eqs)) {
-                    allCards.push(...eqs.map(e => ({
-                        id: e.name || e.id,
-                        name: e.name || 'Unknown',
-                        title: e.title || '',
-                        type: e.type || '装备牌',
-                        description: e.description || '',
-                        cost: e.cost || []
-                    })));
-                }
-                
-                // Process event cards
-                if (Array.isArray(events)) {
-                    allCards.push(...events.map(e => ({
-                        id: e.name || e.id,
-                        name: e.name || 'Unknown',
-                        title: e.title || '',
-                        type: '事件牌',
-                        description: e.description || '',
-                        cost: e.cost || []
-                    })));
-                }
-                
-                // Process support cards
-                if (Array.isArray(supports)) {
-                    allCards.push(...supports.map(s => ({
-                        id: s.name || s.id,
-                        name: s.name || 'Unknown',
-                        title: s.title || '',
-                        type: '支援牌',
-                        description: s.description || '',
-                        cost: s.cost || []
-                    })));
-                }
-                
-                // If still no cards, use demo cards
-                if (allCards.length === 0 && allCharacterCards.length === 0) {
-                    console.log('No cards loaded from API, using demo cards');
-                    loadDemoCards();
-                } else {
-                    // Display cards based on current tab
-                    if (currentTab === 'character') {
-                        displayCharacterCards(allCharacterCards);
-                    } else {
-                        displayCards(allCards);
+            // Load cards from our unified API endpoints that use consistent data structure
+            // Prepare headers with or without auth based on the endpoint
+            const url1 = '/api/cards?type=角色牌&page=1&per_page=12';
+            const headers1 = needsAuth(url1) ? { 
+                'Authorization': 'Bearer ' + (getJWTToken() || '') 
+            } : {};
+            
+            // First load character cards with pagination info
+            fetch(url1, { headers: headers1 })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('HTTP error ' + response.status);
                     }
-                    console.log(`Loaded ${allCharacterCards.length} character cards and ${allCards.length} other cards`);
-                }
-            })
-            .catch(error => {
-                console.error('Error loading cards:', error);
-                loadDemoCards();
-            });
-        }
-        
-        // Helper functions to extract character info from region
-        function extractCountry(region) {
-            const countries = ['蒙德', '璃月', '稻妻', '须弥', '枫丹', '纳塔', '至冬'];
-            for (const country of countries) {
-                if (region.includes(country)) return country;
-            }
-            return '其他';
-        }
-        
-        function extractElement(character) {
-            // Try to get element from skills cost
-            if (character.skills && character.skills.length > 0) {
-                const firstSkill = character.skills[0];
-                if (firstSkill.cost && Array.isArray(firstSkill.cost)) {
-                    for (const cost of firstSkill.cost) {
-                        if (typeof cost === 'object' && cost.type) {
-                            const elements = ['火', '水', '雷', '草', '风', '岩', '冰'];
-                            if (elements.includes(cost.type)) {
-                                return cost.type;
+                    return response.json();
+                })
+                .then(charData => {
+                    allCharacterCards = charData.cards || [];
+                    // Initialize pagination info
+                    totalCharPages = charData.pages || 1;
+                    currentCharPage = charData.current_page || 1;
+                    
+                    // Prepare headers with or without auth based on the endpoint
+                    const url2 = '/api/cards?page=1&per_page=30';
+                    const headers2 = needsAuth(url2) ? { 
+                        'Authorization': 'Bearer ' + (getJWTToken() || '') 
+                    } : {};
+                    
+                    // Then load non-character cards with pagination info
+                    fetch(url2, { headers: headers2 })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('HTTP error ' + response.status);
                             }
-                        }
-                    }
-                }
-            }
-            // Fallback to region
-            const elements = ['火', '水', '雷', '草', '风', '岩', '冰'];
-            for (const element of elements) {
-                if (character.region && character.region.includes(element)) return element;
-            }
-            return '物理';
+                            return response.json();
+                        })
+                        .then(otherData => {
+                            allCards = otherData.cards || [];
+                            // Initialize pagination info
+                            totalCardPages = otherData.pages || 1;
+                            currentCardPage = otherData.current_page || 1;
+                            
+                            // If still no cards, use demo cards
+                            if (allCards.length === 0 && allCharacterCards.length === 0) {
+                                console.log('No cards loaded from API, using demo cards');
+                                loadDemoCards();
+                            } else {
+                                // Display cards based on current tab
+                                if (currentTab === 'character') {
+                                    displayCharacterCards(allCharacterCards);
+                                    updateCharacterPagination(charData.total, charData.pages, charData.current_page);
+                                } else {
+                                    displayCards(allCards);
+                                    updateCardPagination(otherData.total, otherData.pages, otherData.current_page);
+                                }
+                                console.log(`Loaded ${allCharacterCards.length} character cards and ${allCards.length} other cards`);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error loading other cards:', error);
+                            loadDemoCards();
+                        });
+                })
+                .catch(error => {
+                    console.error('Error loading character cards:', error);
+                    loadDemoCards();
+                });
         }
         
-        function extractWeaponType(region) {
-            const weaponTypes = ['单手剑', '双手剑', '长柄武器', '弓', '法器'];
-            for (const weaponType of weaponTypes) {
-                if (region.includes(weaponType)) return weaponType;
-            }
-            return '其他';
-        }
+
         
         // Load demo cards as fallback
         function loadDemoCards() {
@@ -678,8 +666,20 @@ DECK_BUILDER_TEMPLATE = '''
         
         // Load character filters (country, element, weapon type)
         function loadCharacterFilters() {
-            fetch('/api/characters/filters')
-            .then(response => response.json())
+            const url = '/api/characters/filters';
+            const headers = needsAuth(url) ? { 
+                'Authorization': 'Bearer ' + (getJWTToken() || '') 
+            } : {};
+            
+            fetch(url, {
+                headers: headers
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('HTTP error ' + response.status);
+                }
+                return response.json();
+            })
             .then(data => {
                 // Populate country filter
                 const countryFilter = document.getElementById('countryFilter');
@@ -874,13 +874,27 @@ DECK_BUILDER_TEMPLATE = '''
                 // 重新应用过滤条件来保持显示的一致性
                 const params = new URLSearchParams();
                 params.append('type', '角色牌');
+                params.append('page', '1');
+                params.append('per_page', '12');
                 if (countryFilter) params.append('country', countryFilter);
                 if (elementFilter) params.append('element', elementFilter);
                 if (weaponTypeFilter) params.append('weapon_type', weaponTypeFilter);
                 if (searchTerm) params.append('search', searchTerm);
                 
-                fetch(`/api/cards/filter?${params.toString()}`)
-                    .then(response => response.json())
+                const url = `/api/cards/filter?${params.toString()}`;
+                const headers = needsAuth(url) ? { 
+                    'Authorization': 'Bearer ' + (getJWTToken() || '') 
+                } : {};
+                
+                fetch(url, {
+                    headers: headers
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('HTTP error ' + response.status);
+                        }
+                        return response.json();
+                    })
                     .then(data => {
                         displayCharacterCards(data.cards);
                     })
@@ -951,6 +965,8 @@ DECK_BUILDER_TEMPLATE = '''
                 // 重新应用过滤条件以保持显示的一致性
                 const params = new URLSearchParams();
                 params.append('type', '非角色牌');
+                params.append('page', '1');
+                params.append('per_page', '30');
                 if (costFilter) params.append('cost', costFilter);
                 if (searchTerm) params.append('search', searchTerm);
                 
@@ -959,8 +975,20 @@ DECK_BUILDER_TEMPLATE = '''
                     params.append('tag', tag);
                 });
                 
-                fetch(`/api/cards/filter?${params.toString()}`)
-                    .then(response => response.json())
+                const url = `/api/cards/filter?${params.toString()}`;
+                const headers = needsAuth(url) ? { 
+                    'Authorization': 'Bearer ' + (getJWTToken() || '') 
+                } : {};
+                
+                fetch(url, {
+                    headers: headers
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('HTTP error ' + response.status);
+                        }
+                        return response.json();
+                    })
                     .then(data => {
                         displayCards(data.cards);
                     })
@@ -1106,11 +1134,17 @@ DECK_BUILDER_TEMPLATE = '''
             validationResult.className = 'validation-result';
             
             try {
-                const response = await fetch('/api/deck/validate', {
+                const url = '/api/deck/validate';
+                const headers = {
+                    'Content-Type': 'application/json'
+                };
+                if (needsAuth(url) && getJWTToken()) {
+                    headers['Authorization'] = 'Bearer ' + getJWTToken();
+                }
+                
+                const response = await fetch(url, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: headers,
                     body: JSON.stringify({
                         characters: deck.characters.map(c => c.id),
                         cards: deck.cards.map(c => c.id),
@@ -1178,6 +1212,8 @@ DECK_BUILDER_TEMPLATE = '''
             // Build query parameters
             const params = new URLSearchParams();
             params.append('type', '非角色牌');  // Only filter non-character cards
+            params.append('page', '1');
+            params.append('per_page', '30');  // 限制每页30张卡牌
             if (costFilter) params.append('cost', costFilter);
             if (searchTerm) params.append('search', searchTerm);
             
@@ -1188,7 +1224,12 @@ DECK_BUILDER_TEMPLATE = '''
             
             // Call backend API to filter cards
             fetch(`/api/cards/filter?${params.toString()}`)
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('HTTP error ' + response.status);
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     displayCards(data.cards);
                 })
@@ -1209,6 +1250,8 @@ DECK_BUILDER_TEMPLATE = '''
             // Build query parameters
             const params = new URLSearchParams();
             params.append('type', '角色牌');  // Only filter character cards
+            params.append('page', '1');
+            params.append('per_page', '12');  // 限制每页12张角色卡
             if (countryFilter) params.append('country', countryFilter);
             if (elementFilter) params.append('element', elementFilter);
             if (weaponTypeFilter) params.append('weapon_type', weaponTypeFilter);
@@ -1216,7 +1259,12 @@ DECK_BUILDER_TEMPLATE = '''
             
             // Call backend API to filter character cards
             fetch(`/api/cards/filter?${params.toString()}`)
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('HTTP error ' + response.status);
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     displayCharacterCards(data.cards);
                 })
@@ -1239,8 +1287,20 @@ DECK_BUILDER_TEMPLATE = '''
         
         // Function to populate tag buttons
         function populateTagCheckboxes() {
-            fetch('/api/cards/tags')
-                .then(response => response.json())
+            const url = '/api/cards/tags';
+            const headers = needsAuth(url) ? { 
+                'Authorization': 'Bearer ' + (getJWTToken() || '') 
+            } : {};
+            
+            fetch(url, {
+                headers: headers
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('HTTP error ' + response.status);
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     const container = document.getElementById('tagButtonsContainer');
                     container.innerHTML = '';  // Clear existing buttons
@@ -1361,9 +1421,21 @@ DECK_BUILDER_TEMPLATE = '''
             if (elementFilter) params.append('element', elementFilter);
             if (weaponTypeFilter) params.append('weapon_type', weaponTypeFilter);
             
+            const url = `/api/cards/random?${params.toString()}`;
+            const headers = needsAuth(url) ? { 
+                'Authorization': 'Bearer ' + (getJWTToken() || '') 
+            } : {};
+            
             // 调用后端API获取随机角色
-            fetch(`/api/cards/random?${params.toString()}`)
-                .then(response => response.json())
+            fetch(url, {
+                headers: headers
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('HTTP error ' + response.status);
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     if (data.cards && data.cards.length > 0) {
                         // 对每个随机角色进行处理
@@ -1437,9 +1509,21 @@ DECK_BUILDER_TEMPLATE = '''
                 params.append('tag', tag);
             });
             
+            const url = `/api/cards/random?${params.toString()}`;
+            const headers = needsAuth(url) ? { 
+                'Authorization': 'Bearer ' + (getJWTToken() || '') 
+            } : {};
+            
             // 调用后端API获取随机卡牌
-            fetch(`/api/cards/random?${params.toString()}`)
-                .then(response => response.json())
+            fetch(url, {
+                headers: headers
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('HTTP error ' + response.status);
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     if (data.cards && data.cards.length > 0) {
                         // 对每个随机卡牌进行处理
@@ -1503,7 +1587,224 @@ DECK_BUILDER_TEMPLATE = '''
                     alert('随机选择行动牌失败，请重试');
                 });
         }
+        
+        // 获取JWT token的函数
+        function getJWTToken() {
+            // 尝试从localStorage获取token
+            let token = localStorage.getItem('jwt_token');
+            if (!token) {
+                // 如果localStorage中没有，尝试从cookie获取
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.startsWith('access_token_cookie=')) {
+                        token = cookie.substring('access_token_cookie='.length, cookie.length);
+                        break;
+                    }
+                }
+            }
+            return token || null;
+        }
+        
+        // 检查是否需要认证的API端点
+        function needsAuth(url) {
+            // 根据项目重构，现在所有卡牌API都使用数据库作为数据源且需要认证
+            // /api/deck/validate 用于验证卡组，不需要认证
+            // 其他涉及卡牌数据的API都需要认证
+            return url.includes('/api/cards/') || 
+                   url.includes('/api/characters/') || 
+                   (url.includes('/api/deck/') && !url.includes('/api/deck/validate')) ||
+                   url.includes('/api/decks');
+        }
+        
+        // 分页相关状态
+        let currentCharPage = 1;
+        let totalCharPages = 1;
+        let currentCardPage = 1;
+        let totalCardPages = 1;
+        
+        // 分页相关的过滤参数
+        let currentCharFilters = { country: '', element: '', weaponType: '', search: '' };
+        let currentCardFilters = { cost: '', search: '', tags: [] };
+        
+        // 更改角色页码
+        function changeCharacterPage(direction) {
+            const newPage = currentCharPage + direction;
+            if (newPage >= 1 && newPage <= totalCharPages) {
+                currentCharPage = newPage;
+                loadCharacterCardsPage();
+            }
+        }
+        
+        // 更改行动牌页码
+        function changeCardPage(direction) {
+            const newPage = currentCardPage + direction;
+            if (newPage >= 1 && newPage <= totalCardPages) {
+                currentCardPage = newPage;
+                loadCardPage();
+            }
+        }
+        
+        // 加载指定页码的角色卡
+        function loadCharacterCardsPage() {
+            const params = new URLSearchParams();
+            params.append('type', '角色牌');
+            params.append('page', currentCharPage.toString());
+            params.append('per_page', '12');
+            
+            if (currentCharFilters.country) params.append('country', currentCharFilters.country);
+            if (currentCharFilters.element) params.append('element', currentCharFilters.element);
+            if (currentCharFilters.weaponType) params.append('weapon_type', currentCharFilters.weaponType);
+            if (currentCharFilters.search) params.append('search', currentCharFilters.search);
+            
+            const url = `/api/cards/filter?${params.toString()}`;
+            const headers = needsAuth(url) ? { 
+                'Authorization': 'Bearer ' + (getJWTToken() || '') 
+            } : {};
+            
+            fetch(url, {
+                headers: headers
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('HTTP error ' + response.status);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    allCharacterCards = data.cards || [];
+                    if (currentTab === 'character') {
+                        displayCharacterCards(allCharacterCards);
+                    }
+                    updateCharacterPagination(data.total, data.pages, data.current_page);
+                })
+                .catch(error => {
+                    console.error('Error loading character cards page:', error);
+                });
+        }
+        
+        // 加载指定页码的行动牌
+        function loadCardPage() {
+            const params = new URLSearchParams();
+            params.append('type', '非角色牌');
+            params.append('page', currentCardPage.toString());
+            params.append('per_page', '30');
+            
+            if (currentCardFilters.cost) params.append('cost', currentCardFilters.cost);
+            if (currentCardFilters.search) params.append('search', currentCardFilters.search);
+            
+            // 添加标签参数
+            currentCardFilters.tags.forEach(tag => {
+                params.append('tag', tag);
+            });
+            
+            const url = `/api/cards/filter?${params.toString()}`;
+            const headers = needsAuth(url) ? { 
+                'Authorization': 'Bearer ' + (getJWTToken() || '') 
+            } : {};
+            
+            fetch(url, {
+                headers: headers
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('HTTP error ' + response.status);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    allCards = data.cards || [];
+                    if (currentTab === 'other') {
+                        displayCards(allCards);
+                    }
+                    updateCardPagination(data.total, data.pages, data.current_page);
+                })
+                .catch(error => {
+                    console.error('Error loading card page:', error);
+                });
+        }
+        
+        // 更新角色卡分页信息
+        function updateCharacterPagination(total, totalPages, currentPage) {
+            totalCharPages = totalPages;
+            currentCharPage = currentPage;
+            
+            const pageInfo = document.getElementById('characterPageInfo');
+            pageInfo.textContent = `第 ${currentPage} 页，共 ${totalPages} 页 (共 ${total} 张)`;
+            
+            const prevButton = document.querySelector('#characterPagination button:first-child');
+            const nextButton = document.querySelector('#characterPagination button:last-child');
+            
+            prevButton.disabled = currentPage <= 1;
+            nextButton.disabled = currentPage >= totalPages;
+            
+            document.getElementById('characterPagination').style.display = totalPages > 1 ? 'block' : 'none';
+        }
+        
+        // 更新行动牌分页信息
+        function updateCardPagination(total, totalPages, currentPage) {
+            totalCardPages = totalPages;
+            currentCardPage = currentPage;
+            
+            const pageInfo = document.getElementById('cardPageInfo');
+            pageInfo.textContent = `第 ${currentPage} 页，共 ${totalPages} 页 (共 ${total} 张)`;
+            
+            const prevButton = document.querySelector('#cardPagination button:first-child');
+            const nextButton = document.querySelector('#cardPagination button:last-child');
+            
+            prevButton.disabled = currentPage <= 1;
+            nextButton.disabled = currentPage >= totalPages;
+            
+            document.getElementById('cardPagination').style.display = totalPages > 1 ? 'block' : 'none';
+        }
+        
+        // 重写过滤和搜索函数以支持分页
+        function filterCharacterCards() {
+            // 保存当前过滤条件
+            currentCharFilters = {
+                country: document.getElementById('countryFilter').value,
+                element: document.getElementById('elementFilter').value,
+                weaponType: document.getElementById('weaponTypeFilter').value,
+                search: document.getElementById('characterSearchInput').value
+            };
+            
+            // 重置到第一页
+            currentCharPage = 1;
+            loadCharacterCardsPage();
+        }
+        
+        function searchCharacterCards() {
+            // 更新搜索条件
+            currentCharFilters.search = document.getElementById('characterSearchInput').value;
+            
+            // 重置到第一页
+            currentCharPage = 1;
+            loadCharacterCardsPage();
+        }
+        
+        function filterCards() {
+            // 保存当前过滤条件
+            currentCardFilters = {
+                cost: document.getElementById('costFilter').value,
+                search: document.getElementById('searchInput').value,
+                tags: getSelectedTags()
+            };
+            
+            // 重置到第一页
+            currentCardPage = 1;
+            loadCardPage();
+        }
+        
+        function searchCards() {
+            // 更新搜索条件
+            currentCardFilters.search = document.getElementById('searchInput').value;
+            
+            // 重置到第一页
+            currentCardPage = 1;
+            loadCardPage();
+        }
     </script>
 </body>
 </html>
-'''
+"""
+

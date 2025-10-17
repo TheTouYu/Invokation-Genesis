@@ -1,552 +1,148 @@
+"""
+标准化的卡牌构建器API路由
+使用数据库作为统一数据源，替代原有的文件读取方式
+"""
 from flask import Blueprint, jsonify, request
 import json
-import os
 from utils.deck_validator import validate_deck_composition
+from utils.card_data_processor import load_card_data_from_db, extract_country_from_region, extract_weapon_type_from_region
 
-deck_builder_api = Blueprint('deck_builder_api', __name__)
+deck_builder_api = Blueprint("deck_builder_api", __name__)
+
 
 def load_card_data():
-    """从card_data目录中加载所有卡牌数据，但不包括角色技能"""
-    card_data_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'card_data')
-    all_cards = []
-    
-    # 加载各类卡牌数据
-    for filename in ['equipments.json', 'events.json', 'supports.json']:
-        file_path = os.path.join(card_data_path, filename)
-        if os.path.exists(file_path):
-            try:
-                with open(file_path, 'r', encoding='utf-8') as f:
-                    cards = json.load(f)
-                    all_cards.extend(cards)
-            except Exception as e:
-                print(f"Error loading {file_path}: {e}")
-    
-    # 单独处理角色数据，提取国家、元素、武器信息
-    character_file = os.path.join(card_data_path, 'characters.json')
-    if os.path.exists(character_file):
-        try:
-            with open(character_file, 'r', encoding='utf-8') as f:
-                characters = json.load(f)
-                for character in characters:
-                    # 提取国家和元素信息
-                    region_info = character.get('region', '')
-                    # 从region字段中提取国家信息，例如：角色牌稻妻单手剑 -> 国家：稻妻，武器：单手剑
-                    country = extract_country_from_region(region_info)
-                    
-                    # 从角色技能费用中提取元素信息（这比从region字段更准确）
-                    element = extract_element_from_character(character)
-                    
-                    weapon_type = extract_weapon_type_from_region(region_info)
-                    
-                    # 创建角色的概要信息
-                    character_summary = {
-                        'name': character.get('name', ''),
-                        'type': '角色牌',  # 统一类型
-                        'subtype': '角色牌',
-                        'title': region_info,
-                        'description': f"角色牌：{character.get('name', '')}，武器类型：{character.get('weapon', '')}",
-                        'skills': character.get('skills', []),  # 保存技能信息以备后用，但不作为独立卡牌
-                        'country': country,  # 国家
-                        'element': element,  # 元素
-                        'weapon_type': weapon_type  # 武器类型
-                    }
-                    all_cards.append(character_summary)
-        except Exception as e:
-            print(f"Error loading {character_file}: {e}")
-    
-    return all_cards
+    """从数据库加载所有卡牌数据（使用统一的处理器）"""
+    return load_card_data_from_db()
 
 
 def extract_element_from_character(character):
     """从角色技能费用中提取元素信息"""
-    if 'skills' in character and len(character['skills']) > 0:
-        first_skill = character['skills'][0]
-        if 'cost' in first_skill:
-            costs = first_skill['cost']
+    if "skills" in character and len(character["skills"]) > 0:
+        first_skill = character["skills"][0]
+        if "cost" in first_skill:
+            costs = first_skill["cost"]
             for cost in costs:
-                if isinstance(cost, dict) and 'type' in cost:
-                    cost_type = cost['type']
+                if isinstance(cost, dict) and "type" in cost:
+                    cost_type = cost["type"]
                     # 检查是否为元素类型
-                    elements = ['火', '水', '雷', '草', '风', '岩', '冰', '物理']
+                    elements = ["火", "水", "雷", "草", "风", "岩", "冰", "物理"]
                     if cost_type in elements:
                         return cost_type
                     # 检查始基力类型
-                    if '始基力' in cost_type:
-                        if '荒性' in cost_type:
-                            return '荒性'
-                        elif '芒性' in cost_type:
-                            return '芒性'
-    
-    # 如果从技能费用中无法提取，尝试从region字段中获取
-    region_info = character.get('region', '')
-    elements = ['火', '水', '雷', '草', '风', '岩', '冰', '物理']
-    
-    # 检查是否包含始基力类型
-    if '始基力：荒性' in region_info:
-        return '荒性'
-    elif '始基力：芒性' in region_info:
-        return '芒性'
-    
-    # 检查常规元素
-    for element in elements:
-        if element in region_info:
-            return element
-    
-    return '物理'
+                    if "始基力" in cost_type:
+                        if "荒性" in cost_type:
+                            return "荒性"
+                        elif "芒性" in cost_type:
+                            return "芒性"
 
+    # 如果从技能费用中无法提取，尝试从其他字段中获取
+    element = character.get("element", "")
+    if element:
+        return element
 
-def extract_country_from_region(region):
-    """从region字段中提取国家信息"""
-    # region格式示例：角色牌稻妻单手剑
-    if not region:
-        return '未知'
-    
-    # 常见国家列表
-    countries = ['蒙德', '璃月', '稻妻', '须弥', '枫丹', '纳塔', '至冬', '魔物', '愚人众', '丘丘人']
-    
-    for country in countries:
-        if country in region:
-            return country
-    
-    return '其他'
+    return "物理"
 
 
 def extract_element_from_region(region):
     """从region字段中提取元素信息"""
     if not region:
-        return '未知'
-    
+        return "未知"
+
     # 常见元素列表，包括始基力类型
-    elements = ['火', '水', '雷', '草', '风', '岩', '冰', '物理']
-    
+    elements = ["火", "水", "雷", "草", "风", "岩", "冰", "物理"]
+
     # 检查是否包含始基力类型
-    if '始基力：荒性' in region:
-        return '荒性'
-    elif '始基力：芒性' in region:
-        return '芒性'
-    
+    if "始基力：荒性" in region:
+        return "荒性"
+    elif "始基力：芒性" in region:
+        return "芒性"
+
     # 检查常规元素
     for element in elements:
         if element in region:
             return element
-    
-    return '物理'
+
+    return "物理"
 
 
-def extract_weapon_type_from_region(region):
-    """从region字段中提取武器类型信息"""
-    if not region:
-        return '未知'
-    
-    # 常见武器类型
-    weapon_types = ['单手剑', '双手剑', '长柄武器', '弓', '法器', '其他武器']
-    
-    for weapon_type in weapon_types:
-        if weapon_type in region:
-            return weapon_type
-    
-    return '其他'
 
 
-def get_card_tags():
-    """从卡牌数据中提取所有可能的标签"""
-    all_cards = load_card_data()
-    tags = set()
-    
-    # 定义有意义的标签类别
-    valid_tags = {
-        '事件牌', '装备牌', '支援牌', '角色牌', '元素共鸣', '武器', '圣遗物', 
-        '天赋', '特技', '秘传', '伙伴', '料理', '道具', '场地', '战斗行动'
-    }
-    
-    for card in all_cards:
-        # 如果是角色牌，跳过标签提取（因为用户选择其他卡牌时不需要角色牌标签）
-        if card.get('type') == '角色牌':
-            continue
-        
-        # 添加基础类型标签
-        if 'subtype' in card and card['subtype'] in valid_tags:
-            tags.add(card['subtype'])
-        if 'type' in card and card['type'] in valid_tags and card['type'] != '角色牌':
-            tags.add(card['type'])
-        if 'category' in card:
-            # 从category中提取标签，例如：装备牌行动牌武器 单手剑 -> 武器、单手剑
-            cat = card['category']
-            if '武器' in cat:
-                tags.add('武器')
-            if '圣遗物' in cat:
-                tags.add('圣遗物')
-            if '天赋' in cat:
-                tags.add('天赋')
-            if '特技' in cat:
-                tags.add('特技')
-            if '秘传' in cat:
-                tags.add('秘传')
-            if '伙伴' in cat:
-                tags.add('伙伴')
-            if '料理' in cat:
-                tags.add('料理')
-            if '道具' in cat:
-                tags.add('道具')
-            if '场地' in cat:
-                tags.add('场地')
-            if '元素共鸣' in cat:
-                tags.add('元素共鸣')
-            if '战斗行动' in cat:
-                tags.add('战斗行动')
-        
-        # 检查技能描述中是否包含特殊标签
-        if 'skills' in card:
-            for skill in card['skills']:
-                if 'description' in skill:
-                    desc = skill['description']
-                    # 确保只在非角色牌上检查技能描述中的标签
-                    if '特技' in desc:
-                        tags.add('特技')
-                    if '天赋' in desc and card.get('type') not in ['圣遗物牌', '武器牌']:
-                        # 修复天赋标签问题：确保天赋标签只应用于适当的卡牌类型
-                        tags.add('天赋')
-    
-    # 添加基础卡牌类型（但排除角色牌，因为用户选择其他卡牌时不需要角色牌标签）
-    tags.add('事件牌')
-    tags.add('装备牌')
-    tags.add('支援牌')
-    
-    return sorted(list(tags))
 
-
-@deck_builder_api.route('/api/deck/validate', methods=['POST'])
+@deck_builder_api.route("/api/deck/validate", methods=["POST"])
 def validate_deck_api():
     """验证一个卡组组成基于游戏规则"""
     try:
         data = request.get_json()
-        character_ids = data.get('characters', [])
-        card_ids = data.get('cards', [])
-        
+        character_ids = data.get("characters", [])
+        card_ids = data.get("cards", [])
+
         # 转换为验证器期望的格式
         deck_data = {
-            'name': data.get('deck_name', 'Test Deck'),
-            'character_ids': character_ids,
-            'card_ids': card_ids
+            "name": data.get("deck_name", "Test Deck"),
+            "character_ids": character_ids,
+            "card_ids": card_ids,
         }
-        
+
         # 使用现有的验证函数
         validation_result = validate_deck_composition(deck_data)
-        
-        return jsonify({
-            'valid': validation_result['is_valid'],
-            'rules': {
-                'character_count': validation_result['rules'].get('character_count', {}).get('valid', False),
-                'character_count_msg': validation_result['rules'].get('character_count', {}).get('message', ''),
-                'deck_size': validation_result['rules'].get('deck_size', {}).get('valid', False),
-                'deck_size_msg': validation_result['rules'].get('deck_size', {}).get('message', ''),
-                'character_limit': validation_result['rules'].get('character_limit', {}).get('valid', False),
-                'character_limit_msg': validation_result['rules'].get('character_limit', {}).get('message', ''),
-                'card_limit': validation_result['rules'].get('card_limit', {}).get('valid', False),
-                'card_limit_msg': validation_result['rules'].get('card_limit', {}).get('message', ''),
-                'elemental_synergy': validation_result['rules'].get('elemental_synergy', {}).get('valid', False),
-                'elemental_synergy_msg': validation_result['rules'].get('elemental_synergy', {}).get('message', ''),
-            },
-            'errors': validation_result['errors'],
-            'suggestions': validation_result['suggestions']
-        })
-        
+
+        return jsonify(
+            {
+                "valid": validation_result["is_valid"],
+                "rules": {
+                    "character_count": validation_result["rules"]
+                    .get("character_count", {})
+                    .get("valid", False),
+                    "character_count_msg": validation_result["rules"]
+                    .get("character_count", {})
+                    .get("message", ""),
+                    "deck_size": validation_result["rules"]
+                    .get("deck_size", {})
+                    .get("valid", False),
+                    "deck_size_msg": validation_result["rules"]
+                    .get("deck_size", {})
+                    .get("message", ""),
+                    "character_limit": validation_result["rules"]
+                    .get("character_limit", {})
+                    .get("valid", False),
+                    "character_limit_msg": validation_result["rules"]
+                    .get("character_limit", {})
+                    .get("message", ""),
+                    "card_limit": validation_result["rules"]
+                    .get("card_limit", {})
+                    .get("valid", False),
+                    "card_limit_msg": validation_result["rules"]
+                    .get("card_limit", {})
+                    .get("message", ""),
+                    "elemental_synergy": validation_result["rules"]
+                    .get("elemental_synergy", {})
+                    .get("valid", False),
+                    "elemental_synergy_msg": validation_result["rules"]
+                    .get("elemental_synergy", {})
+                    .get("message", ""),
+                },
+                "errors": validation_result["errors"],
+                "suggestions": validation_result["suggestions"],
+            }
+        )
+
     except Exception as e:
-        return jsonify({
-            'valid': False,
-            'rules': {},
-            'errors': [f"验证过程中出现错误: {str(e)}"],
-            'suggestions': []
-        }), 400
+        return jsonify(
+            {
+                "valid": False,
+                "rules": {},
+                "errors": [f"验证过程中出现错误: {str(e)}"],
+                "suggestions": [],
+            }
+        ), 400
 
 
-@deck_builder_api.route('/api/cards/tags', methods=['GET'])
-def get_tags():
-    """获取所有可用的标签"""
-    tags = get_card_tags()
-    return jsonify({'tags': tags})
 
 
-@deck_builder_api.route('/api/characters/filters', methods=['GET'])
-def get_character_filters():
-    """获取角色的过滤选项（国家、元素、武器类型）"""
-    all_cards = load_card_data()
-    characters = [card for card in all_cards if card.get('type') == '角色牌']
-    
-    countries = set()
-    elements = set()
-    weapon_types = set()
-    
-    for character in characters:
-        countries.add(character.get('country', '未知'))
-        elements.add(character.get('element', '未知'))
-        weapon_types.add(character.get('weapon_type', '未知'))
-    
-    # 移除'未知'选项，如果存在其他选项
-    if len(countries) > 1:
-        countries.discard('未知')
-    if len(elements) > 1:
-        elements.discard('未知')
-    if len(weapon_types) > 1:
-        weapon_types.discard('未知')
-    
-    return jsonify({
-        'countries': sorted(list(countries)),
-        'elements': sorted(list(elements)),
-        'weapon_types': sorted(list(weapon_types))
-    })
 
 
-@deck_builder_api.route('/api/cards/filter', methods=['GET'])
-def filter_cards():
-    """根据类型、费用、标签、国家、元素、武器类型过滤卡牌"""
-    card_type = request.args.get('type', '')
-    cost = request.args.get('cost', '')
-    search = request.args.get('search', '')
-    country = request.args.get('country', '')
-    element = request.args.get('element', '')
-    weapon_type = request.args.get('weapon_type', '')
-    
-    # 获取所有标签参数（支持多选）
-    tags = request.args.getlist('tag')
-    # 过滤掉空字符串
-    tags = [tag for tag in tags if tag]
-    
-    all_cards = load_card_data()
-    filtered_cards = all_cards
-    
-    # 根据类型过滤
-    if card_type:
-        if card_type == '非角色牌':
-            # 只显示非角色牌
-            filtered_cards = [card for card in filtered_cards if card.get('type') != '角色牌']
-        else:
-            filtered_cards = [card for card in filtered_cards 
-                             if card.get('subtype', '').lower() == card_type.lower() or 
-                                card.get('type', '').lower() == card_type.lower()]
-    
-    # 根据费用过滤
-    if cost:
-        if cost == 'other':
-            # 费用为4或更高，或其他特殊费用
-            def has_high_cost(card):
-                # 对于角色牌，我们不考虑技能费用，因为角色牌本身没有费用
-                if card.get('type') == '角色牌':
-                    return False  # 角色牌没有费用
-                if 'skills' in card and len(card['skills']) > 0:
-                    # 处理装备、事件、支援牌等
-                    skill = card['skills'][0]
-                    if 'cost' in skill:
-                        costs = skill['cost']
-                        for c in costs:
-                            if isinstance(c, dict) and 'value' in c:
-                                if isinstance(c['value'], (int, float)) and c['value'] >= 4:
-                                    return True
-                        # 检查是否有其他非数值的高成本标识
-                        return len(costs) >= 4
-                return False
-            filtered_cards = [card for card in filtered_cards if has_high_cost(card)]
-        else:
-            cost_value = int(cost)
-            def has_specific_cost(card):
-                # 对于角色牌，我们不考虑技能费用，因为角色牌本身没有费用
-                if card.get('type') == '角色牌':
-                    # 角色牌没有费用，所以只有当cost_value为0时才匹配
-                    return cost_value == 0
-                if 'skills' in card and len(card['skills']) > 0:
-                    skill = card['skills'][0]
-                    if 'cost' in skill:
-                        costs = skill['cost']
-                        # 简化费用计算逻辑：检查是否有指定数量的费用项
-                        cost_count = 0
-                        for c in costs:
-                            if isinstance(c, dict) and 'value' in c:
-                                if isinstance(c['value'], (int, float)):
-                                    cost_count += c['value']
-                                else:
-                                    cost_count += 1
-                            else:
-                                cost_count += 1
-                        return cost_count == cost_value
-                return cost_value == 0
-            filtered_cards = [card for card in filtered_cards if has_specific_cost(card)]
-    
-    # 根据国家过滤（仅适用于角色牌）
-    if country:
-        filtered_cards = [card for card in filtered_cards if card.get('type') != '角色牌' or card.get('country', '').lower() == country.lower()]
-    
-    # 根据元素过滤（仅适用于角色牌）
-    if element:
-        filtered_cards = [card for card in filtered_cards if card.get('type') != '角色牌' or card.get('element', '').lower() == element.lower()]
-    
-    # 根据武器类型过滤（仅适用于角色牌）
-    if weapon_type:
-        filtered_cards = [card for card in filtered_cards if card.get('type') != '角色牌' or card.get('weapon_type', '').lower() == weapon_type.lower()]
-    
-    # 根据标签过滤（多选）
-    if tags:
-        def has_any_tag(card):
-            for tag in tags:
-                # 检查类型标签
-                if card.get('subtype', '') == tag or card.get('type', '') == tag:
-                    return True
-                # 检查类别标签
-                if 'category' in card:
-                    cat = card['category']
-                    if tag in cat:
-                        return True
-                # 检查技能描述（仅对非角色牌）
-                if 'skills' in card and card.get('type') != '角色牌':
-                    for skill in card['skills']:
-                        if 'description' in skill and tag in skill['description']:
-                            return True
-                # 对角色牌检查区域等信息
-                if card.get('type') == '角色牌' and tag in card.get('title', ''):
-                    return True
-            return False
-        filtered_cards = [card for card in filtered_cards if has_any_tag(card)]
-    
-    # 根据搜索关键词过滤（支持多关键字，空格分割）
-    if search:
-        # 将搜索词按空格分割成多个关键字
-        search_terms = [term.strip().lower() for term in search.split() if term.strip()]
-        if search_terms:
-            def card_matches_search(card):
-                # 检查每个关键字是否在卡牌的任何字段中
-                for term in search_terms:
-                    # 检查名称
-                    if term in card.get('name', '').lower():
-                        continue  # 这个关键字匹配了，检查下一个
-                    # 检查类型
-                    if term in card.get('type', '').lower():
-                        continue  # 这个关键字匹配了，检查下一个
-                    # 检查标题
-                    if card.get('title', '') and term in card['title'].lower():
-                        continue  # 这个关键字匹配了，检查下一个
-                    # 检查描述
-                    if card.get('description', '') and term in card['description'].lower():
-                        continue  # 这个关键字匹配了，检查下一个
-                    # 检查技能描述（对于所有卡牌，包括角色牌）
-                    if 'skills' in card:
-                        skill_match = False
-                        for skill in card['skills']:
-                            # 检查技能名称
-                            if 'name' in skill and term in skill['name'].lower():
-                                skill_match = True
-                                break
-                            # 检查技能描述
-                            if 'description' in skill and term in skill['description'].lower():
-                                skill_match = True
-                                break
-                            # 检查技能类型
-                            if 'type' in skill and term in skill['type'].lower():
-                                skill_match = True
-                                break
-                        if skill_match:
-                            continue  # 这个关键字匹配了，检查下一个
-                    # 如果没有任何字段匹配当前关键字，则整个搜索不匹配
-                    return False
-                # 如果所有关键字都匹配了，则这个卡牌匹配搜索
-                return True
-            
-            filtered_cards = [card for card in filtered_cards if card_matches_search(card)]
-    
-    # 格式化返回数据
-    result_cards = []
-    for card in filtered_cards:
-        result_card = {
-            'id': card.get('name', ''),  # 使用名字作为ID
-            'name': card.get('name', 'Unknown'),
-            'type': card.get('type', 'Unknown'),  # 使用统一的type
-            'description': card.get('description', ''),
-            'cost': [],
-            'country': card.get('country', ''),
-            'element': card.get('element', ''),
-            'weapon_type': card.get('weapon_type', ''),
-            'skills': card.get('skills', [])  # 包含技能信息，这对于角色卡很重要
-        }
-        
-        # 获取title（如果有）
-        if 'title' in card:
-            result_card['title'] = card['title']
-        
-        # 对于非角色牌，更新描述和费用信息
-        if card.get('type') != '角色牌' and 'skills' in card and len(card['skills']) > 0:
-            skill = card['skills'][0]
-            result_card['description'] = skill.get('description', '')
-            if 'cost' in skill:
-                result_card['cost'] = skill['cost']
-        
-        result_cards.append(result_card)
-    
-    return jsonify({'cards': result_cards, 'total': len(result_cards)})
 
 
-# 新增：随机选择功能
-@deck_builder_api.route('/api/cards/random', methods=['GET'])
-def get_random_cards():
-    """获取随机卡牌，支持过滤条件"""
-    card_type = request.args.get('type', '')
-    country = request.args.get('country', '')
-    element = request.args.get('element', '')
-    weapon_type = request.args.get('weapon_type', '')
-    count = int(request.args.get('count', 1))
-    
-    all_cards = load_card_data()
-    filtered_cards = all_cards
-    
-    # 根据类型过滤
-    if card_type:
-        if card_type == '非角色牌':
-            # 只显示非角色牌
-            filtered_cards = [card for card in filtered_cards if card.get('type') != '角色牌']
-        else:
-            filtered_cards = [card for card in filtered_cards 
-                             if card.get('subtype', '').lower() == card_type.lower() or 
-                                card.get('type', '').lower() == card_type.lower()]
-    
-    # 根据国家过滤（仅适用于角色牌）
-    if country:
-        filtered_cards = [card for card in filtered_cards if card.get('type') != '角色牌' or card.get('country', '').lower() == country.lower()]
-    
-    # 根据元素过滤（仅适用于角色牌）
-    if element:
-        filtered_cards = [card for card in filtered_cards if card.get('type') != '角色牌' or card.get('element', '').lower() == element.lower()]
-    
-    # 根据武器类型过滤（仅适用于角色牌）
-    if weapon_type:
-        filtered_cards = [card for card in filtered_cards if card.get('type') != '角色牌' or card.get('weapon_type', '').lower() == weapon_type.lower()]
-    
-    # 随机选择卡牌
-    import random
-    selected_cards = random.sample(filtered_cards, min(count, len(filtered_cards)))
-    
-    # 格式化返回数据
-    result_cards = []
-    for card in selected_cards:
-        result_card = {
-            'id': card.get('name', ''),  # 使用名字作为ID
-            'name': card.get('name', 'Unknown'),
-            'type': card.get('type', 'Unknown'),  # 使用统一的type
-            'description': card.get('description', ''),
-            'cost': [],
-            'country': card.get('country', ''),
-            'element': card.get('element', ''),
-            'weapon_type': card.get('weapon_type', ''),
-            'skills': card.get('skills', [])  # 包含技能信息，这对于角色卡很重要
-        }
-        
-        # 获取title（如果有）
-        if 'title' in card:
-            result_card['title'] = card['title']
-        
-        # 对于非角色牌，更新描述和费用信息
-        if card.get('type') != '角色牌' and 'skills' in card and len(card['skills']) > 0:
-            skill = card['skills'][0]
-            result_card['description'] = skill.get('description', '')
-            if 'cost' in skill:
-                result_card['cost'] = skill['cost']
-        
-        result_cards.append(result_card)
-    
-    return jsonify({'cards': result_cards, 'total': len(result_cards)})
+
+
+
