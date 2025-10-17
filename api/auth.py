@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from werkzeug.security import generate_password_hash, check_password_hash
-from models.db_models import User, db
+from dal import db_dal
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -15,15 +15,23 @@ def register():
     if not username or not password:
         return jsonify({'message': 'Username and password are required.'}), 400
     
-    if User.query.filter_by(username=username).first():
+    # Check if user already exists
+    existing_user = db_dal.users.get_user_by_username(username)
+    if existing_user:
         return jsonify({'message': 'Username already exists.'}), 400
     
     hashed_password = generate_password_hash(password)
-    new_user = User(username=username, email=email, password_hash=hashed_password)
-    db.session.add(new_user)
-    db.session.commit()
     
-    return jsonify({'message': 'User registered successfully.'}), 201
+    try:
+        new_user = db_dal.users.create_user(
+            username=username, 
+            email=email, 
+            password_hash=hashed_password
+        )
+        
+        return jsonify({'message': 'User registered successfully.', 'user_id': new_user.id}), 201
+    except Exception as e:
+        return jsonify({'message': 'Registration failed.', 'error': str(e)}), 500
 
 @auth_bp.route('/login', methods=['POST'])
 def login():
@@ -34,7 +42,7 @@ def login():
     if not username or not password:
         return jsonify({'message': 'Username and password are required.'}), 400
     
-    user = User.query.filter_by(username=username).first()
+    user = db_dal.users.get_user_by_username(username)
     
     if not user or not check_password_hash(user.password_hash, password):
         return jsonify({'message': 'Invalid credentials.'}), 401
@@ -46,7 +54,7 @@ def login():
 @jwt_required()
 def get_profile():
     current_user_id = get_jwt_identity()
-    user = User.query.get(current_user_id)
+    user = db_dal.users.get_user_by_id(current_user_id)
     
     if not user:
         return jsonify({'message': 'User not found.'}), 404
