@@ -66,6 +66,8 @@ ys_qs/
 │   ├── db_models.py     # 数据库模型
 │   ├── enums.py         # 枚举类型定义
 │   └── game_models.py   # 游戏数据模型
+├── database_manager.py  # 数据库管理器
+├── dal.py               # 数据访问层 (DAL)
 ├── socket_handlers/     # WebSocket处理器
 ├── tests/               # 测试文件
 ├── app.py              # Flask应用主文件
@@ -74,6 +76,50 @@ ys_qs/
 ├── PROJECT_TASKS.md    # 项目任务列表
 └── README.md           # 项目主文档
 ```
+
+## Working with the Data Access Layer (DAL)
+
+The project uses a Data Access Layer (DAL) to abstract database operations. All database interactions should go through the DAL rather than direct SQLAlchemy queries to maintain consistency and improve maintainability.
+
+### Using the DAL in Your Code
+
+To use the DAL, import it and access the appropriate data access object:
+
+```python
+from dal import db_dal
+
+# For user operations
+user = db_dal.users.create_user(username="test", email="test@example.com", password_hash="hash")
+user = db_dal.users.get_user_by_id(user_id)
+
+# For card operations
+cards = db_dal.cards.get_cards_by_type("角色牌")
+card = db_dal.cards.get_card_by_id(card_id)
+
+# For deck operations  
+deck = db_dal.decks.create_deck(name="My Deck", user_id=user_id, cards=card_ids)
+decks = db_dal.decks.get_decks_by_user(user_id)
+
+# For game history operations
+game = db_dal.game_history.create_game_history(player1_id, player2_id, game_data)
+games = db_dal.game_history.get_games_by_user(user_id)
+```
+
+### DAL Best Practices
+
+1. **Always use DAL for database operations**: Instead of direct model queries like `User.query.filter(...)`, use the appropriate DAL method
+2. **Handle errors appropriately**: DAL methods will return appropriate success/failure indicators or raise exceptions
+3. **Use transactions when needed**: The DAL handles transaction management internally for individual operations, but for complex operations spanning multiple DAL calls, consider wrapping them in a transaction
+4. **Keep business logic separate**: The DAL should only handle data access; business logic should remain in service layers
+
+### Creating New DAL Methods
+
+When adding new functionality that requires database access:
+
+1. Add the method to the appropriate DAL class in `dal.py`
+2. Follow the existing pattern with proper error handling and logging
+3. Use type hints and docstrings for consistency
+4. Test the new DAL method separately
 
 ## 编码规范
 
@@ -101,6 +147,7 @@ ys_qs/
 - 错误响应统一格式: `{"error": "错误描述"}`
 - 成功响应包含有意义的数据结构
 - 认证使用 JWT 令牌
+- 数据访问: 通过数据访问层 (DAL) 进行所有数据库操作，避免直接使用 SQLAlchemy 模型查询
 
 ## 开发工作流
 

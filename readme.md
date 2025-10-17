@@ -26,6 +26,7 @@
 - **卡组构筑**：支持完整的卡组创建、验证和管理
 - **REST API**：提供完整的后端API接口
 - **用户认证**：基于JWT的用户认证系统
+- **数据访问层 (DAL)**：采用数据访问层架构，统一管理数据库操作
 - **测试套件**：全面的单元测试和集成测试
 
 ## 快速开始
@@ -82,6 +83,8 @@ ys_qs/
 │   └── TESTING.md       # 测试文档
 ├── game_engine/         # 游戏引擎核心
 ├── models/              # 数据模型
+├── database_manager.py  # 数据库管理器
+├── dal.py               # 数据访问层 (DAL)
 ├── socket_handlers/     # WebSocket处理器
 ├── app.py              # Flask应用主文件
 ├── PROJECT_TASKS.md    # 项目任务列表
@@ -96,6 +99,12 @@ ys_qs/
 - [用户指南](docs/USER_GUIDE.md) - 系统使用和游戏玩法教程
 - [架构设计](docs/ARCHITECTURE.md) - 系统架构和技术栈说明
 - [测试文档](docs/TESTING.md) - 测试策略和方法
+- [DAL概述](docs/dal_overview.md) - 数据访问层设计与实现
+- [DAL完整指南](docs/dal_complete_guide.md) - 数据访问层完整使用指南
+- [DAL组件详解](docs/dal_components.md) - 各DAL组件详细说明
+- [DAL性能优化](docs/dal_performance_optimization.md) - 数据访问层性能优化
+- [DAL集成API](docs/dal_api_integration.md) - DAL与API集成说明
+- [DAL使用示例](docs/dal_usage_examples.md) - 数据访问层使用示例
 
 ## 贡献指南
 

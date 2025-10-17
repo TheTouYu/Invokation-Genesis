@@ -4,6 +4,22 @@
 
 本API提供了完整的七圣召唤游戏功能，包括用户认证、卡牌数据管理、卡组构建、本地游戏功能等。API使用JWT进行身份验证，所有需要认证的端点都要求在请求头中包含有效的JWT令牌。
 
+### 数据访问层 (DAL)
+
+本项目采用数据访问层（Data Access Layer，DAL）架构模式，将数据库操作抽象为专门的数据访问对象（DAO）。所有API端点通过DAL与数据库交互，而不是直接使用SQLAlchemy模型。这种设计模式提供了以下优势：
+
+- **模块化设计**：将数据访问逻辑与业务逻辑分离
+- **可维护性**：集中管理数据库操作，降低代码重复
+- **可测试性**：便于单元测试和模拟数据访问
+- **错误处理**：统一的异常处理和事务管理
+- **安全性**：防止SQL注入等安全风险
+
+主要的DAL组件包括：
+- `UserDAL`: 处理用户相关数据库操作
+- `CardDataDAL`: 处理卡牌数据相关操作
+- `DeckDAL`: 处理卡组相关操作
+- `GameHistoryDAL`: 处理游戏历史相关操作
+
 ## 认证说明
 
 所有需要认证的端点都需要在请求头中包含JWT令牌：
@@ -46,12 +62,13 @@ API使用标准的HTTP状态码和JSON格式的错误响应：
 | email | string | 否 | 电子邮箱（如果未提供，将使用{username}@example.com） |
 
 **响应**
-- 成功 (201): `{"message": "User registered successfully."}`
+- 成功 (201): `{"message": "User registered successfully.", "user_id": "user-uuid-string"}`
 - 错误 (400): `{"message": "Username already exists."}`
 - 错误 (400): `{"message": "Username and password are required."}`
+- 错误 (500): `{"message": "Registration failed.", "error": "detailed error message"}`
 
 ### POST /api/auth/login
-获取JWT访问令牌。
+获取JWT访问令牌（使用DAL层处理数据库操作）。
 
 **请求体参数**
 | 参数名 | 类型 | 必需 | 描述 |
@@ -64,8 +81,11 @@ API使用标准的HTTP状态码和JSON格式的错误响应：
 - 错误 (400): `{"message": "Username and password are required."}`
 - 错误 (401): `{"message": "Invalid credentials."}`
 
+**内部实现**
+此端点使用 `db_dal.users.get_user_by_username()` 方法验证用户凭据，通过数据访问层确保安全的用户认证。
+
 ### GET /api/auth/profile
-获取当前认证用户的信息。
+获取当前认证用户的信息（使用DAL层处理数据库操作）。
 
 **响应**
 - 成功 (200): 
@@ -76,6 +96,9 @@ API使用标准的HTTP状态码和JSON格式的错误响应：
 }
 ```
 - 错误 (404): `{"message": "User not found."}`
+
+**内部实现**
+此端点使用 `db_dal.users.get_user_by_id()` 方法获取用户信息，通过数据访问层确保安全的数据访问。
 
 ## 卡牌系统接口
 
@@ -156,13 +179,16 @@ API使用标准的HTTP状态码和JSON格式的错误响应：
 ## 卡组管理接口
 
 ### GET /api/decks
-获取当前用户的所有卡组。
+获取当前用户的所有卡组（使用DAL层处理数据库操作）。
 
 **响应**
 - 成功 (200): 返回卡组列表
 
+**内部实现**
+此端点使用 `db_dal.decks.get_decks_by_user()` 方法获取用户卡组列表，通过数据访问层确保安全的数据访问和权限控制。
+
 ### POST /api/decks
-创建一个新的卡组。
+创建一个新的卡组（使用DAL层处理数据库操作）。
 
 **请求体参数**
 | 参数名 | 类型 | 必需 | 描述 |
@@ -176,8 +202,11 @@ API使用标准的HTTP状态码和JSON格式的错误响应：
 - 错误 (400): `{"error": "卡组名称不能为空"}`
 - 错误 (400): `{"error": "卡组验证失败", "details": ["错误详情"]}`
 
+**内部实现**
+此端点使用 `db_dal.decks.create_deck()` 方法执行创建操作，通过数据访问层确保数据一致性并提供错误处理。
+
 ### PUT /api/decks/{deck_id}
-更新指定ID的卡组。
+更新指定ID的卡组（使用DAL层处理数据库操作）。
 
 **路径参数**
 | 参数名 | 类型 | 必需 | 描述 |
@@ -196,8 +225,11 @@ API使用标准的HTTP状态码和JSON格式的错误响应：
 - 错误 (404): `{"error": "卡组不存在或无权限访问"}`
 - 错误 (400): `{"error": "卡组验证失败", "details": ["错误详情"]}`
 
+**内部实现**
+此端点使用 `db_dal.decks.update_deck()` 方法执行更新操作，通过数据访问层确保数据一致性并提供错误处理。
+
 ### DELETE /api/decks/{deck_id}
-删除指定ID的卡组。
+删除指定ID的卡组（使用DAL层处理数据库操作）。
 
 **路径参数**
 | 参数名 | 类型 | 必需 | 描述 |
@@ -208,8 +240,11 @@ API使用标准的HTTP状态码和JSON格式的错误响应：
 - 成功 (200): `{"message": "卡组删除成功"}`
 - 错误 (404): `{"error": "卡组不存在或无权限访问"}`
 
+**内部实现**
+此端点使用 `db_dal.decks.delete_deck()` 方法执行删除操作，通过数据访问层确保数据一致性和事务处理。
+
 ### GET /api/decks/{deck_id}
-获取指定ID的卡组详细信息。
+获取指定ID的卡组详细信息（使用DAL层处理数据库操作）。
 
 **路径参数**
 | 参数名 | 类型 | 必需 | 描述 |
@@ -219,6 +254,9 @@ API使用标准的HTTP状态码和JSON格式的错误响应：
 **响应**
 - 成功 (200): 返回卡组详细信息（包含完整卡牌数据）
 - 错误 (404): `{"error": "卡组不存在或无权限访问"}`
+
+**内部实现**
+此端点使用 `db_dal.decks.get_deck_by_id()` 方法获取卡组数据，通过数据访问层确保安全的数据访问。
 
 ### POST /api/decks/validate
 验证卡组是否符合游戏规则。

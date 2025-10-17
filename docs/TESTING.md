@@ -25,6 +25,9 @@ tests/
 ├── test_deck_builder.py  # 卡组构建测试
 ├── test_game_engine.py   # 游戏引擎测试
 ├── test_models.py        # 数据模型测试
+├── test_dal.py           # 数据访问层 (DAL) 测试
+├── test_database_manager.py  # 数据库管理器测试
+├── updated_test_apis.py  # 更新的API端点测试
 └── conftest.py           # 测试配置和fixture
 ```
 
@@ -53,6 +56,75 @@ def test_invalid_deck_too_few_characters():
     assert "角色牌数量必须为3" in result.errors
 ```
 
+## 单元测试指南
+
+### 编写单元测试
+
+1. **测试文件命名**: 以`test_`开头，对应被测试模块
+2. **测试函数命名**: 以`test_`开头，描述测试场景
+3. **使用fixture**: 通过`conftest.py`提供共享测试数据
+4. **边界条件**: 测试正常情况、边界情况和异常情况
+
+### 示例: 卡组验证测试
+```python
+def test_valid_deck_structure():
+    """测试有效的卡组结构 (3角色+30行动牌)"""
+    deck = create_valid_deck()
+    result = validate_deck(deck)
+    assert result.is_valid is True
+
+def test_invalid_deck_too_few_characters():
+    """测试角色牌不足的卡组"""
+    deck = create_deck_with_few_characters()
+    result = validate_deck(deck)
+    assert result.is_valid is False
+    assert "角色牌数量必须为3" in result.errors
+```
+
+## DAL (数据访问层) 测试指南
+
+### DAL 测试策略
+
+由于项目采用了数据访问层 (DAL) 模式，需要对 DAL 组件进行专门的测试：
+
+1. **单元测试**: 测试每个 DAL 组件的独立方法
+2. **集成测试**: 测试 DAL 与数据库的交互
+3. **错误处理测试**: 验证 DAL 在数据库错误时的处理能力
+
+### 示例: DAL 测试
+```python
+import pytest
+from dal import db_dal
+
+def test_create_user_dal():
+    """测试 DAL 创建用户功能"""
+    user = db_dal.users.create_user(
+        username="test_user", 
+        email="test@example.com", 
+        password_hash="hashed_password"
+    )
+    assert user is not None
+    assert user.username == "test_user"
+
+def test_get_user_by_id_dal():
+    """测试 DAL 获取用户功能"""
+    user = db_dal.users.get_user_by_id(user_id)
+    assert user is not None
+    assert user.id == user_id
+
+def test_update_user_dal():
+    """测试 DAL 更新用户功能"""
+    success = db_dal.users.update_user(user_id, username="updated_name")
+    assert success is True
+```
+
+### DAL 测试注意事项
+
+1. **使用内存数据库**: 为隔离测试，使用 SQLite 内存数据库
+2. **事务回滚**: 确保测试数据不会影响其他测试
+3. **异常情况**: 测试数据库连接失败、查询失败等异常情况
+4. **数据清理**: 测试完成后清理测试数据
+
 ## 集成测试指南
 
 ### 运行集成测试
@@ -63,13 +135,17 @@ python integration_test_final.py
 
 # 运行基础集成测试
 python integration_test.py
+
+# 运行 DAL 专项测试
+python -m pytest tests/test_dal.py
 ```
 
 ### 集成测试内容
 
 1. **数据库集成**: 验证数据模型与数据库的交互
-2. **API路由集成**: 验证API端点与后端逻辑的集成
-3. **游戏引擎集成**: 验证游戏规则与API的集成
+2. **DAL集成**: 验证DAL组件与数据库的交互
+3. **API路由集成**: 验证API端点与后端逻辑的集成
+4. **游戏引擎集成**: 验证游戏规则与API的集成
 
 ## API测试方法
 
@@ -213,6 +289,14 @@ coverage html  # 生成HTML报告
 - [ ] 胜利条件正确判断
 - [ ] 行动费用正确计算
 - [ ] 角色切换功能正常
+
+### DAL (数据访问层) 测试场景
+- [ ] UserDAL: 用户创建、查询、更新、删除功能
+- [ ] CardDataDAL: 卡牌数据查询、搜索、过滤功能
+- [ ] DeckDAL: 卡组创建、查询、更新、删除功能
+- [ ] GameHistoryDAL: 游戏历史记录的创建和查询功能
+- [ ] 错误处理: 数据库连接失败时的异常处理
+- [ ] 事务管理: 数据操作的原子性验证
 
 ## 测试数据管理
 
