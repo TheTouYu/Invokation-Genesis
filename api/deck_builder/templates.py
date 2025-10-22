@@ -399,11 +399,70 @@ DECK_BUILDER_TEMPLATE = """
             margin: 0 15px;
             vertical-align: middle;
         }
+        
+        /* Login section styles */
+        #loginForm {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        #loginForm input {
+            padding: 8px;
+            border: 1px solid #cbd5e0;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        #loginForm button, #userInfo button {
+            padding: 8px 15px;
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        #userInfo {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        #loginStatus {
+            margin-top: 10px;
+        }
+        
+        .success-message {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        
+        .error-message {
+            color: #e74c3c;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>七圣召唤 - 卡组构建器</h1>
+        
+        <!-- Login Section -->
+        <div class="section" id="loginSection">
+            <h3>用户认证</h3>
+            <div id="loginForm">
+                <label>用户名: <input type="text" id="usernameInput" value="test"></label>
+                <label>密码: <input type="password" id="passwordInput" value="test"></label>
+                <button onclick="loginUser()">登录</button>
+            </div>
+            <div id="userInfo" style="display:none;">
+                <p>已登录: <span id="currentUsername"></span> | 
+                <button onclick="logoutUser()">登出</button></p>
+            </div>
+            <div id="loginStatus"></div>
+        </div>
         
         <div class="tabs">
             <div class="tab active" onclick="switchTab('character')">角色选择</div>
@@ -667,8 +726,9 @@ DECK_BUILDER_TEMPLATE = """
         // Load character filters (country, element, weapon type)
         function loadCharacterFilters() {
             const url = '/api/characters/filters';
-            const headers = needsAuth(url) ? { 
-                'Authorization': 'Bearer ' + (getJWTToken() || '') 
+            const token = getJWTToken();
+            const headers = token ? { 
+                'Authorization': 'Bearer ' + token 
             } : {};
             
             fetch(url, {
@@ -1135,11 +1195,14 @@ DECK_BUILDER_TEMPLATE = """
             
             try {
                 const url = '/api/deck/validate';
+                const token = getJWTToken();
                 const headers = {
                     'Content-Type': 'application/json'
                 };
-                if (needsAuth(url) && getJWTToken()) {
-                    headers['Authorization'] = 'Bearer ' + getJWTToken();
+                
+                // Always include token for deck validation in this context
+                if (token) {
+                    headers['Authorization'] = 'Bearer ' + token;
                 }
                 
                 const response = await fetch(url, {
@@ -1222,8 +1285,16 @@ DECK_BUILDER_TEMPLATE = """
                 params.append('tag', tag);
             });
             
+            // Get token and set headers
+            const token = getJWTToken();
+            const headers = token ? { 
+                'Authorization': 'Bearer ' + token 
+            } : {};
+            
             // Call backend API to filter cards
-            fetch(`/api/cards/filter?${params.toString()}`)
+            fetch(`/api/cards/filter?${params.toString()}`, {
+                headers: headers
+            })
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('HTTP error ' + response.status);
@@ -1257,8 +1328,16 @@ DECK_BUILDER_TEMPLATE = """
             if (weaponTypeFilter) params.append('weapon_type', weaponTypeFilter);
             if (searchTerm) params.append('search', searchTerm);
             
+            // Get token and set headers
+            const token = getJWTToken();
+            const headers = token ? { 
+                'Authorization': 'Bearer ' + token 
+            } : {};
+            
             // Call backend API to filter character cards
-            fetch(`/api/cards/filter?${params.toString()}`)
+            fetch(`/api/cards/filter?${params.toString()}`, {
+                headers: headers
+            })
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('HTTP error ' + response.status);
@@ -1288,8 +1367,9 @@ DECK_BUILDER_TEMPLATE = """
         // Function to populate tag buttons
         function populateTagCheckboxes() {
             const url = '/api/cards/tags';
-            const headers = needsAuth(url) ? { 
-                'Authorization': 'Bearer ' + (getJWTToken() || '') 
+            const token = getJWTToken();
+            const headers = token ? { 
+                'Authorization': 'Bearer ' + token 
             } : {};
             
             fetch(url, {
@@ -1422,8 +1502,9 @@ DECK_BUILDER_TEMPLATE = """
             if (weaponTypeFilter) params.append('weapon_type', weaponTypeFilter);
             
             const url = `/api/cards/random?${params.toString()}`;
-            const headers = needsAuth(url) ? { 
-                'Authorization': 'Bearer ' + (getJWTToken() || '') 
+            const token = getJWTToken();
+            const headers = token ? { 
+                'Authorization': 'Bearer ' + token 
             } : {};
             
             // 调用后端API获取随机角色
@@ -1510,8 +1591,9 @@ DECK_BUILDER_TEMPLATE = """
             });
             
             const url = `/api/cards/random?${params.toString()}`;
-            const headers = needsAuth(url) ? { 
-                'Authorization': 'Bearer ' + (getJWTToken() || '') 
+            const token = getJWTToken();
+            const headers = token ? { 
+                'Authorization': 'Bearer ' + token 
             } : {};
             
             // 调用后端API获取随机卡牌
@@ -1603,18 +1685,21 @@ DECK_BUILDER_TEMPLATE = """
                     }
                 }
             }
-            return token || null;
+            return token;
         }
         
         // 检查是否需要认证的API端点
         function needsAuth(url) {
-            // 根据项目重构，现在所有卡牌API都使用数据库作为数据源且需要认证
-            // /api/deck/validate 用于验证卡组，不需要认证
-            // 其他涉及卡牌数据的API都需要认证
-            return url.includes('/api/cards/') || 
-                   url.includes('/api/characters/') || 
-                   (url.includes('/api/deck/') && !url.includes('/api/deck/validate')) ||
-                   url.includes('/api/decks');
+            // Authentication endpoints that don't require a token:
+            // - /api/auth/login for login
+            // - /api/auth/register for registration
+            if (url.includes('/api/auth/login') || 
+                url.includes('/api/auth/register')) {
+                return false;
+            }
+            
+            // All other endpoints require authentication
+            return true;
         }
         
         // 分页相关状态
@@ -1658,8 +1743,9 @@ DECK_BUILDER_TEMPLATE = """
             if (currentCharFilters.search) params.append('search', currentCharFilters.search);
             
             const url = `/api/cards/filter?${params.toString()}`;
-            const headers = needsAuth(url) ? { 
-                'Authorization': 'Bearer ' + (getJWTToken() || '') 
+            const token = getJWTToken();
+            const headers = token ? { 
+                'Authorization': 'Bearer ' + token 
             } : {};
             
             fetch(url, {
@@ -1699,8 +1785,9 @@ DECK_BUILDER_TEMPLATE = """
             });
             
             const url = `/api/cards/filter?${params.toString()}`;
-            const headers = needsAuth(url) ? { 
-                'Authorization': 'Bearer ' + (getJWTToken() || '') 
+            const token = getJWTToken();
+            const headers = token ? { 
+                'Authorization': 'Bearer ' + token 
             } : {};
             
             fetch(url, {
@@ -1803,8 +1890,97 @@ DECK_BUILDER_TEMPLATE = """
             currentCardPage = 1;
             loadCardPage();
         }
+        
+        // Login and authentication functions
+        async function loginUser() {
+            const username = document.getElementById('usernameInput').value;
+            const password = document.getElementById('passwordInput').value;
+            const statusDiv = document.getElementById('loginStatus');
+            
+            if (!username || !password) {
+                statusDiv.innerHTML = '<div class="error-message">请输入用户名和密码</div>';
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        password: password
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // Store the token
+                    localStorage.setItem('jwt_token', data.access_token);
+                    
+                    // Update UI to show logged in state
+                    document.getElementById('loginForm').style.display = 'none';
+                    document.getElementById('userInfo').style.display = 'flex';
+                    document.getElementById('currentUsername').textContent = username;
+                    statusDiv.innerHTML = '<div class="success-message">登录成功！</div>';
+                    
+                    // Reload cards after successful login
+                    loadCards();
+                } else {
+                    statusDiv.innerHTML = '<div class="error-message">登录失败: ' + (data.message || '用户名或密码错误') + '</div>';
+                }
+            } catch (error) {
+                statusDiv.innerHTML = '<div class="error-message">登录请求失败: ' + error.message + '</div>';
+            }
+        }
+        
+        function logoutUser() {
+            // Remove the token
+            localStorage.removeItem('jwt_token');
+            
+            // Update UI to show logged out state
+            document.getElementById('loginForm').style.display = 'flex';
+            document.getElementById('userInfo').style.display = 'none';
+            document.getElementById('usernameInput').value = 'test';
+            document.getElementById('passwordInput').value = 'test';
+            document.getElementById('loginStatus').innerHTML = '<div class="success-message">已登出</div>';
+        }
+        
+        // Check if user is already logged in when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            const token = localStorage.getItem('jwt_token');
+            if (token) {
+                // Check if token is valid by making a simple request
+                fetch('/api/auth/profile', {
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // Token is valid, update UI
+                        document.getElementById('loginForm').style.display = 'none';
+                        document.getElementById('userInfo').style.display = 'flex';
+                        // We can't get username from token directly, so we'll just show generic text
+                        document.getElementById('currentUsername').textContent = '已登录用户';
+                    } else {
+                        // Token is invalid, remove it
+                        localStorage.removeItem('jwt_token');
+                    }
+                })
+                .catch(() => {
+                    // Error occurred, remove token
+                    localStorage.removeItem('jwt_token');
+                });
+            }
+            
+            loadCards(); // Load cards from API
+            loadCharacterFilters(); // Load character filter options
+            populateTagCheckboxes(); // Initialize tag buttons for other cards
+        });
     </script>
 </body>
 </html>
 """
-
