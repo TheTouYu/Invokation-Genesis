@@ -159,3 +159,6 @@ npm start
 - 元素反应系统
 - 装备和支援牌系统
 - 胜利条件判断
+
+## Qwen Added Memories
+- react.md
