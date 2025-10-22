@@ -11,9 +11,10 @@ import useSWR from 'swr'
 import { getCardDetail } from "@/lib/api/cards"
 import { Card as CardType } from "@/lib/api/types"
 import { notFound } from "next/navigation"
+import React from "react"
 
-export default function CardDetailPage({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default function CardDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = React.use(params);
 
   // 使用SWR获取卡牌详情
   const { data: cardDetail, error, isLoading } = useSWR(
@@ -22,6 +23,11 @@ export default function CardDetailPage({ params }: { params: { id: string } }) {
     {
       refreshInterval: 0, // 不自动刷新
       revalidateOnFocus: false, // 窗口聚焦时不重新验证
+      onError: (error) => {
+        if (error.message && error.message.startsWith('AUTH_ERROR:')) {
+          // 重定向到登录页面已经在API客户端中处理
+        }
+      }
     }
   );
 
@@ -86,9 +92,23 @@ export default function CardDetailPage({ params }: { params: { id: string } }) {
       dendro: Leaf,
       geo: Mountain,
       cryo: Snowflake,
+      充能: Zap,
+      无色: Sparkles,
     };
 
-    return elementIcons[element?.toLowerCase() || ''] || Zap;
+    return elementIcons[element?.toLowerCase() || element || ''] || Sparkles;
+  };
+  
+  // 根据技能类型选择图标
+  const getSkillTypeIcon = (skillType: string) => {
+    const skillTypeIcons: Record<string, any> = {
+      '普通攻击': Droplet, // 使用水元素图标表示普通攻击
+      '元素战技': Zap,    // 使用雷元素图标表示元素战技
+      '元素爆发': Flame,  // 使用火元素图标表示元素爆发
+      '被动技能': Leaf,   // 使用草元素图标表示被动技能
+    };
+
+    return skillTypeIcons[skillType] || Sparkles;
   };
 
   const ElementIcon = getElementIcon(card.element || card.element_type || '');
@@ -112,21 +132,76 @@ export default function CardDetailPage({ params }: { params: { id: string } }) {
             <div className="space-y-4">
               <Card className="overflow-hidden">
                 <div className="aspect-[3/4] bg-gradient-to-br from-primary/20 via-accent/10 to-background relative">
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <ElementIcon className="w-48 h-48 text-primary/20" />
-                  </div>
-                  <div className="absolute top-4 right-4">
-                    <Badge variant="secondary" className="gap-1">
-                      {[...Array(card.rarity)].map((_, i) => (
-                        <Sparkles key={i} className="w-3 h-3 fill-current" />
-                      ))}
-                    </Badge>
-                  </div>
-                  <div className="absolute bottom-4 left-4">
-                    <div className="w-12 h-12 rounded-full bg-background/90 backdrop-blur flex items-center justify-center font-bold text-xl">
-                      {card.cost?.length || 0}
+                  {card.image_url ? (
+                    <div className="w-full h-full relative">
+                      <img 
+                        src={card.image_url} 
+                        alt={card.name} 
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.onerror = null; // 避免无限循环
+                          target.style.display = 'none';
+                        }}
+                      />
+                      <div className="absolute top-4 right-4">
+                        <Badge variant="secondary" className="gap-1">
+                          {[...Array(card.rarity)].map((_, i) => (
+                            <Sparkles key={i} className="w-3 h-3 fill-current" />
+                          ))}
+                        </Badge>
+                      </div>
+                      <div className="absolute bottom-4 left-4">
+                        <div className="flex flex-wrap gap-1">
+                          {card.cost && card.cost.map((costItem, index) => {
+                            const CostIcon = getElementIcon(costItem.type);
+                            return (
+                              <div 
+                                key={index} 
+                                className="w-8 h-8 rounded-full bg-background/90 backdrop-blur flex items-center justify-center font-bold text-sm"
+                              >
+                                <div className="flex items-center gap-1">
+                                  {React.createElement(CostIcon, { className: "w-4 h-4" })}
+                                  {costItem.value}
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                  ) : (
+                    <>
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <ElementIcon className="w-48 h-48 text-primary/20" />
+                      </div>
+                      <div className="absolute top-4 right-4">
+                        <Badge variant="secondary" className="gap-1">
+                          {[...Array(card.rarity)].map((_, i) => (
+                            <Sparkles key={i} className="w-3 h-3 fill-current" />
+                          ))}
+                        </Badge>
+                      </div>
+                      <div className="absolute bottom-4 left-4">
+                        <div className="flex flex-wrap gap-1">
+                          {card.cost && card.cost.map((costItem, index) => {
+                            const CostIcon = getElementIcon(costItem.type);
+                            return (
+                              <div 
+                                key={index} 
+                                className="w-8 h-8 rounded-full bg-background/90 backdrop-blur flex items-center justify-center font-bold text-sm"
+                              >
+                                <div className="flex items-center gap-1">
+                                  {React.createElement(CostIcon, { className: "w-4 h-4" })}
+                                  {costItem.value}
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
               </Card>
 
@@ -170,13 +245,27 @@ export default function CardDetailPage({ params }: { params: { id: string } }) {
                         >
                           <CardContent className="p-4">
                             <div className="flex items-start justify-between mb-2">
-                              <h4 className="font-medium">{skill.name}</h4>
-                              <Badge 
-                                variant={index === card.skills!.length - 1 ? "default" : "secondary"}
-                                className={index === card.skills!.length - 1 ? "bg-primary" : ""}
-                              >
-                                {skill.cost?.length || 0}费
-                              </Badge>
+                              <div className="flex items-center gap-2">
+                                <h4 className="font-medium">{skill.name}</h4>
+                                <Badge variant="outline" className="text-xs flex items-center gap-1">
+                                  {React.createElement(getSkillTypeIcon(skill.type), { className: "w-3 h-3" })}
+                                  {skill.type}
+                                </Badge>
+                              </div>
+                              <div className="flex flex-wrap justify-end gap-1 ml-2">
+                                {skill.cost && skill.cost.map((costItem, costIndex) => {
+                                  const CostIcon = getElementIcon(costItem.type);
+                                  return (
+                                    <div 
+                                      key={costIndex} 
+                                      className="flex items-center gap-1 px-2 py-1 rounded-full bg-muted text-xs"
+                                    >
+                                      {React.createElement(CostIcon, { className: "w-3 h-3" })}
+                                      {costItem.value > 0 ? costItem.value : ''}
+                                    </div>
+                                  );
+                                })}
+                              </div>
                             </div>
                             <p className="text-sm text-muted-foreground">{skill.description}</p>
                           </CardContent>
@@ -186,20 +275,38 @@ export default function CardDetailPage({ params }: { params: { id: string } }) {
                   </div>
                 )}
 
-                {(card.health || card.max_health || card.energy) && (
+                {(card.health !== undefined || card.max_health !== undefined || card.energy !== undefined || card.max_energy !== undefined || card.weapon_type) && (
                   <div>
-                    <h3 className="font-semibold mb-2">卡牌属性</h3>
+                    <h3 className="font-semibold mb-2">角色属性</h3>
                     <div className="grid grid-cols-2 gap-3">
                       {card.max_health !== undefined && (
                         <div className="p-3 rounded-lg bg-muted">
-                          <div className="text-sm text-muted-foreground mb-1">生命值</div>
+                          <div className="text-sm text-muted-foreground mb-1">最大生命值</div>
                           <div className="text-2xl font-bold">{card.max_health}</div>
+                        </div>
+                      )}
+                      {card.health !== undefined && card.health !== card.max_health && (
+                        <div className="p-3 rounded-lg bg-muted">
+                          <div className="text-sm text-muted-foreground mb-1">当前生命值</div>
+                          <div className="text-2xl font-bold">{card.health}</div>
+                        </div>
+                      )}
+                      {card.max_energy !== undefined && (
+                        <div className="p-3 rounded-lg bg-muted">
+                          <div className="text-sm text-muted-foreground mb-1">最大能量</div>
+                          <div className="text-2xl font-bold">{card.max_energy}</div>
                         </div>
                       )}
                       {card.energy !== undefined && (
                         <div className="p-3 rounded-lg bg-muted">
-                          <div className="text-sm text-muted-foreground mb-1">能量</div>
+                          <div className="text-sm text-muted-foreground mb-1">当前能量</div>
                           <div className="text-2xl font-bold">{card.energy}</div>
+                        </div>
+                      )}
+                      {card.weapon_type && (
+                        <div className="p-3 rounded-lg bg-muted col-span-2">
+                          <div className="text-sm text-muted-foreground mb-1">武器类型</div>
+                          <div className="text-xl font-bold">{card.weapon_type}</div>
                         </div>
                       )}
                     </div>

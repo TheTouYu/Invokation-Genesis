@@ -4,8 +4,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { ArrowLeft, Edit, Copy, Trash2, Play, Zap, Sparkles } from "lucide-react"
 import Link from "next/link"
+import React from "react"
 
-export default function DeckDetailPage() {
+import React from "react"
+
+export default function DeckDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = React.use(params);
   const deck = {
     name: "雷电将军速攻",
     cards: 30,

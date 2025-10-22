@@ -26,10 +26,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (token) {
         try {
           const profile = await getProfile();
+          // 如果成功获取用户信息，设置用户信息
           setUser(profile);
-        } catch (error) {
+        } catch (error: any) {
           console.error('获取用户信息失败:', error);
-          clearToken(); // token无效，清除它
+          // 检查错误是否为认证错误，包括错误消息在msg字段的情况
+          const isAuthError = error.message?.includes('401') || 
+                             error.message?.includes('Missing Authorization Header') || 
+                             error.message?.includes('Token has expired') ||
+                             error.message?.includes('Invalid token') ||
+                             error.message?.includes('AUTH_ERROR:');
+          
+          if (isAuthError) {
+            // 清除无效的token
+            clearToken();
+            // 重定向到登录页面
+            if (typeof window !== 'undefined') {
+              window.location.href = '/login';
+            }
+          } else {
+            // 对于其他错误，只是清除token
+            clearToken();
+          }
         }
       }
       setLoading(false);

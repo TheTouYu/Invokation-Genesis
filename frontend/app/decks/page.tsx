@@ -15,7 +15,17 @@ const fetcher = (url: string) => fetch(url).then(res => res.json())
 
 export default function DecksPage() {
   // 使用SWR获取卡组列表
-  const { data: decksData, error, isLoading } = useSWR('/api/decks', getDecks);
+  const { data: decksData, error, isLoading } = useSWR(
+    '/api/decks', 
+    getDecks,
+    {
+      onError: (error) => {
+        if (error.message && error.message.startsWith('AUTH_ERROR:')) {
+          // 重定向到登录页面已经在API客户端中处理
+        }
+      }
+    }
+  );
 
   // 加载状态
   if (isLoading) {

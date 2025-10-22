@@ -42,6 +42,39 @@ export async function apiRequest<T = any>(endpoint: string, options: RequestInit
       headers,
     })
 
+    // 检查响应是否为授权错误
+    if (response.status === 401 || response.status === 403) {
+      let errorData;
+      try {
+        errorData = await response.json();
+      } catch (e) {
+        // 如果无法解析JSON，创建一个默认错误对象
+        errorData = { message: `HTTP error! status: ${response.status}` };
+      }
+      
+      // 检查是否为认证相关的错误，包括消息字段为msg的情况
+      const isAuthError = errorData.message?.includes('Missing Authorization Header') ||
+                         errorData.message?.includes('Token has expired') ||
+                         errorData.message?.includes('Invalid token') ||
+                         errorData.msg?.includes('Missing Authorization Header') ||
+                         errorData.msg?.includes('Token has expired') ||
+                         errorData.msg?.includes('Invalid token');
+      
+      if (isAuthError) {
+        // 清除无效的token
+        clearToken();
+        // 在客户端环境中重定向到登录页面
+        if (typeof window !== 'undefined') {
+          window.location.href = '/login';
+        }
+        // 抛出错误以通知调用方
+        const errorMessage = errorData.message || errorData.msg || `HTTP error! status: ${response.status}`;
+        throw new Error('AUTH_ERROR: ' + errorMessage);
+      } else {
+        throw new Error(errorData.error || errorData.message || errorData.msg || `HTTP error! status: ${response.status}`)
+      }
+    }
+
     // 处理非 JSON 响应
     const contentType = response.headers.get("content-type")
     if (!contentType || !contentType.includes("application/json")) {
@@ -59,6 +92,11 @@ export async function apiRequest<T = any>(endpoint: string, options: RequestInit
 
     return data as T
   } catch (error) {
+    // 如果是认证错误，这里也处理
+    if (error instanceof Error && error.message.startsWith('AUTH_ERROR:')) {
+      throw error; // 重新抛出认证错误，让上层处理
+    }
+    
     console.error("[v0] API request failed:", error)
     throw error
   }

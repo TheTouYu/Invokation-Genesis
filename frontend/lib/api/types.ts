@@ -31,7 +31,7 @@ export interface UserProfile {
 // 卡牌相关类型
 export interface CardCost {
   type: string
-  count: number
+  value: number
 }
 
 export interface CardSkill {
