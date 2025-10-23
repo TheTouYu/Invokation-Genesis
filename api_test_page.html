@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>七圣召唤API测试页面</title>
+    <title>七圣召唤卡牌API测试页面</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -29,7 +29,7 @@
             border-radius: 5px;
             background-color: #fafafa;
         }
-        input, button {
+        input, select, button {
             padding: 8px;
             margin: 5px;
             border: 1px solid #ccc;
@@ -57,50 +57,125 @@
         .token-section {
             background-color: #e8f5e8;
         }
+        .info-box {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 4px;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .error {
+            color: #721c24;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .success {
+            color: #155724;
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>七圣召唤 API 测试页面</h1>
+        <h1>七圣召唤卡牌API测试页面</h1>
+        
+        <div class="info-box">
+            <strong>提示：</strong>先登录获取JWT令牌，然后可以测试各种卡牌过滤参数
+        </div>
         
         <div class="section token-section">
-            <h3>1. 设置JWT令牌</h3>
-            <p>在下方输入您的JWT认证令牌：</p>
-            <input type="text" id="jwtToken" placeholder="输入JWT令牌..." style="width: 80%;">
-            <p>提示：运行 `uv run python dev_tools/generate_test_token.py` 生成测试令牌</p>
+            <h3>1. 用户登录</h3>
+            <div>
+                <input type="text" id="username" placeholder="用户名" value="test0">
+                <input type="password" id="password" placeholder="密码" value="test">
+                <button onclick="login()">登录获取令牌</button>
+            </div>
+            <div id="loginResult" class="result"></div>
         </div>
 
-        <div class="section">
-            <h3>2. 测试API端点</h3>
+        <div class="section" id="filtersSection" style="display:none;">
+            <h3>2. 卡牌过滤参数</h3>
             
             <div>
-                <h4>健康检查</h4>
-                <button onclick="testHealth()">测试健康检查</button>
+                <label>卡牌类型: 
+                    <select id="cardType">
+                        <option value="">所有类型</option>
+                    </select>
+                </label>
+                
+                <label>元素: 
+                    <select id="element">
+                        <option value="">所有元素</option>
+                    </select>
+                </label>
+                
+                <label>国家: 
+                    <select id="country">
+                        <option value="">所有国家</option>
+                    </select>
+                </label>
             </div>
             
             <div>
-                <h4>获取卡牌</h4>
-                <label>每页数量: <input type="number" id="per_page" value="5" min="1" max="50"></label>
-                <label>类型: <select id="card_type"><option value="">所有类型</option><option value="角色牌">角色牌</option><option value="事件牌">事件牌</option></select></label>
-                <button onclick="getCards()">获取卡牌</button>
+                <label>武器类型: 
+                    <select id="weaponType">
+                        <option value="">所有武器</option>
+                    </select>
+                </label>
+                
+                <label>角色子类型: 
+                    <input type="text" id="characterSubtype" placeholder="角色子类型">
+                </label>
+                
+                <label>稀有度: 
+                    <input type="number" id="rarity" placeholder="稀有度">
+                </label>
             </div>
             
             <div>
-                <h4>获取角色卡</h4>
-                <label>每页数量: <input type="number" id="char_per_page" value="5" min="1" max="50"></label>
-                <button onclick="getCharacterCards()">获取角色卡</button>
+                <label>标签: 
+                    <select id="tag">
+                        <option value="">所有标签</option>
+                    </select>
+                </label>
+                
+                <label>搜索: 
+                    <input type="text" id="search" placeholder="搜索关键词">
+                </label>
             </div>
             
             <div>
-                <h4>获取事件卡</h4>
-                <label>每页数量: <input type="number" id="event_per_page" value="5" min="1" max="50"></label>
-                <button onclick="getEventCards()">获取事件卡</button>
+                <label>每页数量: 
+                    <input type="number" id="per_page" value="10" min="1" max="50">
+                </label>
+                
+                <label>页码: 
+                    <input type="number" id="page" value="1" min="1">
+                </label>
             </div>
             
-            <div>
-                <h4>获取用户卡组</h4>
-                <button onclick="getUserDecks()">获取卡组</button>
-            </div>
+            <button onclick="loadFilters()">加载过滤选项</button>
+            <button onclick="searchCards()">搜索卡牌</button>
         </div>
 
         <div class="section">
@@ -110,144 +185,197 @@
     </div>
 
     <script>
-        const baseURL = 'http://localhost:5000';
-
-        // 通用API调用函数
-        async function callAPI(endpoint, method = 'GET', data = null) {
-            const token = document.getElementById('jwtToken').value;
-            if (!token) {
-                alert('请先输入JWT令牌！');
+        let jwtToken = '';
+        
+        // 登录函数
+        async function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const loginResult = document.getElementById('loginResult');
+            
+            if (!username || !password) {
+                loginResult.innerHTML = '<div class="error">请输入用户名和密码</div>';
                 return;
             }
-
+            
             try {
-                const config = {
-                    method: method,
+                const response = await fetch(`${window.location.origin}/api/auth/login`, {
+                    method: 'POST',
                     headers: {
-                        'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
-                    }
-                };
-
-                if (data && method !== 'GET') {
-                    config.body = JSON.stringify(data);
-                }
-
-                const response = await fetch(`${baseURL}${endpoint}`, config);
-                const result = await response.json();
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        password: password
+                    })
+                });
                 
-                document.getElementById('result').innerHTML = `状态码: ${response.status}\n\n${JSON.stringify(result, null, 2)}`;
+                const data = await response.json();
+                
+                if (response.ok) {
+                    jwtToken = data.access_token;
+                    localStorage.setItem('jwtToken', jwtToken); // 存储到本地存储
+                    loginResult.innerHTML = '<div class="success">登录成功！令牌已获取并保存</div>';
+                    document.getElementById('filtersSection').style.display = 'block';
+                    loadFilters(); // 自动加载过滤选项
+                } else {
+                    loginResult.innerHTML = `<div class="error">登录失败: ${data.message || data.error}</div>`;
+                }
             } catch (error) {
-                document.getElementById('result').innerHTML = `错误: ${error.message}`;
+                loginResult.innerHTML = `<div class="error">请求失败: ${error.message}</div>`;
             }
         }
-
-        // 测试健康检查
-        async function testHealth() {
-            try {
-                const response = await fetch(`${baseURL}/health`);
-                const result = await response.json();
-                document.getElementById('result').innerHTML = `状态码: ${response.status}\n\n${JSON.stringify(result, null, 2)}`;
-            } catch (error) {
-                document.getElementById('result').innerHTML = `错误: ${error.message}`;
-            }
-        }
-
-        // 获取卡牌
-        async function getCards() {
-            const perPage = document.getElementById('per_page').value;
-            const cardType = document.getElementById('card_type').value;
-            let url = `${baseURL}/api/cards?per_page=${perPage}`;
-            if (cardType) {
-                url += `&type=${encodeURIComponent(cardType)}`;
-            }
-            
-            const token = document.getElementById('jwtToken').value;
-            if (!token) {
-                alert('请先输入JWT令牌！');
+        
+        // 加载过滤选项
+        async function loadFilters() {
+            if (!jwtToken) {
+                document.getElementById('result').innerHTML = '<div class="error">请先登录获取令牌</div>';
                 return;
             }
-
+            
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<div class="loading"></div> 加载过滤选项中...';
+            
             try {
-                const response = await fetch(url, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
+                // 并行加载所有过滤选项
+                const [typesRes, elementsRes, countriesRes, weaponTypesRes, tagsRes] = await Promise.all([
+                    fetch(`${window.location.origin}/api/filters`, {
+                        headers: { 'Authorization': `Bearer ${jwtToken}` }
+                    }),
+                    fetch(`${window.location.origin}/api/filters`, {
+                        headers: { 'Authorization': `Bearer ${jwtToken}` }
+                    }),
+                    fetch(`${window.location.origin}/api/filters`, {
+                        headers: { 'Authorization': `Bearer ${jwtToken}` }
+                    }),
+                    fetch(`${window.location.origin}/api/filters`, {
+                        headers: { 'Authorization': `Bearer ${jwtToken}` }
+                    }),
+                    fetch(`${window.location.origin}/api/filters`, {
+                        headers: { 'Authorization': `Bearer ${jwtToken}` }
+                    })
+                ]);
+                
+                const filtersData = await typesRes.json();
+                
+                // 填充卡牌类型
+                const typeSelect = document.getElementById('cardType');
+                typeSelect.innerHTML = '<option value="">所有类型</option>';
+                filtersData.card_types.forEach(type => {
+                    const option = document.createElement('option');
+                    option.value = type;
+                    option.textContent = type;
+                    typeSelect.appendChild(option);
                 });
-                const result = await response.json();
-                document.getElementById('result').innerHTML = `状态码: ${response.status}\n\n${JSON.stringify(result, null, 2)}`;
+                
+                // 填充元素
+                const elementSelect = document.getElementById('element');
+                elementSelect.innerHTML = '<option value="">所有元素</option>';
+                filtersData.elements.forEach(element => {
+                    const option = document.createElement('option');
+                    option.value = element;
+                    option.textContent = element;
+                    elementSelect.appendChild(option);
+                });
+                
+                // 填充国家
+                const countrySelect = document.getElementById('country');
+                countrySelect.innerHTML = '<option value="">所有国家</option>';
+                filtersData.countries.forEach(country => {
+                    const option = document.createElement('option');
+                    option.value = country;
+                    option.textContent = country;
+                    countrySelect.appendChild(option);
+                });
+                
+                // 填充武器类型
+                const weaponTypeSelect = document.getElementById('weaponType');
+                weaponTypeSelect.innerHTML = '<option value="">所有武器</option>';
+                filtersData.weapon_types.forEach(weaponType => {
+                    const option = document.createElement('option');
+                    option.value = weaponType;
+                    option.textContent = weaponType;
+                    weaponTypeSelect.appendChild(option);
+                });
+                
+                // 填充标签
+                const tagSelect = document.getElementById('tag');
+                tagSelect.innerHTML = '<option value="">所有标签</option>';
+                filtersData.tags.forEach(tag => {
+                    const option = document.createElement('option');
+                    option.value = tag;
+                    option.textContent = tag;
+                    tagSelect.appendChild(option);
+                });
+                
+                resultDiv.innerHTML = '<div class="success">过滤选项加载完成</div>';
             } catch (error) {
-                document.getElementById('result').innerHTML = `错误: ${error.message}`;
+                resultDiv.innerHTML = `<div class="error">加载过滤选项失败: ${error.message}</div>`;
             }
         }
-
-        // 获取角色卡
-        async function getCharacterCards() {
-            const perPage = document.getElementById('char_per_page').value;
-            const token = document.getElementById('jwtToken').value;
-            
-            if (!token) {
-                alert('请先输入JWT令牌！');
+        
+        // 搜索卡牌
+        async function searchCards() {
+            if (!jwtToken) {
+                document.getElementById('result').innerHTML = '<div class="error">请先登录获取令牌</div>';
                 return;
             }
-
-            try {
-                const response = await fetch(`${baseURL}/api/cards/characters?per_page=${perPage}`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-                const result = await response.json();
-                document.getElementById('result').innerHTML = `状态码: ${response.status}\n\n${JSON.stringify(result, null, 2)}`;
-            } catch (error) {
-                document.getElementById('result').innerHTML = `错误: ${error.message}`;
-            }
-        }
-
-        // 获取事件卡
-        async function getEventCards() {
-            const perPage = document.getElementById('event_per_page').value;
-            const token = document.getElementById('jwtToken').value;
             
-            if (!token) {
-                alert('请先输入JWT令牌！');
-                return;
-            }
-
-            try {
-                const response = await fetch(`${baseURL}/api/cards/events?per_page=${perPage}`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-                const result = await response.json();
-                document.getElementById('result').innerHTML = `状态码: ${response.status}\n\n${JSON.stringify(result, null, 2)}`;
-            } catch (error) {
-                document.getElementById('result').innerHTML = `错误: ${error.message}`;
-            }
-        }
-
-        // 获取用户卡组
-        async function getUserDecks() {
-            const token = document.getElementById('jwtToken').value;
+            // 构建查询参数
+            const params = new URLSearchParams();
+            const cardType = document.getElementById('cardType').value;
+            const element = document.getElementById('element').value;
+            const country = document.getElementById('country').value;
+            const weaponType = document.getElementById('weaponType').value;
+            const characterSubtype = document.getElementById('characterSubtype').value;
+            const rarity = document.getElementById('rarity').value;
+            const tag = document.getElementById('tag').value;
+            const search = document.getElementById('search').value;
+            const per_page = document.getElementById('per_page').value || 10;
+            const page = document.getElementById('page').value || 1;
             
-            if (!token) {
-                alert('请先输入JWT令牌！');
-                return;
-            }
-
+            if (cardType) params.append('type', cardType);
+            if (element) params.append('element', element);
+            if (country) params.append('country', country);
+            if (weaponType) params.append('weapon_type', weaponType);
+            if (characterSubtype) params.append('character_subtype', characterSubtype);
+            if (rarity) params.append('rarity', rarity);
+            if (tag) params.append('tag', tag); // Note: tag is handled differently, maybe add multiple
+            if (search) params.append('search', search);
+            params.append('per_page', per_page);
+            params.append('page', page);
+            
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<div class="loading"></div> 搜索中...';
+            
             try {
-                const response = await fetch(`${baseURL}/api/decks`, {
+                const response = await fetch(`${window.location.origin}/api/cards?${params.toString()}`, {
                     headers: {
-                        'Authorization': `Bearer ${token}`
+                        'Authorization': `Bearer ${jwtToken}`
                     }
                 });
-                const result = await response.json();
-                document.getElementById('result').innerHTML = `状态码: ${response.status}\n\n${JSON.stringify(result, null, 2)}`;
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `状态码: ${response.status}\n\n${JSON.stringify(data, null, 2)}`;
+                } else {
+                    resultDiv.innerHTML = `状态码: ${response.status}\n\n错误信息: ${JSON.stringify(data, null, 2)}`;
+                }
             } catch (error) {
-                document.getElementById('result').innerHTML = `错误: ${error.message}`;
+                resultDiv.innerHTML = `请求失败: ${error.message}`;
             }
         }
+        
+        // 页面加载时检查本地存储中的令牌
+        window.onload = function() {
+            const storedToken = localStorage.getItem('jwtToken');
+            if (storedToken) {
+                jwtToken = storedToken;
+                document.getElementById('filtersSection').style.display = 'block';
+                document.getElementById('loginResult').innerHTML = '<div class="success">已从本地存储加载令牌</div>';
+            }
+        };
     </script>
 </body>
 </html>

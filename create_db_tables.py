@@ -13,10 +13,6 @@ from sqlalchemy import text
 
 def create_tables_manually():
     """手动创建数据库表"""
-    # 首先确保没有初始化过的标记
-    from models.db_models import _initialized
-    print(f"模型初始化标记: {_initialized}")
-    
     app = create_app()
     
     print(f"数据库URI: {app.config['SQLALCHEMY_DATABASE_URI']}")

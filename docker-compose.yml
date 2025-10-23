@@ -1,0 +1,22 @@
+services:
+  metabase:
+    image: metabase/metabase:latest
+    container_name: metabase-ys-qs
+    ports:
+      - "8888:3000"
+    volumes:
+      # Mount the directory containing the SQLite database
+      - ./instance:/app/data/db
+      # Optional: Mount a directory for logs
+      - ./metabase-data:/metabase-data
+    environment:
+      - MB_DB_FILE=/app/data/db/game_metabase.db # Path to your SQLite database inside the container
+      - JAVA_OPTS=-Xmx2g # Adjust memory as needed
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+

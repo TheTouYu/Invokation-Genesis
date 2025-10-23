@@ -644,7 +644,7 @@ DECK_BUILDER_TEMPLATE = """
                     currentCharPage = charData.current_page || 1;
                     
                     // Prepare headers with or without auth based on the endpoint
-                    const url2 = '/api/cards?page=1&per_page=30';
+                    const url2 = '/api/cards?type=非角色牌&page=1&per_page=30';
                     const headers2 = needsAuth(url2) ? { 
                         'Authorization': 'Bearer ' + (getJWTToken() || '') 
                     } : {};

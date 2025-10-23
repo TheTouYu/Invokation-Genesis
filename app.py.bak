@@ -84,7 +84,7 @@ def create_app():
         return jsonify({"status": "healthy", "message": "七圣召唤游戏服务器运行正常"}), 200
 
     @app.route('/api/test', methods=['GET'])
-    def api_test_page():
+        def api_test_page():
             """提供API测试页面"""
             with open('api_test_page.html', 'r', encoding='utf-8') as f:
                 test_page_html = f.read()

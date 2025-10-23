@@ -49,6 +49,24 @@ class CardDataImporter:
                 # 标准化数据
                 card_data = self.processor.standardize_character_card(char_data)
                 
+                # 确保skills和tags字段使用中文而非转义字符
+                if 'skills' in card_data and isinstance(card_data['skills'], str):
+                    try:
+                        skills_obj = json.loads(card_data['skills'])
+                        card_data['skills'] = json.dumps(skills_obj, ensure_ascii=False)
+                    except (json.JSONDecodeError, TypeError):
+                        pass  # 如果解析失败，保持原值
+                
+                if 'tags' in card_data and isinstance(card_data['tags'], str):
+                    try:
+                        tags_obj = json.loads(card_data['tags'])
+                        card_data['tags'] = json.dumps(tags_obj, ensure_ascii=False)
+                    except (json.JSONDecodeError, TypeError):
+                        pass  # 如果解析失败，保持原值
+                
+                if 'country' not in card_data:
+                    card_data['country'] = ''
+                
                 # 检查是否已存在（根据名称）
                 existing_card = CardData.query.filter_by(name=card_data['name'], card_type='角色牌').first()
                 
@@ -83,6 +101,24 @@ class CardDataImporter:
             try:
                 # 标准化数据
                 processed_card = self.processor.standardize_action_card(card_data, card_type)
+                
+                # 确保skills和tags字段使用中文而非转义字符
+                if 'skills' in processed_card and isinstance(processed_card['skills'], str):
+                    try:
+                        skills_obj = json.loads(processed_card['skills'])
+                        processed_card['skills'] = json.dumps(skills_obj, ensure_ascii=False)
+                    except (json.JSONDecodeError, TypeError):
+                        pass  # 如果解析失败，保持原值
+                
+                if 'tags' in processed_card and isinstance(processed_card['tags'], str):
+                    try:
+                        tags_obj = json.loads(processed_card['tags'])
+                        processed_card['tags'] = json.dumps(tags_obj, ensure_ascii=False)
+                    except (json.JSONDecodeError, TypeError):
+                        pass  # 如果解析失败，保持原值
+                
+                if 'country' not in processed_card:
+                    processed_card['country'] = ''
                 
                 # 检查是否已存在（根据名称和类型）
                 existing_card = CardData.query.filter_by(

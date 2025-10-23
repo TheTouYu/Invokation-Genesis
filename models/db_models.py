@@ -70,12 +70,14 @@ class ModelContainer:
             is_active = sqlalchemy_db.Column(sqlalchemy_db.Boolean, default=True, index=True)
             # 角色卡特定字段
             health = sqlalchemy_db.Column(sqlalchemy_db.Integer)
-            max_health = sqlalchemy_db.Column(sqlalchemy_db.Integer)
+            health_max = sqlalchemy_db.Column(sqlalchemy_db.Integer)  # 替换原来的max_health
             energy = sqlalchemy_db.Column(sqlalchemy_db.Integer)
-            max_energy = sqlalchemy_db.Column(sqlalchemy_db.Integer)
+            energy_max = sqlalchemy_db.Column(sqlalchemy_db.Integer)  # 替换原来的max_energy
             weapon_type = sqlalchemy_db.Column(sqlalchemy_db.String(50))
             skills = sqlalchemy_db.Column(sqlalchemy_db.JSON)
+            tags = sqlalchemy_db.Column(sqlalchemy_db.JSON)  # 新增tags字段
             image_url = sqlalchemy_db.Column(sqlalchemy_db.String(255))
+            country = sqlalchemy_db.Column(sqlalchemy_db.String(50), index=True)  # 国家/地区
 
             
             def to_dict(self):
@@ -95,12 +97,14 @@ class ModelContainer:
                     'is_active': self.is_active,
                     # 角色卡特定字段
                     'health': self.health,
-                    'max_health': self.max_health,
+                    'health_max': self.health_max,  # 替换原来的max_health
                     'energy': self.energy,
-                    'max_energy': self.max_energy,
+                    'energy_max': self.energy_max,  # 替换原来的max_energy
                     'weapon_type': self.weapon_type,
                     'skills': self.skills,
-                    'image_url': self.image_url
+                    'tags': self.tags,  # 新增tags字段
+                    'image_url': self.image_url,
+                    'country': self.country  # 国家/地区
                 }
 
 

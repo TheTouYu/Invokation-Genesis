@@ -40,9 +40,8 @@ def extract_card_info(card) -> Dict[str, Any]:
     # 对于非角色牌，尝试从技能中获取cost和description
     card_description = card.description or ""
     if card.card_type != "角色牌" and card.skills:
-        try:
-            # card.skills from JSON field is already a Python object, not a string
-            skills_data = card.skills if isinstance(card.skills, list) else (json.loads(card.skills) if isinstance(card.skills, str) else [])
+        # card.skills from JSON field is already a Python object, not a string
+        skills_data = card.skills if isinstance(card.skills, list) else (json.loads(card.skills) if isinstance(card.skills, str) else [])
             if skills_data and isinstance(skills_data, list) and len(skills_data) > 0:
                 first_skill = skills_data[0]
                 if "cost" in first_skill:
@@ -54,9 +53,8 @@ def extract_card_info(card) -> Dict[str, Any]:
     elif card.card_type == "角色牌":
         # 对于角色牌，技能中也可能包含cost和description信息
         if card.skills:
-            try:
-                # card.skills from JSON field is already a Python object, not a string
-                skills_data = card.skills if isinstance(card.skills, list) else (json.loads(card.skills) if isinstance(card.skills, str) else [])
+            # card.skills from JSON field is already a Python object, not a string
+            skills_data = card.skills if isinstance(card.skills, list) else (json.loads(card.skills) if isinstance(card.skills, str) else [])
                 if (
                     skills_data
                     and isinstance(skills_data, list)
@@ -69,26 +67,31 @@ def extract_card_info(card) -> Dict[str, Any]:
                         card_description = first_skill["description"]
             except (json.JSONDecodeError, TypeError):
                 pass
-            except (json.JSONDecodeError, TypeError):
-                pass
 
-    # 提取武器类型和国家信息需要region_info
-    # For character cards, character_subtype often contains element/country info, so check that first
-    character_subtype_val = getattr(card, "character_subtype", "") or ""
-    weapon_type_val = getattr(card, "weapon_type", "") or ""
-    
-    # Use character_subtype first, then weapon_type as fallback
-    region_info = character_subtype_val or weapon_type_val
-    
-    # 提取国家信息 - now using the stored country field
-    country = getattr(card, "country", "") or ""
+    # 提取国家信息
+    region_info = (
+        getattr(card, "weapon_type", "") or getattr(card, "character_subtype", "") or ""
+    )
+
+    countries = [
+        "蒙德",
+        "璃月",
+        "稻妻",
+        "须弥",
+        "枫丹",
+        "纳塔",
+        "至冬",
+        "魔物",
+        "愚人众",
+        "丘丘人",
+    ]
+    country = next((c for c in countries if c in region_info), "")
 
     # 从技能中提取元素信息
     element = card.element_type or ""
     if not element and card.skills:
-        try:
-            # card.skills from JSON field is already a Python object, not a string
-            skills_data = card.skills if isinstance(card.skills, list) else (json.loads(card.skills) if isinstance(card.skills, str) else [])
+        # card.skills from JSON field is already a Python object, not a string
+        skills_data = card.skills if isinstance(card.skills, list) else (json.loads(card.skills) if isinstance(card.skills, str) else [])
             if skills_data and isinstance(skills_data, list) and len(skills_data) > 0:
                 first_skill = skills_data[0]
                 if "cost" in first_skill:
@@ -111,7 +114,7 @@ def extract_card_info(card) -> Dict[str, Any]:
         except (json.JSONDecodeError, TypeError):
             pass
 
-    # 提取武器类型 - now using the stored weapon_type field
+    # 提取武器类型
     weapon_type = getattr(card, "weapon_type", "") or ""
     weapon_types = ["单手剑", "双手剑", "长柄武器", "弓", "法器", "其他武器"]
     if not weapon_type:
@@ -144,8 +147,8 @@ def extract_card_info(card) -> Dict[str, Any]:
             {
                 "health": getattr(card, "health", None),
                 "energy": getattr(card, "energy", None),
-                "health_max": getattr(card, "health_max", None),
-                "energy_max": getattr(card, "energy_max", None),
+                "max_health": getattr(card, "max_health", None),
+                "max_energy": getattr(card, "max_energy", None),
             }
         )
 
@@ -164,14 +167,10 @@ def apply_filters(query, filters: Dict[str, Any], CardData):
     rarity = filters.get("rarity")
     search = filters.get("search")
     tags = filters.get("tags", [])
-    energy_cost = filters.get("energy_cost")  # 元素费用过滤
 
     # 应用基础过滤条件
     if card_type:
-        if card_type == "非角色牌":
-            query = query.filter(CardData.card_type != "角色牌")
-        elif card_type == "行动牌":
-            # 行动牌通常指非角色牌，在这里我们将其视为非角色牌的别名
+        if card_type in ["非角色牌", "行动牌"]:
             query = query.filter(CardData.card_type != "角色牌")
         else:
             query = query.filter(CardData.card_type == card_type)
@@ -185,26 +184,28 @@ def apply_filters(query, filters: Dict[str, Any], CardData):
     if rarity is not None:
         query = query.filter(CardData.rarity == int(rarity))
 
-    # 应用国家过滤 - 现在直接使用country字段
+    # 应用国家过滤 - 在数据库中可能存储在不同的字段
     if country:
-        query = query.filter(CardData.country == country)
+        query = query.filter(
+            or_(
+                CardData.weapon_type.contains(country),
+                CardData.character_subtype.contains(country),
+            )
+        )
 
     # 应用武器类型过滤
     if weapon_type:
         query = query.filter(CardData.weapon_type == weapon_type)
 
-    # 应用标签过滤功能  
+    # 应用标签过滤功能
     if tags:
         for tag in tags:
-            # 由于skills是JSON字段，将其转换为TEXT进行搜索
-            from database_manager import db_manager
-            db = db_manager.get_db()
             query = query.filter(
                 or_(
                     CardData.card_type.contains(tag),
                     CardData.character_subtype.contains(tag),
                     CardData.description.contains(tag),
-                    db.cast(CardData.skills, db.Text).contains(tag)  # 将JSON字段转换为文本进行搜索
+                    CardData.skills.contains(tag),
                 )
             )
 
@@ -225,41 +226,6 @@ def apply_filters(query, filters: Dict[str, Any], CardData):
                     )
                 )
 
-    # 应用元素费用过滤 - 根据技能中的cost字段过滤
-    if energy_cost is not None:
-        # 将能量费用转换为整数
-        try:
-            energy_value = int(energy_cost)
-            from database_manager import db_manager
-            db = db_manager.get_db()
-            
-            # 更智能地搜索技能中的费用信息
-            if energy_value >= 0 and energy_value <= 3:
-                # 查找需要特定数量充能的卡牌
-                # 我们需要在JSON字段中搜索特定的费用值
-                query = query.filter(
-                    db.cast(CardData.skills, db.Text).like(f'%"{energy_value}"%')
-                )
-            elif energy_cost == "其他":
-                # 查找非标准费用的卡牌
-                query = query.filter(
-                    or_(
-                        db.cast(CardData.skills, db.Text).notlike('%"value": 0%'),
-                        db.cast(CardData.skills, db.Text).notlike('%"value": 1%'),
-                        db.cast(CardData.skills, db.Text).notlike('%"value": 2%'),
-                        db.cast(CardData.skills, db.Text).notlike('%"value": 3%')
-                    )
-                )
-        except ValueError:
-            # 如果不是数字，则按文本搜索
-            if energy_cost == "充能":
-                from database_manager import db_manager
-                db = db_manager.get_db()
-                query = query.filter(
-                    db.cast(CardData.skills, db.Text).like('%充能%')
-                )
-            pass  # 忽略无效的能量费用值
-
     return query
 
 
@@ -269,14 +235,12 @@ def get_all_cards():
     """
     获取卡牌数据 - 支持多种过滤条件和分页
     查询参数:
-    - type: 卡牌类型 (角色牌, 事件牌, 武器, 圣遗物, 支援牌, 非角色牌, 行动牌)
+    - type: 卡牌类型 (角色牌, 事件牌, 武器, 圣遗物, 支援牌, 非角色牌,行动牌)
     - element: 元素类型
     - country: 国家 (蒙德, 璃月, 稻妻, etc.)
     - weapon_type: 武器类型 (单手剑, 双手剑, etc.)
     - character_subtype: 角色子类型
     - rarity: 稀有度
-    - tag: 卡牌标签 (场地, 武器, 圣遗物等，详见 /cards/tags 接口)
-    - energy_cost: 元素费用 (0, 1, 2, 3, 其他)
     - search: 搜索关键词 (在名称、描述、类型、子类型、技能中搜索)
     - page: 页码 (默认 1)
     - per_page: 每页数量 (默认 20, 最大 100)
@@ -290,7 +254,6 @@ def get_all_cards():
             "weapon_type": request.args.get("weapon_type"),
             "character_subtype": request.args.get("character_subtype"),
             "rarity": request.args.get("rarity"),
-            "energy_cost": request.args.get("energy_cost"),  # 元素费用过滤
             "search": request.args.get("search"),
             "tags": request.args.getlist("tag"),  # 支持多个标签
         }

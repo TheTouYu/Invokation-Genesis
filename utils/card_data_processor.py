@@ -87,6 +87,65 @@ class CardDataProcessor:
                 return weapon_type
         return ""
     
+    def generate_tags_for_card(self, card_data: Dict[str, Any], card_type: str) -> List[str]:
+        """为卡牌生成标签"""
+        tags = []
+        
+        # 根据卡牌类型添加基本标签
+        if card_type:
+            tags.append(card_type.strip())
+        
+        # 添加元素标签（如果是角色牌或有元素的卡牌）
+        element = card_data.get('element_type')
+        if element:
+            tags.append(element)
+        
+        # 添加国家/地区标签
+        region = card_data.get('region', '')
+        countries = ["蒙德", "璃月", "稻妻", "须弥", "枫丹", "纳塔", "至冬", "魔物", "愚人众", "丘丘人"]
+        for country in countries:
+            if country in region:
+                tags.append(country)
+                break
+        
+        # 添加武器类型标签（如果是角色牌）
+        weapon_type = card_data.get('weapon_type')
+        if weapon_type:
+            tags.append(weapon_type)
+        
+        # 从技能中提取标签
+        skills = card_data.get('skills', [])
+        if skills and isinstance(skills, list):
+            for skill in skills:
+                skill_type = skill.get('type')
+                if skill_type:
+                    if skill_type not in tags:  # 避免重复
+                        tags.append(skill_type)
+                    
+                # 检查技能描述中是否有特殊关键词
+                description = skill.get('description', '')
+                if '治疗' in description:
+                    tags.append('治疗')
+                if '护盾' in description:
+                    tags.append('护盾')
+                if '伤害' in description:
+                    tags.append('伤害')
+                if '元素' in description and '反应' in description:
+                    tags.append('元素反应')
+        
+        # 从子类型添加标签
+        character_subtype = card_data.get('character_subtype')
+        if character_subtype:
+            tags.append(character_subtype)
+        
+        # 从稀有度添加标签
+        rarity = card_data.get('rarity')
+        if rarity:
+            tags.append(f'{rarity}星')
+        
+        # 去重并返回
+        return list(set(tags))
+
     def standardize_character_card(self, char_data: Dict[str, Any]) -> Dict[str, Any]:
         """标准化角色卡数据"""
         region = char_data.get('region', '')
@@ -101,24 +160,29 @@ class CardDataProcessor:
         # 确定卡牌类型
         card_type = "角色牌"
         
+        # 生成标签
+        tags = self.generate_tags_for_card(char_data, card_type)
+        
         # 构建CardData对象所需的数据
         card_data_dict = {
             'id': char_data.get('id', str(uuid.uuid4())),
             'name': char_data.get('name', ''),
             'card_type': card_type,
             'element_type': element,
-            'cost': [],  # 角色牌通常没有打出成本
+            'cost': json.dumps([], ensure_ascii=False),  # 角色牌通常没有打出成本
             'description': char_data.get('description', ''),
             'character_subtype': region,
             'rarity': char_data.get('rarity', 5),  # 假设角色都是5星
-            'skills': json.dumps(char_data.get('skills', [])),
+            'skills': json.dumps(char_data.get('skills', []), ensure_ascii=False),  # 确保中文不被转义
+            'tags': json.dumps(tags, ensure_ascii=False),  # 存储标签
             # 角色特定属性
             'health': char_data.get('health', 10),
-            'max_health': char_data.get('health', 10),
+            'health_max': char_data.get('health', 10),  # 替换原来的max_health
             'energy': 0,
-            'max_energy': 2,
+            'energy_max': 2,  # 替换原来的max_energy
             'weapon_type': weapon_type,
             'image_url': char_data.get('name_url', ''),
+            'country': country,  # 国家
         }
         
         return card_data_dict
@@ -135,6 +199,13 @@ class CardDataProcessor:
         # 确定元素类型
         element = self.extract_element_from_skills(card_data.get('skills', []))
         
+        # 生成标签
+        tags = self.generate_tags_for_card(card_data, card_type)
+        
+        # 从region字段提取国家，如果available
+        region = card_data.get('region', '')
+        country = self.extract_country_from_region(region)
+        
         # 构建CardData对象所需的数据
         result = {
             'id': card_data.get('id', str(uuid.uuid4())),
@@ -145,8 +216,10 @@ class CardDataProcessor:
             'description': card_data.get('description', ''),
             'character_subtype': card_data.get('subtype', card_data.get('category', '')),
             'rarity': card_data.get('rarity', 1),
-            'skills': json.dumps(card_data.get('skills', [])),
+            'skills': json.dumps(card_data.get('skills', []), ensure_ascii=False),  # 确保中文不被转义
+            'tags': json.dumps(tags, ensure_ascii=False),  # 存储标签
             'image_url': card_data.get('image_url', card_data.get('name_url', '')),
+            'country': country,  # 国家
         }
         
         return result

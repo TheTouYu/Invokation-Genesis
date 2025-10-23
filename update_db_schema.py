@@ -23,9 +23,10 @@ def update_database_schema():
         ('element_type', 'TEXT'),
         ('character_subtype', 'TEXT'), 
         ('health', 'INTEGER'),
-        ('max_health', 'INTEGER'),
+        ('health_max', 'INTEGER'),  # 替换原来的max_health
         ('energy', 'INTEGER'),
-        ('max_energy', 'INTEGER'),
+        ('energy_max', 'INTEGER'),  # 替换原来的max_energy
+        ('tags', 'TEXT'),           # 新增tags字段
         ('weapon_type', 'TEXT'),
         ('skills', 'TEXT'),  # SQLite中使用TEXT存储JSON
         ('image_url', 'TEXT')

@@ -46,7 +46,7 @@ def verify_and_fix_schema():
         print(f"decks表当前列: {decks_cols}")
         
         # 验证是否所有必需的列都存在
-        required_card_cols = ['element_type', 'character_subtype', 'health', 'max_health', 'energy', 'max_energy', 'weapon_type', 'skills', 'image_url']
+        required_card_cols = ['element_type', 'character_subtype', 'health', 'health_max', 'energy', 'energy_max', 'weapon_type', 'skills', 'image_url', 'tags']
         missing_card_cols = [col for col in required_card_cols if col not in card_data_cols]
         
         required_deck_cols = ['cards']

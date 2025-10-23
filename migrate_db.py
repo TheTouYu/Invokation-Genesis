@@ -35,17 +35,21 @@ def migrate_database():
                 print("添加health列到card_data表...")
                 cursor.execute("ALTER TABLE card_data ADD COLUMN health INTEGER")
                 
-            if 'max_health' not in columns:
-                print("添加max_health列到card_data表...")
-                cursor.execute("ALTER TABLE card_data ADD COLUMN max_health INTEGER")
+            if 'health_max' not in columns:
+                print("添加health_max列到card_data表...")  # 替换原来的max_health
+                cursor.execute("ALTER TABLE card_data ADD COLUMN health_max INTEGER")
                 
             if 'energy' not in columns:
                 print("添加energy列到card_data表...")
                 cursor.execute("ALTER TABLE card_data ADD COLUMN energy INTEGER")
                 
-            if 'max_energy' not in columns:
-                print("添加max_energy列到card_data表...")
-                cursor.execute("ALTER TABLE card_data ADD COLUMN max_energy INTEGER")
+            if 'energy_max' not in columns:
+                print("添加energy_max列到card_data表...")  # 替换原来的max_energy
+                cursor.execute("ALTER TABLE card_data ADD COLUMN energy_max INTEGER")
+                
+            if 'tags' not in columns:
+                print("添加tags列到card_data表...")  # 新增字段
+                cursor.execute("ALTER TABLE card_data ADD COLUMN tags JSON")
                 
             if 'weapon_type' not in columns:
                 print("添加weapon_type列到card_data表...")
