@@ -1,7 +1,7 @@
 // 卡牌相关 API
 
 import { get } from "./client"
-import type { Card, CardsResponse, CardDetailResponse, CardFilters } from "./types"
+import type { Card, CardsResponse, CardDetailResponse, CardFilters, CharacterFilters, CardFiltersResponse } from "./types"
 
 // 获取所有卡牌
 export async function getCards(filters?: CardFilters): Promise<CardsResponse> {
@@ -86,4 +86,19 @@ export async function getSupports(params?: { page?: number; per_page?: number })
 // 获取事件牌列表
 export async function getEvents(params?: { page?: number; per_page?: number }): Promise<Card[]> {
   return get<Card[]>("/api/events", params)
+}
+
+// 获取角色过滤参数
+export async function getCharacterFilterOptions(): Promise<CharacterFilters> {
+  return get("/api/characters/filters")
+}
+
+// 获取通用卡牌过滤参数
+export async function getCardFilterOptions(): Promise<CardFiltersResponse> {
+  return get("/api/cards/filter")
+}
+
+// 获取所有过滤选项
+export async function getAllFilters(): Promise<CardFiltersResponse> {
+  return get("/api/filters")
 }

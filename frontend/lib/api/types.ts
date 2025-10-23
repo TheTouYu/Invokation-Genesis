@@ -149,6 +149,21 @@ export interface DeckValidationResponse {
   }
 }
 
+// 过滤器类型
+export interface CharacterFilters {
+  countries: string[]
+  elements: string[]
+  weapon_types: string[]
+}
+
+export interface CardFiltersResponse {
+  card_types: string[]
+  countries: string[]
+  elements: string[]
+  tags: string[]
+  weapon_types: string[]
+}
+
 // 游戏相关类型
 export interface GameCharacter {
   id: string
