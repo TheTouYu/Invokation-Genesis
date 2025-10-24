@@ -94,18 +94,18 @@ def validate_deck_composition(deck_data: Dict[str, Any]) -> Dict[str, Any]:
             # 如果导入成功，使用数据库验证
             from models.db_models import db
             
-            # 从数据库中获取角色卡信息 - 使用名称而不是ID进行查询
+            # 从数据库中获取角色卡信息 - 使用ID进行查询
             character_cards = []
             if deck_data.get('character_ids'):
                 character_cards = CardData.query.filter(
-                    CardData.name.in_(deck_data['character_ids'])
+                    CardData.id.in_(deck_data['character_ids'])
                 ).all()
             
-            # 从数据库中获取其他卡牌信息 - 使用名称而不是ID进行查询
+            # 从数据库中获取其他卡牌信息 - 使用ID进行查询
             action_cards = []
             if deck_data.get('card_ids'):
                 action_cards = CardData.query.filter(
-                    CardData.name.in_(deck_data['card_ids'])
+                    CardData.id.in_(deck_data['card_ids'])
                 ).all()
 
             # 将数据库对象转换为Card对象
@@ -214,7 +214,7 @@ def validate_deck_composition(deck_data: Dict[str, Any]) -> Dict[str, Any]:
                 )
                 
                 # 添加多张相同的角色卡（如果用户选择了多张）
-                count = deck_data['character_ids'].count(card.name)  # Use card name instead of card ID
+                count = deck_data['character_ids'].count(card.id)  # Use card ID
                 for _ in range(count):
                     all_cards.append(card_obj)
             
@@ -230,7 +230,7 @@ def validate_deck_composition(deck_data: Dict[str, Any]) -> Dict[str, Any]:
                     character_subtype=getattr(card, 'character_subtype', None)
                 )
                 # 添加多张相同的行动卡（如果用户选择了多张）
-                count = deck_data['card_ids'].count(card.name)  # Use card name instead of card ID
+                count = deck_data['card_ids'].count(card.id)  # Use card ID
                 for _ in range(count):
                     all_cards.append(card_obj)
 
@@ -346,8 +346,8 @@ def _validate_deck_by_id_counts(deck_data: Dict[str, Any]) -> Dict[str, Any]:
     card_ids = deck_data.get('card_ids', [])
     
     # Find the actual character and action cards from loaded data
-    selected_character_cards = [card for card in all_cards if card.get('name', '') in character_ids]
-    selected_action_cards = [card for card in all_cards if card.get('name', '') in card_ids]
+    selected_character_cards = [card for card in all_cards if card.get('id', '') in character_ids]
+    selected_action_cards = [card for card in all_cards if card.get('id', '') in card_ids]
     
     errors = []
     suggestions = []
@@ -364,6 +364,9 @@ def _validate_deck_by_id_counts(deck_data: Dict[str, Any]) -> Dict[str, Any]:
     if not card_count_valid:
         errors.append(f"行动卡应为30张，当前为{card_count}张")
     
+    # Create a mapping from IDs to names for user-friendly error messages
+    card_id_to_name = {card.get('id', ''): card.get('name', '') for card in all_cards if 'id' in card and 'name' in card}
+    
     # Check individual card limits (no more than 2 of same card)
     card_counts = {}
     for card_id in card_ids:
@@ -373,16 +376,25 @@ def _validate_deck_by_id_counts(deck_data: Dict[str, Any]) -> Dict[str, Any]:
             card_counts[card_id] = 1
     
     card_limits_valid = True
-    for card_name, count in card_counts.items():
+    for card_id, count in card_counts.items():
         if count > 2:
+            card_name = card_id_to_name.get(card_id, card_id)  # Use ID if name not available
             errors.append(f"卡牌「{card_name}」超过2张限制，当前为{count}张")
             card_limits_valid = False
     
     # Check character limits (each character only once)
-    character_names = [char.get('name', '') for char in selected_character_cards]
+    character_ids_list = [char.get('id', '') for char in selected_character_cards]
     character_names_count = {}
-    for name in character_names:
-        character_names_count[name] = character_names_count.get(name, 0) + 1
+    for char_id in character_ids_list:
+        character_names_count[char_id] = character_names_count.get(char_id, 0) + 1
+    
+    # Check for character duplicates - get names for user-friendly message
+    character_limit_valid = all(count <= 1 for count in character_names_count.values())
+    for char_id, count in character_names_count.items():
+        if count > 1:
+            char_name = card_id_to_name.get(char_id, char_id)  # Use ID if name not available
+            errors.append(f"角色「{char_name}」超过1张限制，当前为{count}张")
+            character_limit_valid = False  # Mark as invalid if character appears more than once
     
     character_limit_valid = all(count <= 1 for count in character_names_count.values())
     

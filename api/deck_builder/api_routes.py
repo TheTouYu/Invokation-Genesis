@@ -12,6 +12,7 @@ from utils.card_data_processor import (
     extract_weapon_type_from_region,
 )
 from flask_jwt_extended import jwt_required, get_jwt_identity
+from dal import db_dal
 
 deck_builder_api = Blueprint("deck_builder_api", __name__)
 
@@ -173,9 +174,11 @@ def create_deck():
                 {"message": "卡组不符合规则", "errors": validation_result["errors"]}
             ), 400
 
+        # 合并普通卡牌和角色卡牌到一个列表中
+        all_cards = character_card_ids + card_ids
         # 使用DAL创建卡组
         deck = db_dal.decks.create_deck(
-            user_id=current_user_id, name=name, cards=card_ids, description=description
+            user_id=current_user_id, name=name, cards=all_cards, description=description
         )
 
         return jsonify(
