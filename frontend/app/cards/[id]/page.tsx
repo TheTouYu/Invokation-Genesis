@@ -67,7 +67,21 @@ export default function CardDetailPage({ params }: { params: Promise<{ id: strin
   }
 
   // 获取卡牌数据
-  const card: CardType | undefined = cardDetail?.card;
+  const rawCard: CardType | undefined = cardDetail?.card;
+  
+  // 解析技能数据（如果技能是JSON字符串）
+  let card: CardType | undefined = rawCard;
+  if (rawCard) {
+    card = { ...rawCard };
+    if (typeof rawCard.skills === 'string') {
+      try {
+        card.skills = JSON.parse(rawCard.skills);
+      } catch (error) {
+        console.error('Failed to parse skills JSON:', error);
+        card.skills = []; // 如果解析失败，设置为空数组
+      }
+    }
+  }
 
   if (!card) {
     return (
@@ -234,7 +248,7 @@ export default function CardDetailPage({ params }: { params: Promise<{ id: strin
                   </p>
                 </div>
 
-                {card.skills && card.skills.length > 0 && (
+                {card.skills && Array.isArray(card.skills) && card.skills.length > 0 && (
                   <div>
                     <h3 className="font-semibold mb-3">技能</h3>
                     <div className="space-y-3">
@@ -253,7 +267,7 @@ export default function CardDetailPage({ params }: { params: Promise<{ id: strin
                                 </Badge>
                               </div>
                               <div className="flex flex-wrap justify-end gap-1 ml-2">
-                                {skill.cost && skill.cost.map((costItem, costIndex) => {
+                                {skill.cost && Array.isArray(skill.cost) && skill.cost.map((costItem, costIndex) => {
                                   const CostIcon = getElementIcon(costItem.type);
                                   return (
                                     <div 

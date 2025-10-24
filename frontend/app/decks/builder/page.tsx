@@ -34,6 +34,17 @@ export default function DeckBuilderPage() {
   const [validationResult, setValidationResult] = useState<DeckValidationResponse | null>(null)
   const [isSaving, setIsSaving] = useState(false)
   const [activeTab, setActiveTab] = useState("characters")
+  // 添加认证状态初始化完成的标识
+  const [authInitialized, setAuthInitialized] = useState(false)
+  
+  // 添加日志来跟踪认证状态
+  useEffect(() => {
+    console.log('[DeckBuilder] 认证状态更新:', { user: !!user, isAuthenticated, loading });
+  }, [user, isAuthenticated, loading]);
+  
+  useEffect(() => {
+    console.log('[DeckBuilder] authInitialized 状态:', authInitialized);
+  }, [authInitialized]);
   
   // 过滤器状态
   const [characterSearchQuery, setCharacterSearchQuery] = useState("")
@@ -84,12 +95,22 @@ export default function DeckBuilderPage() {
 
   // 当卡组完整时（3个角色+30张行动牌）自动验证卡组
   useEffect(() => {
-    // 仅在卡组完整时才自动验证（3个角色+30张行动牌=33张）
-    if (deckName && 
+    console.log('[DeckBuilder] 检查是否需要自动验证卡组:', { 
+      authInitialized, 
+      deckName: !!deckName, 
+      characterCount: selectedCharacters.length, 
+      actionCount: selectedActions.reduce((sum, a) => sum + a.count, 0),
+      isAuthenticated
+    });
+    
+    // 仅在卡组完整且认证已初始化时才自动验证（3个角色+30张行动牌=33张）
+    if (authInitialized && 
+        deckName && 
         selectedCharacters.length === 3 && 
         selectedActions.reduce((sum, a) => sum + a.count, 0) === 30) {
       
       const validate = async () => {
+        console.log('[DeckBuilder] 开始自动验证卡组');
         const validationData: ValidateDeckRequest = {
           deck_name: deckName,
           characters: selectedCharacters,
@@ -107,9 +128,10 @@ export default function DeckBuilderPage() {
     } else if (selectedCharacters.length < 3 || 
                selectedActions.reduce((sum, a) => sum + a.count, 0) < 30) {
       // 如果卡组不完整，清空验证结果
+      console.log('[DeckBuilder] 卡组不完整，清空验证结果');
       setValidationResult(null)
     }
-  }, [deckName, selectedCharacters, selectedActions])
+  }, [authInitialized, deckName, selectedCharacters, selectedActions, isAuthenticated])
   
   // 防抖处理角色搜索查询
   useEffect(() => {
@@ -139,6 +161,16 @@ export default function DeckBuilderPage() {
     }
   }, [actionSearchQuery])
   
+  // 监听认证状态初始化完成
+  useEffect(() => {
+    console.log('[DeckBuilder] 检查认证加载状态:', { loading, user: !!user, isAuthenticated });
+    // 确保只有在加载完成且认证状态确定时才设置 authInitialized
+    if (!loading) {
+      console.log('[DeckBuilder] 认证状态已加载，用户信息:', { user: !!user, isAuthenticated });
+      setAuthInitialized(true)
+    }
+  }, [loading, user, isAuthenticated])
+
   // 组件挂载时重新验证数据
   useEffect(() => {
     if (typeof window !== 'undefined') { // 确保在客户端执行
@@ -324,19 +356,25 @@ export default function DeckBuilderPage() {
 
   // 验证卡组并更新结果
   const validateDeckAndUpdateResult = async (validationData: ValidateDeckRequest) => {
-    // 检查是否已登录，如果 auth 状态还在加载中，稍后再试
-    if (loading) {
-      toast.error("认证信息正在加载，请稍后再试")
+    console.log('[DeckBuilder] 开始验证卡组，当前状态:', { authInitialized, isAuthenticated, user: !!user });
+    
+    // 检查认证状态是否已完成初始化
+    if (!authInitialized) {
+      console.log('[DeckBuilder] 认证尚未初始化，无法验证卡组');
+      toast.error("认证信息正在初始化，请稍后再试")
       return
     }
     
     if (!isAuthenticated) {
+      console.log('[DeckBuilder] 用户未认证，无法验证卡组');
       toast.error("请先登录以验证卡组")
       return
     }
     
     try {
+      console.log('[DeckBuilder] 发起卡组验证请求');
       const result = await validateDeck(validationData)
+      console.log('[DeckBuilder] 卡组验证结果:', result);
       setValidationResult(result)
       
       if (result.valid) {
@@ -356,13 +394,17 @@ export default function DeckBuilderPage() {
 
   // 验证卡组
   const validateAndSetResult = async () => {
-    // 检查是否已登录，如果 auth 状态还在加载中，稍后再试
-    if (loading) {
-      toast.error("认证信息正在加载，请稍后再试")
+    console.log('[DeckBuilder] 手动验证卡组，当前状态:', { authInitialized, isAuthenticated, user: !!user });
+    
+    // 检查认证状态是否已完成初始化
+    if (!authInitialized) {
+      console.log('[DeckBuilder] 认证尚未初始化，无法验证卡组');
+      toast.error("认证信息正在初始化，请稍后再试")
       return
     }
     
     if (!isAuthenticated) {
+      console.log('[DeckBuilder] 用户未认证，无法验证卡组');
       toast.error("请先登录以验证卡组")
       return
     }
@@ -398,13 +440,17 @@ export default function DeckBuilderPage() {
 
   // 保存卡组
   const saveDeck = async () => {
-    // 检查是否已登录，如果 auth 状态还在加载中，稍后再试
-    if (loading) {
-      toast.error("认证信息正在加载，请稍后再试")
+    console.log('[DeckBuilder] 保存卡组，当前状态:', { authInitialized, isAuthenticated, user: !!user });
+    
+    // 检查认证状态是否已完成初始化
+    if (!authInitialized) {
+      console.log('[DeckBuilder] 认证尚未初始化，无法保存卡组');
+      toast.error("认证信息正在初始化，请稍后再试")
       return
     }
 
     if (!isAuthenticated) {
+      console.log('[DeckBuilder] 用户未认证，无法保存卡组');
       toast.error("请先登录以保存卡组")
       return
     }
@@ -434,6 +480,7 @@ export default function DeckBuilderPage() {
         cards: selectedActions.flatMap(({ id, count }) => Array(count).fill(id))
       }
 
+      console.log('[DeckBuilder] 保存前再次验证卡组');
       const validationResult = await validateDeck(validationData)
       if (!validationResult.valid) {
         toast.error("卡组验证失败，无法保存")
@@ -448,6 +495,7 @@ export default function DeckBuilderPage() {
         cards: [...selectedCharacters, ...cardList]
       }
 
+      console.log('[DeckBuilder] 发起卡组保存请求');
       await createDeck(deckData)
       toast.success("卡组保存成功！")
     } catch (error: any) {
@@ -674,6 +722,17 @@ export default function DeckBuilderPage() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       {charactersData.map((char: CardType) => {
                           const isSelected = selectedCharacters.includes(char.id)
+                          // 解析技能数据（如果技能是JSON字符串）
+                          let processedChar = char;
+                          if (typeof char.skills === 'string') {
+                            try {
+                              processedChar = { ...char, skills: JSON.parse(char.skills) };
+                            } catch (error) {
+                              console.error('Failed to parse skills JSON:', error);
+                              processedChar = { ...char, skills: [] }; // 如果解析失败，设置为空数组
+                            }
+                          }
+
                           return (
                             <TooltipProvider key={char.id}>
                               <Tooltip>
@@ -748,16 +807,15 @@ export default function DeckBuilderPage() {
                                     </div>
                                     <div className="text-sm">
                                       <p><span className="font-semibold">生命值:</span> {char.health || "N/A"}</p>
-                                      <p><span className="font-semibold">能量:</span> {char.energy || "N/A"}/{char.max_energy || "N/A"}</p>
                                       {char.description && (
                                         <p><span className="font-semibold">描述:</span> {char.description}</p>
                                       )}
                                     </div>
-                                    {char.skills && Array.isArray(char.skills) && char.skills.length > 0 && (
+                                    {processedChar.skills && Array.isArray(processedChar.skills) && processedChar.skills.length > 0 && (
                                       <div className="pt-2 border-t">
                                         <h5 className="font-semibold mb-1">技能:</h5>
                                         <ul className="space-y-1">
-                                          {char.skills.map((skill, idx) => (
+                                          {processedChar.skills.map((skill, idx) => (
                                             <li key={idx} className="text-sm">
                                               <span className="font-medium">{skill.name}</span>
                                               <div className="text-xs mt-1 ml-2">
@@ -918,6 +976,18 @@ export default function DeckBuilderPage() {
                       {filteredActions.map((action: CardType) => {
                         const selected = selectedActions.find((a) => a.id === action.id)
                         const count = selected?.count || 0
+                        
+                        // 解析技能数据（如果技能是JSON字符串）
+                        let processedAction = action;
+                        if (typeof action.skills === 'string') {
+                          try {
+                            processedAction = { ...action, skills: JSON.parse(action.skills) };
+                          } catch (error) {
+                            console.error('Failed to parse skills JSON:', error);
+                            processedAction = { ...action, skills: [] }; // 如果解析失败，设置为空数组
+                          }
+                        }
+                        
                         return (
                           <TooltipProvider key={action.id}>
                             <Tooltip>
@@ -1026,11 +1096,11 @@ export default function DeckBuilderPage() {
                                       )}
                                     </div>
                                   </div>
-                                  {action.skills && Array.isArray(action.skills) && action.skills.length > 0 && (
+                                  {processedAction.skills && Array.isArray(processedAction.skills) && processedAction.skills.length > 0 && (
                                     <div className="pt-2 border-t">
                                       <h5 className="font-semibold mb-1">技能:</h5>
                                       <ul className="space-y-1">
-                                        {action.skills.map((skill, idx) => (
+                                        {processedAction.skills.map((skill, idx) => (
                                           <li key={idx} className="text-sm">
                                             <span className="font-medium">{skill.name}</span>
                                             <div className="text-xs mt-1 ml-2">

@@ -59,6 +59,17 @@ export function CardGrid({ cards, cardType }: CardGridProps) {
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       {cards.map((card: CardType) => {
         const ElementIcon = getElementTypeIcon(card.element || card.element_type || '');
+        // 解析技能数据（如果技能是JSON字符串）
+        let processedCard = card;
+        if (typeof card.skills === 'string') {
+          try {
+            processedCard = { ...card, skills: JSON.parse(card.skills) };
+          } catch (error) {
+            console.error('Failed to parse skills JSON:', error);
+            processedCard = { ...card, skills: [] }; // 如果解析失败，设置为空数组
+          }
+        }
+
         return (
           <TooltipProvider key={card.id}>
             <Tooltip>
@@ -198,10 +209,7 @@ export function CardGrid({ cards, cardType }: CardGridProps) {
                   </div>
                   <div className="text-sm">
                     {cardType === 'characters' && (
-                      <>
-                        <p><span className="font-semibold">生命值:</span> {card.health || "N/A"}</p>
-                        <p><span className="font-semibold">能量:</span> {card.energy || "N/A"}/{card.max_energy || "N/A"}</p>
-                      </>
+                      <p><span className="font-semibold">生命值:</span> {card.health || "N/A"}</p>
                     )}
                     {card.description && <p><span className="font-semibold">描述:</span> {card.description}</p>}
                     <div className="pt-1">
@@ -223,11 +231,11 @@ export function CardGrid({ cards, cardType }: CardGridProps) {
                       )}
                     </div>
                   </div>
-                  {card.skills && Array.isArray(card.skills) && card.skills.length > 0 && (
+                  {processedCard.skills && Array.isArray(processedCard.skills) && processedCard.skills.length > 0 && (
                     <div className="pt-2 border-t">
                       <h5 className="font-semibold mb-1">技能:</h5>
                       <ul className="space-y-1">
-                        {card.skills.map((skill, idx) => (
+                        {processedCard.skills.map((skill, idx) => (
                           <li key={idx} className="text-sm">
                             <span className="font-medium">{skill.name}</span>
                             <div className="text-xs mt-1 ml-2">

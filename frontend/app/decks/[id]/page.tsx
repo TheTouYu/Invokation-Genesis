@@ -6,8 +6,6 @@ import { ArrowLeft, Edit, Copy, Trash2, Play, Zap, Sparkles } from "lucide-react
 import Link from "next/link"
 import React from "react"
 
-import React from "react"
-
 export default function DeckDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = React.use(params);
   const deck = {

@@ -22,7 +22,10 @@ export async function login(data: LoginRequest): Promise<LoginResponse> {
 
 // 获取用户资料
 export async function getProfile(): Promise<UserProfile> {
-  return get<UserProfile>("/api/auth/profile")
+  console.log('[API/Auth] 调用 getProfile 接口');
+  const result = await get<UserProfile>("/api/auth/profile");
+  console.log('[API/Auth] getProfile 接口返回:', result);
+  return result;
 }
 
 // 登出
