@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>七圣召唤API测试页面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fafafa;
+        }
+        .form-group {
+            margin: 10px 0;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .response {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>七圣召唤API测试页面</h1>
+        
+        <div class="section">
+            <h2>认证</h2>
+            <div class="form-group">
+                <label for="username">用户名:</label>
+                <input type="text" id="username" value="testuser">
+            </div>
+            <div class="form-group">
+                <label for="password">密码:</label>
+                <input type="password" id="password" value="testpassword">
+            </div>
+            <button onclick="login()">登录</button>
+            <div id="authResponse" class="response"></div>
+        </div>
+
+        <div class="section">
+            <h2>获取卡牌</h2>
+            <div class="form-group">
+                <label for="cardPage">页码:</label>
+                <input type="number" id="cardPage" value="1">
+            </div>
+            <div class="form-group">
+                <label for="cardPerPage">每页数量:</label>
+                <input type="number" id="cardPerPage" value="10">
+            </div>
+            <button onclick="getCards()">获取卡牌</button>
+            <div id="cardsResponse" class="response"></div>
+        </div>
+
+        <div class="section">
+            <h2>获取特定卡牌</h2>
+            <div class="form-group">
+                <label for="cardId">卡牌ID:</label>
+                <input type="text" id="cardId" placeholder="输入卡牌ID">
+            </div>
+            <button onclick="getCardById()">获取卡牌</button>
+            <div id="cardByIdResponse" class="response"></div>
+        </div>
+
+        <div class="section">
+            <h2>获取卡牌类型</h2>
+            <button onclick="getCardTypes()">获取卡牌类型</button>
+            <div id="cardTypesResponse" class="response"></div>
+        </div>
+
+        <div class="section">
+            <h2>获取元素类型</h2>
+            <button onclick="getElements()">获取元素类型</button>
+            <div id="elementsResponse" class="response"></div>
+        </div>
+
+        <div class="section">
+            <h2>获取国家列表</h2>
+            <button onclick="getCountries()">获取国家列表</button>
+            <div id="countriesResponse" class="response"></div>
+        </div>
+
+        <div class="section">
+            <h2>获取武器类型</h2>
+            <button onclick="getWeaponTypes()">获取武器类型</button>
+            <div id="weaponTypesResponse" class="response"></div>
+        </div>
+
+        <div class="section">
+            <h2>获取随机卡牌</h2>
+            <button onclick="getRandomCard()">获取随机卡牌</button>
+            <div id="randomCardResponse" class="response"></div>
+        </div>
+        
+        <div class="section">
+            <h2>获取用户信息</h2>
+            <button onclick="getUserInfo()">获取用户信息</button>
+            <div id="userInfoResponse" class="response"></div>
+        </div>
+    </div>
+
+    <script>
+        let authToken = '';
+
+        async function apiRequest(url, method = 'GET', data = null) {
+            const options = {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            };
+            
+            if (authToken) {
+                options.headers['Authorization'] = `Bearer ${authToken}`;
+            }
+            
+            if (data) {
+                options.body = JSON.stringify(data);
+            }
+            
+            try {
+                const response = await fetch(url, options);
+                const result = await response.json();
+                return result;
+            } catch (error) {
+                console.error('API请求错误:', error);
+                return { error: error.message };
+            }
+        }
+
+        async function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            const response = await apiRequest('/api/auth/login', 'POST', {
+                username: username,
+                password: password
+            });
+            
+            document.getElementById('authResponse').innerText = JSON.stringify(response, null, 2);
+            
+            if (response.access_token) {
+                authToken = response.access_token;
+            }
+        }
+
+        async function getCards() {
+            const page = document.getElementById('cardPage').value;
+            const perPage = document.getElementById('cardPerPage').value;
+            
+            const response = await apiRequest(`/api/cards?page=${page}&per_page=${perPage}`);
+            document.getElementById('cardsResponse').innerText = JSON.stringify(response, null, 2);
+        }
+
+        async function getCardById() {
+            const cardId = document.getElementById('cardId').value;
+            
+            if (!cardId) {
+                document.getElementById('cardByIdResponse').innerText = '请输入卡牌ID';
+                return;
+            }
+            
+            const response = await apiRequest(`/api/cards/${cardId}`);
+            document.getElementById('cardByIdResponse').innerText = JSON.stringify(response, null, 2);
+        }
+
+        async function getCardTypes() {
+            const response = await apiRequest('/api/cards/types');
+            document.getElementById('cardTypesResponse').innerText = JSON.stringify(response, null, 2);
+        }
+
+        async function getElements() {
+            const response = await apiRequest('/api/cards/elements');
+            document.getElementById('elementsResponse').innerText = JSON.stringify(response, null, 2);
+        }
+
+        async function getCountries() {
+            const response = await apiRequest('/api/cards/countries');
+            document.getElementById('countriesResponse').innerText = JSON.stringify(response, null, 2);
+        }
+
+        async function getWeaponTypes() {
+            const response = await apiRequest('/api/cards/weapon_types');
+            document.getElementById('weaponTypesResponse').innerText = JSON.stringify(response, null, 2);
+        }
+
+        async function getRandomCard() {
+            const response = await apiRequest('/api/cards/random');
+            document.getElementById('randomCardResponse').innerText = JSON.stringify(response, null, 2);
+        }
+        
+        async function getUserInfo() {
+            if (!authToken) {
+                document.getElementById('userInfoResponse').innerText = '请先登录';
+                return;
+            }
+            
+            const response = await apiRequest('/api/auth/profile');
+            document.getElementById('userInfoResponse').innerText = JSON.stringify(response, null, 2);
+        }
+    </script>
+</body>
+</html>

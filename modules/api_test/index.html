@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>七圣召唤卡牌API测试页面 - 模块化版</title>
+    <link rel="stylesheet" href="/api_test_static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>七圣召唤卡牌API测试页面</h1>
+        
+        <div class="info-box">
+            <strong>提示：</strong>先登录获取JWT令牌，然后可以测试各种卡牌过滤参数
+        </div>
+        
+        <div class="section token-section">
+            <h3>1. 用户登录</h3>
+            <div>
+                <input type="text" id="username" placeholder="用户名" value="test0">
+                <input type="password" id="password" placeholder="密码" value="test">
+                <button onclick="login()">登录获取令牌</button>
+            </div>
+            <div id="loginResult" class="result"></div>
+        </div>
+
+        <div class="section" id="filtersSection" style="display:none;">
+            <h3>2. 卡牌过滤参数</h3>
+            
+            <div>
+                <label>卡牌类型: 
+                    <select id="cardType">
+                        <option value="">所有类型</option>
+                    </select>
+                </label>
+                
+                <label>元素: 
+                    <select id="element">
+                        <option value="">所有元素</option>
+                    </select>
+                </label>
+                
+                <label>国家: 
+                    <select id="country">
+                        <option value="">所有国家</option>
+                    </select>
+                </label>
+            </div>
+            
+            <div>
+                <label>武器类型: 
+                    <select id="weaponType">
+                        <option value="">所有武器</option>
+                    </select>
+                </label>
+                
+                <label>角色子类型: 
+                    <input type="text" id="characterSubtype" placeholder="角色子类型">
+                </label>
+                
+                <label>稀有度: 
+                    <input type="number" id="rarity" placeholder="稀有度">
+                </label>
+            </div>
+            
+            <div>
+                <label>标签: 
+                    <select id="tag">
+                        <option value="">所有标签</option>
+                    </select>
+                </label>
+                
+                <label>搜索: 
+                    <input type="text" id="search" placeholder="搜索关键词">
+                </label>
+            </div>
+            
+            <div>
+                <label>每页数量: 
+                    <input type="number" id="per_page" value="10" min="1" max="50">
+                </label>
+                
+                <label>页码: 
+                    <input type="number" id="page" value="1" min="1">
+                </label>
+            </div>
+            
+            <button onclick="loadFilters()">加载过滤选项</button>
+            <button onclick="searchCards()">搜索卡牌</button>
+        </div>
+
+        <div class="section">
+            <h3>3. 测试结果</h3>
+            <div id="result" class="result">测试结果将显示在这里...</div>
+        </div>
+    </div>
+
+    <script src="/api_test_static/api_operations.js"></script>
+</body>
+</html>

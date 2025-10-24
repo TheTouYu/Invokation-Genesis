@@ -1,0 +1,103 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #f5f5f5;
+}
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+h1 {
+    color: #333;
+    text-align: center;
+}
+.section {
+    margin: 20px 0;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fafafa;
+}
+.form-group {
+    margin: 10px 0;
+}
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+input, select, textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 5px;
+}
+button:hover {
+    background-color: #45a049;
+}
+.secondary-btn {
+    background-color: #2196F3;
+}
+.secondary-btn:hover {
+    background-color: #0b7dda;
+}
+.error {
+    color: red;
+    margin: 10px 0;
+}
+.success {
+    color: green;
+    margin: 10px 0;
+}
+.response {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+.game-state-display {
+    background-color: #eef7ff;
+    padding: 10px;
+    border-radius: 4px;
+    margin-top: 10px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+.hidden {
+    display: none;
+}
+.info-box {
+    background-color: #e3f2fd;
+    padding: 10px;
+    border-left: 4px solid #2196F3;
+    margin: 10px 0;
+}
+.payload-helper {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+.payload-example {
+    margin: 5px 0;
+    cursor: pointer;
+    color: #1976D2;
+    text-decoration: underline;
+}

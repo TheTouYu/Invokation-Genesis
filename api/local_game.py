@@ -1,381 +1,358 @@
 """
-本地游戏API路由
+游戏会话API
 """
 from flask import Blueprint, request, jsonify
-from flask_jwt_extended import jwt_required, get_jwt_identity
 from game_engine.core import GameEngine
-from models.db_models import model_container
-# 延迟导入，确保模型已初始化
-def get_models():
-    return model_container.User, model_container.CardData, model_container.Deck
-
-# 从SQLAlchemy获取db实例而非直接导入
-from database_manager import db_manager
-def get_db():
-    return db_manager.get_db()
-from models.game_models import Card, CharacterCard
-from models.enums import PlayerAction, ElementType, CardType
-import json
+from game_engine.deck_validation import DeckValidationSystem
+from dal import db_dal
+from utils.decorators import token_required
+from models.game_models import Card
+import uuid
 import logging
-from typing import Dict, Any
 
 local_game_bp = Blueprint('local_game', __name__)
 
-# 创建游戏引擎实例
+# 创建全局游戏引擎实例
 game_engine = GameEngine()
 
-# 用于存储本地游戏会话的字典
-local_game_sessions: Dict[str, Any] = {}
+# 创建卡组验证系统实例
+deck_validation = DeckValidationSystem()
 
-@local_game_bp.route('/local-game/start', methods=['POST'])
-@jwt_required()
-def start_local_game():
+logger = logging.getLogger(__name__)
+
+
+@local_game_bp.route('/api/game_sessions', methods=['POST'])
+@token_required
+def create_game_session(current_user):
     """
-    开始本地游戏
+    创建游戏会话
     """
     try:
-        current_user_id = get_jwt_identity()
         data = request.get_json()
         
-        opponent_type = data.get('opponent_type', 'ai')  # 'ai' 或 'human'
-        deck_id = data.get('deck_id')
+        # 获取玩家和卡组信息
+        player1_id = current_user.id  # 当前用户作为玩家1
+        player2_id = data.get('player2_id')  # 对手ID，如果是AI对战则为AI标识
+        deck1_id = data.get('deck1_id')
+        deck2_id = data.get('deck2_id')  # 在AI对战中这可能为空
         
-        if not deck_id:
-            return jsonify({'error': '必须选择一个卡组'}), 400
+        if not deck1_id:
+            return jsonify({'error': '必须提供玩家1的卡组ID'}), 400
         
-        # 获取用户和对手的卡组
-        User, CardData, Deck = get_models()
-        user_deck = Deck.query.filter_by(id=deck_id, user_id=current_user_id).first()
-        if not user_deck:
-            return jsonify({'error': '卡组不存在或无权限访问'}), 404
+        # 获取玩家1的卡组
+        deck1 = db_dal.decks.get_deck_by_id(deck1_id)
+        if not deck1 or deck1.user_id != player1_id:
+            return jsonify({'error': '无效的卡组ID或无权访问该卡组'}), 400
         
-        # 获取对手卡组（如果是AI对手，使用系统提供的卡组）
-        if opponent_type == 'ai':
-            # 这里可以实现AI对手的逻辑，现在我们使用一个默认的卡组
-            # 为了测试，我们创建一个简单的AI卡组
-            ai_deck_data = [
-                {
-                    'id': 'ai_char_1',
-                    'name': 'AI角色1',
-                    'card_type': '角色牌',
-                    'cost': [ElementType.OMNI.value, ElementType.OMNI.value],
-                    'health': 10,
-                    'max_health': 10,
-                    'element_type': ElementType.PYRO.value,
-                    'skills': [
-                        {
-                            'id': 'ai_skill_1',
-                            'name': 'AI技能1',
-                            'cost': [ElementType.SAME.value, ElementType.SAME.value],
-                            'damage': 1
-                        }
-                    ]
-                }
-            ]
-            # 这只是一个简单示例，实际应从数据库获取AI卡组
-            ai_deck_cards = []
+        # 验证玩家1的卡组
+        # 从数据库中获取卡牌详细信息
+        card_ids1 = deck1.cards  # 这里需要根据实际数据结构调整
+        deck1_cards = []
+        for card_id in card_ids1:
+            card_data = db_dal.cards.get_card_by_id(card_id)
+            if card_data:
+                # 转换为Card对象
+                card = Card(
+                    id=card_data.id,
+                    name=card_data.name,
+                    card_type=card_data.card_type,
+                    cost=card_data.cost,  # 需要转换为ElementType
+                    description=card_data.description
+                )
+                deck1_cards.append(card)
+        
+        # 模拟获取玩家2的卡组（如果是AI对战则随机生成或使用预设卡组）
+        deck2_cards = []
+        if deck2_id:
+            deck2 = db_dal.decks.get_deck_by_id(deck2_id)
+            if not deck2:
+                return jsonify({'error': '无效的玩家2卡组ID'}), 400
+            
+            card_ids2 = deck2.cards  # 这里需要根据实际数据结构调整
+            for card_id in card_ids2:
+                card_data = db_dal.cards.get_card_by_id(card_id)
+                if card_data:
+                    card = Card(
+                        id=card_data.id,
+                        name=card_data.name,
+                        card_type=card_data.card_type,
+                        cost=card_data.cost,  # 需要转换为ElementType
+                        description=card_data.description
+                    )
+                    deck2_cards.append(card)
         else:
-            # 如果是人对人，需要获取对手的卡组
-            return jsonify({'error': '多人游戏尚未实现，请选择AI对手'}), 400
+            # 如果没有提供deck2_id，可能是AI对战，使用预设卡组
+            # 这里应该有AI卡组的逻辑，暂时用模拟数据
+            pass
         
-        # 解析用户卡组
-        User, CardData, Deck = get_models()
-        user_card_list = json.loads(user_deck.cards) if user_deck.cards else []
-        user_cards_data = CardData.query.filter(CardData.id.in_(user_card_list)).all()
-        
-        # 将数据库数据转换为游戏引擎需要的格式
-        user_cards = convert_db_cards_to_game_cards(user_cards_data)
-        
-        # 启动本地游戏
-        game_session_id = game_engine.create_game_state(
-            current_user_id,  # 玩家1 ID
-            "ai_opponent",    # 玩家2 ID (AI)
-            user_cards,       # 玩家卡组
-            []               # AI卡组 (暂时为空，需要实现AI卡组)
+        # 创建游戏状态
+        game_id = game_engine.create_game_state(
+            player1_id=player1_id,
+            player2_id=player2_id or f"AI_{uuid.uuid4()}",  # 如果没有对手ID，则创建AI标识
+            deck1=deck1_cards,
+            deck2=deck2_cards
         )
         
-        # 保存游戏会话信息
-        local_game_sessions[game_session_id] = {
-            'player_id': current_user_id,
-            'opponent_type': opponent_type,
-            'game_started_at': get_db().func.now()
-        }
+        if not game_id:
+            return jsonify({'error': '创建游戏会话失败，卡组验证未通过'}), 400
         
-        # 获取初始游戏状态
-        game_state = game_engine.get_game_state(game_session_id)
-        
-        response_data = {
-            'game_session_id': game_session_id,
-            'message': '本地游戏已开始',
-            'game_state': serialize_game_state(game_state)
-        }
-        
-        return jsonify(response_data), 200
-    except Exception as e:
-        logging.error(f"Start local game error: {str(e)}")
-        return jsonify({'error': str(e)}), 500
-
-
-@local_game_bp.route('/local-game/<session_id>/action', methods=['POST'])
-@jwt_required()
-def process_game_action(session_id):
-    """
-    处理游戏中的行动
-    """
-    try:
-        current_user_id = get_jwt_identity()
-        data = request.get_json()
-        
-        # 验证会话是否存在
-        if session_id not in local_game_sessions:
-            return jsonify({'error': '游戏会话不存在'}), 404
-        
-        session_info = local_game_sessions[session_id]
-        if session_info['player_id'] != current_user_id:
-            return jsonify({'error': '无权访问此游戏会话'}), 403
-        
-        # 验证行动数据
-        action_type = data.get('action_type')
-        if not action_type:
-            return jsonify({'error': '必须指定行动类型'}), 400
-        
-        # 处理行动
-        payload = data.get('payload', {})
-        action_enum = PlayerAction[action_type.upper()]
-        
-        game_state = game_engine.process_action(
-            session_id,
-            current_user_id,
-            action_enum,
-            payload
+        # 记录游戏历史
+        game_history = db_dal.game_history.create_game_history(
+            player1_id=player1_id,
+            player2_id=player2_id or "AI",
+            game_data={'game_id': game_id},
+            game_result='ongoing'
         )
         
-        if game_state is None:
-            return jsonify({'error': '处理行动失败'}), 400
-        
-        response_data = {
-            'game_session_id': session_id,
-            'message': '行动处理成功',
-            'game_state': serialize_game_state(game_state)
-        }
-        
-        return jsonify(response_data), 200
-    except KeyError as e:
-        logging.error(f"Invalid action type: {str(e)}")
-        return jsonify({'error': f'无效的行动类型: {str(e)}'}), 400
+        return jsonify({
+            'message': '游戏会话创建成功',
+            'game_id': game_id,
+            'game_history_id': game_history.id
+        }), 201
     except Exception as e:
-        logging.error(f"Process game action error: {str(e)}")
-        return jsonify({'error': str(e)}), 500
+        logger.error(f"创建游戏会话时发生错误: {e}")
+        return jsonify({'error': '服务器内部错误'}), 500
 
 
-@local_game_bp.route('/local-game/<session_id>/state', methods=['GET'])
-@jwt_required()
-def get_game_state(session_id):
+@local_game_bp.route('/api/game_sessions/<game_session_id>', methods=['GET'])
+@token_required
+def get_game_state(current_user, game_session_id):
     """
     获取游戏状态
     """
     try:
-        current_user_id = get_jwt_identity()
-        
-        # 验证会话是否存在
-        if session_id not in local_game_sessions:
+        game_state = game_engine.get_game_state(game_session_id)
+        if not game_state:
             return jsonify({'error': '游戏会话不存在'}), 404
         
-        session_info = local_game_sessions[session_id]
-        if session_info['player_id'] != current_user_id:
-            return jsonify({'error': '无权访问此游戏会话'}), 403
+        # 检查当前用户是否有权查看此游戏状态
+        if not any(player.player_id == current_user.id for player in game_state.players):
+            return jsonify({'error': '无权查看此游戏状态'}), 403
         
-        game_state = game_engine.get_game_state(session_id)
-        if game_state is None:
-            return jsonify({'error': '游戏状态不存在'}), 404
-        
-        response_data = {
-            'game_session_id': session_id,
-            'game_state': serialize_game_state(game_state)
-        }
-        
-        return jsonify(response_data), 200
+        # 返回游戏状态（根据用户角色过滤信息）
+        # 在观战模式中可能需要过滤某些信息
+        return jsonify({
+            'game_id': game_session_id,
+            'game_state': game_state.__dict__  # 序列化游戏状态
+        })
     except Exception as e:
-        logging.error(f"Get game state error: {str(e)}")
-        return jsonify({'error': str(e)}), 500
+        logger.error(f"获取游戏状态时发生错误: {e}")
+        return jsonify({'error': '服务器内部错误'}), 500
 
 
-@local_game_bp.route('/local-game/<session_id>/end', methods=['POST'])
-@jwt_required()
-def end_local_game(session_id):
+@local_game_bp.route('/api/game_sessions/<game_session_id>/actions', methods=['POST'])
+@token_required
+def submit_action(current_user, game_session_id):
     """
-    结束本地游戏
+    提交玩家操作
     """
     try:
-        current_user_id = get_jwt_identity()
+        data = request.get_json()
+        action = data.get('action')
+        payload = data.get('payload', {})
         
-        # 验证会话是否存在
-        if session_id not in local_game_sessions:
+        if not action:
+            return jsonify({'error': '必须提供操作类型'}), 400
+        
+        # 处理玩家操作
+        updated_game_state = game_engine.process_action(
+            game_id=game_session_id,
+            player_id=current_user.id,
+            action=action,
+            payload=payload
+        )
+        
+        if not updated_game_state:
+            return jsonify({'error': '处理操作失败'}), 400
+        
+        # 记录操作日志
+        try:
+            db_dal.game_action_log.create_action_log(
+                game_id=game_session_id,
+                player_id=current_user.id,
+                action_type=action,
+                action_payload=payload,
+                turn_number=updated_game_state.round_number,
+                action_number=updated_game_state.round_actions,
+                game_phase=updated_game_state.phase.value if hasattr(updated_game_state.phase, 'value') else updated_game_state.phase
+            )
+        except Exception as e:
+            logger.error(f"记录操作日志时发生错误: {e}")
+        
+        return jsonify({
+            'message': '操作提交成功',
+            'game_state': updated_game_state.__dict__
+        })
+    except Exception as e:
+        logger.error(f"提交操作时发生错误: {e}")
+        return jsonify({'error': '服务器内部错误'}), 500
+
+
+@local_game_bp.route('/api/game_sessions/<game_session_id>/end', methods=['POST'])
+@token_required
+def end_game(current_user, game_session_id):
+    """
+    结束游戏
+    """
+    try:
+        # 获取游戏状态以确定获胜者
+        game_state = game_engine.get_game_state(game_session_id)
+        if not game_state:
             return jsonify({'error': '游戏会话不存在'}), 404
         
-        session_info = local_game_sessions[session_id]
-        if session_info['player_id'] != current_user_id:
-            return jsonify({'error': '无权访问此游戏会话'}), 403
+        # 确定获胜者，通常由游戏引擎内部逻辑确定
+        winner_id = game_state.winner
         
         # 结束游戏
-        game_state = game_engine.get_game_state(session_id)
-        if game_state:
-            winner_id = determine_winner(game_state)  # 简单的胜负判断逻辑
-            game_engine.end_game(session_id, winner_id)
+        game_engine.end_game(game_session_id, winner_id)
         
-        # 清理会话
-        del local_game_sessions[session_id]
+        # 更新游戏历史记录
+        game_histories = db_dal.game_history.get_games_by_user(current_user.id)
+        for history in game_histories:
+            if history.game_data.get('game_id') == game_session_id:
+                db_dal.game_history.update_game_history(
+                    history.id,
+                    winner_id=winner_id,
+                    game_result='completed',
+                    duration=game_state.round_number * 60  # 简化的时长计算
+                )
+                break
         
-        return jsonify({'message': '本地游戏已结束'}), 200
+        # 创建回放数据
+        try:
+            replay_data = {
+                'game_id': game_session_id,
+                'final_state': game_state.__dict__,
+                'actions': db_dal.game_action_log.get_action_logs_by_game(game_session_id)
+            }
+            
+            db_dal.replay_data.create_replay_data(
+                game_id=game_session_id,
+                replay_data=replay_data,
+                duration=game_state.round_number * 60  # 简化的时长计算
+            )
+        except Exception as e:
+            logger.error(f"创建回放数据时发生错误: {e}")
+        
+        return jsonify({
+            'message': '游戏结束',
+            'winner_id': winner_id
+        })
     except Exception as e:
-        logging.error(f"End local game error: {str(e)}")
-        return jsonify({'error': str(e)}), 500
+        logger.error(f"结束游戏时发生错误: {e}")
+        return jsonify({'error': '服务器内部错误'}), 500
 
 
-def convert_db_cards_to_game_cards(db_cards):
+@local_game_bp.route('/api/replays', methods=['GET'])
+@token_required
+def get_replay_list(current_user):
     """
-    将数据库卡牌数据转换为游戏引擎需要的卡牌对象
+    获取回放列表
     """
-    from models.enums import ElementType as EType, CardType as CType
-    game_cards = []
-    
-    for db_card in db_cards:
-        card_data = json.loads(db_card.cost) if db_card.cost else []
-        cost = []
+    try:
+        # 获取用户参与的游戏历史
+        game_histories = db_dal.game_history.get_games_by_user(current_user.id)
         
-        # 将字符串转换为ElementType枚举
-        for cost_item in card_data:
-            if cost_item == "万能":
-                cost.append(EType.OMNI)
-            elif cost_item == "火":
-                cost.append(EType.PYRO)
-            elif cost_item == "水":
-                cost.append(EType.HYDRO)
-            elif cost_item == "雷":
-                cost.append(EType.ELECTRO)
-            elif cost_item == "风":
-                cost.append(EType.ANEMO)
-            elif cost_item == "岩":
-                cost.append(EType.GEO)
-            elif cost_item == "草":
-                cost.append(EType.DENDRO)
-            elif cost_item == "冰":
-                cost.append(EType.CRYO)
-            elif cost_item == "物理":
-                cost.append(EType.PHYSICAL)
-            elif cost_item == "同色":
-                cost.append(EType.SAME)
-            elif cost_item == "晶体":
-                cost.append(EType.CRYSTAL)
-            else:
-                cost.append(EType.NONE)
+        replays = []
+        for history in game_histories:
+            replay = db_dal.replay_data.get_replay_by_game_id(history.id)
+            if replay:
+                replays.append({
+                    'replay_id': replay.id,
+                    'game_id': replay.game_id,
+                    'created_at': replay.creation_time,
+                    'duration': replay.duration
+                })
         
-        # 根据卡牌类型创建相应对象
-        if db_card.card_type == "角色牌":
-            skills = json.loads(db_card.skills) if db_card.skills else []
-            game_card = CharacterCard(
-                id=db_card.id,
-                name=db_card.name,
-                card_type=CType.CHARACTER,
-                cost=cost,
-                health=db_card.health or 10,
-                max_health=db_card.health_max or 10,
-                energy=db_card.energy or 0,
-                max_energy=db_card.energy_max or 3,
-                skills=skills,
-                element_type=getattr(EType, db_card.element_type, EType.NONE) if db_card.element_type else EType.NONE,
-                weapon_type=db_card.weapon_type or "",
-                description=db_card.description
-            )
-        else:
-            game_card = Card(
-                id=db_card.id,
-                name=db_card.name,
-                card_type=getattr(CType, db_card.card_type.replace('牌', '').upper(), CType.EVENT),
-                cost=cost,
-                description=db_card.description,
-                character_subtype=db_card.character_subtype
-            )
+        return jsonify({
+            'replays': replays,
+            'count': len(replays)
+        })
+    except Exception as e:
+        logger.error(f"获取回放列表时发生错误: {e}")
+        return jsonify({'error': '服务器内部错误'}), 500
+
+
+@local_game_bp.route('/api/replays/<replay_id>', methods=['GET'])
+@token_required
+def get_replay(current_user, replay_id):
+    """
+    获取特定回放
+    """
+    try:
+        replay = db_dal.replay_data.get_replay_by_id(replay_id)
+        if not replay:
+            return jsonify({'error': '回放不存在'}), 404
         
-        game_cards.append(game_card)
-    
-    return game_cards
+        # 检查用户是否有权查看此回放
+        game_history = db_dal.game_history.get_game_history_by_id(replay.game_id)
+        if not game_history or (game_history.player1_id != current_user.id and game_history.player2_id != current_user.id):
+            return jsonify({'error': '无权查看此回放'}), 403
+        
+        return jsonify({
+            'replay_id': replay.id,
+            'game_id': replay.game_id,
+            'replay_data': replay.replay_data,
+            'created_at': replay.creation_time,
+            'duration': replay.duration
+        })
+    except Exception as e:
+        logger.error(f"获取回放时发生错误: {e}")
+        return jsonify({'error': '服务器内部错误'}), 500
 
 
-def serialize_game_state(game_state):
+@local_game_bp.route('/api/spectator/<game_session_id>/join', methods=['POST'])
+@token_required
+def join_spectate(current_user, game_session_id):
     """
-    序列化游戏状态为JSON可序列化格式
+    加入观战
     """
-    if game_state is None:
-        return None
-    
-    # 将游戏状态转换为字典格式
-    serialized = {
-        'players': [
-            {
-                'player_id': player.player_id,
-                'characters': [
-                    {
-                        'id': char.id,
-                        'name': char.name,
-                        'health': char.health,
-                        'max_health': char.health_max,
-                        'energy': char.energy,
-                        'max_energy': char.energy_max,
-                        'element_type': char.element_type.value if hasattr(char.element_type, 'value') else str(char.element_type),
-                        'weapon_type': char.weapon_type,
-                        'status': char.status.value if hasattr(char.status, 'value') else str(char.status),
-                        'skills': char.skills if hasattr(char, 'skills') else []
-                    } for char in player.characters
-                ],
-                'active_character_index': player.active_character_index,
-                'hand_cards': [
-                    {
-                        'id': card.id,
-                        'name': card.name,
-                        'card_type': card.card_type.value if hasattr(card.card_type, 'value') else str(card.card_type),
-                        'cost': [cost.value if hasattr(cost, 'value') else str(cost) for cost in card.cost],
-                        'description': card.description
-                    } for card in player.hand_cards
-                ],
-                'dice': [
-                    die.value if hasattr(die, 'value') else str(die) for die in player.dice
-                ],
-                'supports': player.supports,
-                'summons': player.summons
-            } for player in game_state.players
-        ],
-        'current_player_index': game_state.current_player_index,
-        'round_number': game_state.round_number,
-        'phase': game_state.phase.value if hasattr(game_state.phase, 'value') else str(game_state.phase),
-        'round_actions': game_state.round_actions,
-        'game_log': game_state.game_log,
-        'is_game_over': game_state.is_game_over,
-        'winner': game_state.winner
-    }
-    
-    return serialized
+    try:
+        # 获取游戏状态
+        game_state = game_engine.get_game_state(game_session_id)
+        if not game_state:
+            return jsonify({'error': '游戏会话不存在'}), 404
+        
+        # 观战者可以加入任何正在进行的游戏
+        # 这里可以添加额外的权限检查，如仅观战公开游戏等
+        
+        return jsonify({
+            'message': '成功加入观战',
+            'game_id': game_session_id,
+            'spectator_id': current_user.id
+        })
+    except Exception as e:
+        logger.error(f"加入观战时发生错误: {e}")
+        return jsonify({'error': '服务器内部错误'}), 500
 
 
-def determine_winner(game_state):
+@local_game_bp.route('/api/spectator/active_games', methods=['GET'])
+@token_required
+def get_active_games_for_spectator(current_user):
     """
-    简单的胜负判断逻辑
+    获取可观看的游戏
     """
-    if not game_state.players:
-        return None
-    
-    # 检查是否有玩家的所有角色都被击败
-    for i, player in enumerate(game_state.players):
-        alive_characters = [char for char in player.characters if char.health > 0]
-        if len(alive_characters) == 0:
-            # 如果当前玩家没有存活角色，则对方获胜
-            opponent_index = 1 - i
-            if opponent_index < len(game_state.players):
-                return game_state.players[opponent_index].player_id
-    
-    # 如果没有玩家的所有角色都被击败，返回当前玩家ID（作为默认值）
-    # 在实际游戏中，可能还有其他决定胜负的条件
-    if game_state.players:
-        return game_state.players[game_state.current_player_index].player_id
-    
-    return None
+    try:
+        # 获取所有正在进行的游戏（未结束的游戏）
+        recent_games = db_dal.game_history.get_recent_games(limit=20)
+        active_games = []
+        
+        for game in recent_games:
+            if game.game_result != 'completed' and game.game_result != 'ongoing':
+                game_state = game_engine.get_game_state(game.id)
+                if game_state and not game_state.is_game_over:
+                    active_games.append({
+                        'game_id': game.id,
+                        'player1_id': game.player1_id,
+                        'player2_id': game.player2_id,
+                        'start_time': game.created_at,
+                        'current_round': game_state.round_number if game_state else 1
+                    })
+        
+        return jsonify({
+            'active_games': active_games,
+            'count': len(active_games)
+        })
+    except Exception as e:
+        logger.error(f"获取可观看游戏时发生错误: {e}")
+        return jsonify({'error': '服务器内部错误'}), 500

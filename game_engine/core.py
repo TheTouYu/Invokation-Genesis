@@ -289,12 +289,14 @@ class GameEngine:
         # 处理结束阶段触发的卡牌效果（从先手牌手开始）
         # 先处理当前先手玩家的效果
         first_player = game_state.players[game_state.first_player_index]
-        # 这里可以处理先手玩家的结束阶段效果
+        # 应用先手玩家的结束阶段效果（如某些卡牌效果）
+        self._apply_end_phase_effects(first_player, game_state)
         
         # 再处理后手玩家的效果
         second_player_index = 1 - game_state.first_player_index
         second_player = game_state.players[second_player_index]
-        # 这里可以处理后手玩家的结束阶段效果
+        # 应用后手玩家的结束阶段效果
+        self._apply_end_phase_effects(second_player, game_state)
         
         # 应用状态效果（如燃烧、绽放等持续效果）
         self._apply_status_effects(game_state)
@@ -307,6 +309,7 @@ class GameEngine:
                     card = player.deck.pop(0)  # 从牌堆顶部抽牌
                     if len(player.hand_cards) < player.max_hand_size:  # 检查手牌上限
                         player.hand_cards.append(card)
+                        game_state.game_log.append(f"玩家 {player.player_id} 抓到 {card.name}")
                     else:
                         # 如果手牌已满，丢弃这张牌
                         game_state.game_log.append(f"玩家 {player.player_id} 手牌已满，丢弃了 {card.name}")
@@ -334,19 +337,45 @@ class GameEngine:
             return game_state
         
         # 切换先手玩家（在实际规则中，上回合最后行动的玩家成为下回合的先手）
+        # 记录当前回合最后行动的玩家作为下回合先手
+        # 当前game_state.current_player_index在行动阶段结束时是行动过的玩家
+        game_state.first_player_index = game_state.current_player_index
         game_state.current_player_index = game_state.first_player_index
-        game_state.first_player_index = 1 - game_state.first_player_index  # 切换先手玩家
         
         # 重置玩家的回合状态
         for player in game_state.players:
             player.round_passed = False
             player.has_used_elemental_tuning = False  # 重置元素调和使用状态
+            player.has_reroll_option_used = False  # 重置重投选项使用状态
         
         # 进入下一回合的投骰阶段
         game_state.phase = GamePhase.ROLL_PHASE
         game_state.game_log.append(f"回合 {game_state.round_number} 开始")
         
         return game_state
+
+    def _apply_end_phase_effects(self, player: PlayerState, game_state: GameState):
+        """
+        应用玩家在结束阶段的效果
+        """
+        # 检查角色的结束阶段效果
+        for i, character in enumerate(player.characters):
+            if not character.is_alive:
+                continue
+                
+            # 检查角色状态效果的结束阶段处理
+            for status in character.character_statuses:
+                if status.get('name') == 'HealRegen':  # 持续治疗状态
+                    heal_amount = status.get('effect', {}).get('heal_amount', 0)
+                    character.health = min(character.health + heal_amount, character.max_health)
+                    game_state.game_log.append(f"角色 {character.name} 在结束阶段恢复了 {heal_amount} 点生命值")
+        
+        # 检查支援牌的结束阶段效果
+        for i, support in enumerate(player.supports):
+            # 一些支援牌在结束阶段有特殊效果
+            if support.get('name') == '田铁嘴':
+                # 田铁嘴在结束阶段可能有费用返还效果
+                pass
 
     def _process_use_skill_action(self, game_state: GameState, payload: Dict[str, Any]) -> GameState:
         """
@@ -878,8 +907,8 @@ class GameEngine:
                     elif reaction_effects.get("additional_effect") == "spread_damage_to_other_enemies":
                         # 扩散伤害反应，对其他敌人造成伤害
                         spread_damage = reaction_effects.get("spread_damage", 0)
-                        # 这里需要实现对其他角色的伤害逻辑
-                        pass
+                        # 对其他角色造成扩散伤害
+                        self._apply_spread_damage(character, spread_damage)
                     elif reaction_effects.get("additional_effect") == "create_status":
                         # 创建状态效果，如燃烧、绽放等
                         status_name = reaction_effects.get("status_name")
@@ -919,6 +948,26 @@ class GameEngine:
                     character.status = CharacterStatus.DEAD
             
             return actual_damage
+
+    def _apply_spread_damage(self, source_character: CharacterCard, spread_damage: int) -> None:
+        """
+        对其他敌人造成扩散伤害
+        """
+        # 遍历所有角色，对非同一队伍的角色造成扩散伤害
+        for player in self.game_states.values():
+            for character in player.characters:
+                # 假设source_character和character不在同一队伍
+                if character != source_character and character.is_alive:
+                    # 对角色造成扩散伤害，不触发元素反应
+                    character.health -= spread_damage
+                    if character.health <= 0:
+                        # 检查免于被击倒机制
+                        if hasattr(character, 'survive_at_hp') and character.survive_at_hp:
+                            character.health = 1
+                            character.survive_at_hp = False
+                        else:
+                            character.is_alive = False
+                            character.status = CharacterStatus.DEAD
     
     def _apply_status_effects(self, game_state: GameState) -> None:
         """

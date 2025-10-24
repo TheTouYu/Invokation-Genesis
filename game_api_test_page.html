@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>七圣召唤游戏引擎API测试页面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fafafa;
+        }
+        .form-group {
+            margin: 10px 0;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .secondary-btn {
+            background-color: #2196F3;
+        }
+        .secondary-btn:hover {
+            background-color: #0b7dda;
+        }
+        .error {
+            color: red;
+            margin: 10px 0;
+        }
+        .success {
+            color: green;
+            margin: 10px 0;
+        }
+        .response {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .game-state-display {
+            background-color: #eef7ff;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .hidden {
+            display: none;
+        }
+        .info-box {
+            background-color: #e3f2fd;
+            padding: 10px;
+            border-left: 4px solid #2196F3;
+            margin: 10px 0;
+        }
+        .payload-helper {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .payload-example {
+            margin: 5px 0;
+            cursor: pointer;
+            color: #1976D2;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>七圣召唤游戏引擎API测试页面</h1>
+        
+        <div class="info-box">
+            <strong>使用说明：</strong>在使用本测试页面前，请确保已通过认证接口获取有效的JWT令牌。
+            可通过 <code>/api/auth/login</code> 接口获取令牌。
+        </div>
+        
+        <div class="section">
+            <h2>认证信息</h2>
+            <div class="info-box">
+                请先获取JWT令牌，系统将自动保存到本地存储中。
+            </div>
+            <div class="form-group">
+                <label for="jwtToken">JWT Token:</label>
+                <input type="text" id="jwtToken" placeholder="输入JWT认证令牌">
+            </div>
+            <button onclick="saveToken()">保存Token</button>
+            <div id="authStatus" class="response"></div>
+        </div>
+        
+        <div class="section">
+            <h2>创建游戏会话</h2>
+            <div class="info-box">
+                此接口用于创建一个新的游戏会话。如果是AI对战，可不填写对手ID。
+                仅需提供有效的用户ID和卡组ID即可创建游戏。
+            </div>
+            <div class="form-group">
+                <label for="player2Id">对手ID (留空表示AI对战):</label>
+                <select id="player2Id" onchange="handlePlayer2Select(this)">
+                    <option value="">选择对手 (AI对战)</option>
+                    <option value="refresh">刷新用户列表</option>
+                    <!-- 动态用户选项将通过JavaScript添加 -->
+                </select>
+                <input type="text" id="player2IdText" placeholder="或输入对手用户ID" style="margin-top: 5px;">
+            </div>
+            <div class="form-group">
+                <label for="deck1Id">玩家1卡组ID:</label>
+                <select id="deck1Id" onchange="handleDeck1Select(this)">
+                    <option value="">选择玩家1的卡组</option>
+                    <option value="refresh">刷新卡组列表</option>
+                    <!-- 动态卡组选项将通过JavaScript添加 -->
+                </select>
+                <input type="text" id="deck1IdText" placeholder="或输入玩家1的卡组ID" style="margin-top: 5px;">
+            </div>
+            <div class="form-group">
+                <label for="deck2Id">玩家2卡组ID (AI对战可选):</label>
+                <select id="deck2Id" onchange="handleDeck2Select(this)">
+                    <option value="">选择玩家2的卡组</option>
+                    <option value="refresh">刷新卡组列表</option>
+                    <!-- 动态卡组选项将通过JavaScript添加 -->
+                </select>
+                <input type="text" id="deck2IdText" placeholder="或输入玩家2的卡组ID" style="margin-top: 5px;">
+            </div>
+            <button onclick="createGameSession()">创建游戏会话</button>
+            <div id="createGameResponse" class="response"></div>
+        </div>
+        
+        <div class="section">
+            <h2>获取游戏状态</h2>
+            <div class="info-box">
+                获取指定游戏会话的当前状态。需要提供有效的游戏会话ID。
+            </div>
+            <div class="form-group">
+                <label for="gameSessionId">游戏会话ID:</label>
+                <select id="gameSessionId" onchange="handleGameSessionSelect(this)">
+                    <option value="">选择游戏会话</option>
+                    <option value="refresh">刷新游戏列表</option>
+                    <!-- 动态游戏选项将通过JavaScript添加 -->
+                </select>
+                <input type="text" id="gameSessionIdText" placeholder="或输入游戏会话ID" style="margin-top: 5px;">
+            </div>
+            <button onclick="getGameState()">获取游戏状态</button>
+            <div id="getGameStateResponse" class="response"></div>
+            <div id="gameStateDisplay" class="game-state-display hidden"></div>
+        </div>
+        
+        <div class="section">
+            <h2>提交玩家操作</h2>
+            <div class="info-box">
+                提交玩家在当前游戏中的操作。请确保提供的载荷格式正确，
+                并与所选操作类型匹配。
+            </div>
+            <div class="form-group">
+                <label for="actionGameSessionId">游戏会话ID:</label>
+                <select id="actionGameSessionId" onchange="handleActionGameSessionSelect(this)">
+                    <option value="">选择游戏会话</option>
+                    <option value="refresh">刷新游戏列表</option>
+                    <!-- 动态游戏选项将通过JavaScript添加 -->
+                </select>
+                <input type="text" id="actionGameSessionIdText" placeholder="或输入游戏会话ID" style="margin-top: 5px;">
+            </div>
+            <div class="form-group">
+                <label for="actionType">操作类型:</label>
+                <select id="actionType" onchange="updatePayloadHelper()">
+                    <option value="PLAY_CARD">打出卡牌</option>
+                    <option value="USE_SKILL">使用技能</option>
+                    <option value="SWITCH_CHARACTER">切换角色</option>
+                    <option value="PASS">结束回合</option>
+                    <option value="REROLL_DICE">重投骰子</option>
+                    <option value="ELEMENTAL_TUNING">元素调和</option>
+                    <option value="REPLACE_CARDS">替换手牌</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="actionPayload">操作载荷 (JSON格式):</label>
+                <textarea id="actionPayload" rows="4" placeholder='例如: {"card_id": "card123"} 或 {"skill_id": "skill456"}'></textarea>
+            </div>
+            <div class="payload-helper">
+                <strong>操作载荷示例:</strong>
+                <div class="payload-example" onclick='fillPayloadExample("{\"card_id\": \"card123\"}")'>打出卡牌示例</div>
+                <div class="payload-example" onclick='fillPayloadExample("{\"skill_id\": \"skill456\"}")'>使用技能示例</div>
+                <div class="payload-example" onclick='fillPayloadExample("{\"character_index\": 1}")'>切换角色示例</div>
+                <div class="payload-example" onclick='fillPayloadExample("{\"dice_indices\": [0, 1]}")'>重投骰子示例</div>
+                <div class="payload-example" onclick='fillPayloadExample("{\"card_index\": 0}")'>元素调和示例</div>
+                <div class="payload-example" onclick='fillPayloadExample("{\"card_ids\": [\"card1\", \"card2\"]}")'>替换手牌示例</div>
+            </div>
+            <button onclick="submitAction()">提交操作</button>
+            <div id="submitActionResponse" class="response"></div>
+        </div>
+        
+        <div class="section">
+            <h2>结束游戏</h2>
+            <div class="info-box">
+                强制结束指定的游戏会话。
+            </div>
+            <div class="form-group">
+                <label for="endGameSessionId">游戏会话ID:</label>
+                <select id="endGameSessionId" onchange="handleEndGameSelect(this)">
+                    <option value="">选择游戏会话</option>
+                    <option value="refresh">刷新游戏列表</option>
+                    <!-- 动态游戏选项将通过JavaScript添加 -->
+                </select>
+                <input type="text" id="endGameSessionIdText" placeholder="或输入游戏会话ID" style="margin-top: 5px;">
+            </div>
+            <button onclick="endGame()">结束游戏</button>
+            <div id="endGameResponse" class="response"></div>
+        </div>
+        
+        <div class="section">
+            <h2>获取回放列表</h2>
+            <div class="info-box">
+                获取当前用户参与的所有游戏回放列表。
+            </div>
+            <button onclick="getReplayList()">获取回放列表</button>
+            <button class="secondary-btn" onclick="loadUserDecks()">刷新卡组列表</button>
+            <button class="secondary-btn" onclick="loadUsers()">刷新用户列表</button>
+            <div id="replayListResponse" class="response"></div>
+        </div>
+        
+        <div class="section">
+            <h2>获取特定回放</h2>
+            <div class="info-box">
+                获取指定ID的游戏回放详情。
+            </div>
+            <div class="form-group">
+                <label for="replayId">回放ID:</label>
+                <select id="replayId" onchange="handleReplaySelect(this)">
+                    <option value="">选择回放</option>
+                    <option value="refresh">刷新回放列表</option>
+                    <!-- 动态回放选项将通过JavaScript添加 -->
+                </select>
+                <input type="text" id="replayIdText" placeholder="或输入回放ID" style="margin-top: 5px;">
+            </div>
+            <button onclick="getReplay()">获取回放</button>
+            <div id="replayResponse" class="response"></div>
+        </div>
+        
+        <div class="section">
+            <h2>观战功能</h2>
+            <div class="info-box">
+                加入观战指定的游戏会话，或获取当前可观看的游戏列表。
+            </div>
+            <div class="form-group">
+                <label for="spectateGameSessionId">要观战的游戏会话ID:</label>
+                <select id="spectateGameSessionId" onchange="handleSpectateSelect(this)">
+                    <option value="">选择游戏会话</option>
+                    <option value="refresh">刷新游戏列表</option>
+                    <!-- 动态游戏选项将通过JavaScript添加 -->
+                </select>
+                <input type="text" id="spectateGameSessionIdText" placeholder="或输入游戏会话ID" style="margin-top: 5px;">
+            </div>
+            <button onclick="joinSpectate()">加入观战</button>
+            <div id="spectateResponse" class="response"></div>
+            
+            <button onclick="getActiveGames()" style="margin-top: 10px;">获取可观看游戏</button>
+            <div id="activeGamesResponse" class="response"></div>
+        </div>
+    </div>
+
+    <script>
+        // 存储从API获取的数据
+        let users = [];
+        let decks = [];
+        let gameSessions = [];
+        let replays = [];
+        
+        // 从localStorage加载保存的token
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedToken = localStorage.getItem('jwtToken');
+            if (savedToken) {
+                document.getElementById('jwtToken').value = savedToken;
+                document.getElementById('authStatus').innerText = '已加载保存的Token';
+            }
+            
+            // 初始加载用户和卡组数据
+            loadUsers();
+            loadUserDecks();
+        });
+
+        // 保存Token到localStorage
+        function saveToken() {
+            const token = document.getElementById('jwtToken').value;
+            localStorage.setItem('jwtToken', token);
+            document.getElementById('authStatus').innerText = 'Token已保存';
+        }
+
+        // 通用API请求函数
+        async function apiRequest(url, method = 'GET', data = null) {
+            const token = document.getElementById('jwtToken').value;
+            
+            const options = {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            };
+            
+            if (data) {
+                options.body = JSON.stringify(data);
+            }
+            
+            try {
+                const response = await fetch(url, options);
+                const result = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(result.error || `HTTP error! status: ${response.status}`);
+                }
+                
+                return result;
+            } catch (error) {
+                console.error('API请求错误:', error);
+                throw error;
+            }
+        }
+        
+        // 动态加载用户列表
+        async function loadUsers() {
+            try {
+                // 注意：标准API中没有提供公共用户列表接口
+                // 我们可以通过获取当前用户信息来获取一些示例数据
+                // 或者这里可以实现一个获取对手玩家的接口（需要后端支持）
+                
+                // 模拟从后端获取用户列表的API调用
+                // 实际应用中需要实现一个获取用户列表的API端点
+                const response = await apiRequest('/api/users', 'GET'); // 这个API需要后端实现
+                users = response.users || [];
+                
+                // 如果API不存在或失败，使用模拟数据
+                if (!users || users.length === 0) {
+                    users = [
+                        {id: "user1", username: "玩家1"},
+                        {id: "user2", username: "玩家2"},
+                        {id: "user3", username: "玩家3"}
+                    ];
+                }
+                
+                // 更新选择框
+                updateSelectOptions('player2Id', users, 'id', 'username');
+                
+                document.getElementById('authStatus').innerText = '用户列表已刷新';
+            } catch (error) {
+                console.warn('获取用户列表失败，使用默认选项:', error.message);
+                // 使用模拟数据
+                users = [
+                    {id: "user1", username: "玩家1"},
+                    {id: "user2", username: "玩家2"},
+                    {id: "user3", username: "玩家3"}
+                ];
+                
+                // 更新选择框
+                updateSelectOptions('player2Id', users, 'id', 'username');
+                
+                document.getElementById('authStatus').innerText = '用户列表已加载（使用默认选项）';
+            }
+        }
+        
+        // 动态加载卡组列表
+        async function loadUserDecks() {
+            try {
+                // 调用获取用户卡组列表的API
+                const response = await apiRequest('/api/decks', 'GET');
+                decks = response.decks || [];
+                
+                // 确保卡组数据格式正确
+                const formattedDecks = decks.map(deck => ({
+                    id: deck.id,
+                    name: deck.name || `卡组 ${deck.id}`
+                }));
+                
+                // 更新选择框
+                updateSelectOptions('deck1Id', formattedDecks, 'id', 'name');
+                updateSelectOptions('deck2Id', formattedDecks, 'id', 'name');
+                
+                document.getElementById('authStatus').innerText = '卡组列表已刷新';
+            } catch (error) {
+                console.warn('获取卡组列表失败，使用默认选项:', error.message);
+                // 使用模拟数据
+                decks = [
+                    {id: "deck1", name: "卡组1 - 火元素队"},
+                    {id: "deck2", name: "卡组2 - 水元素队"},
+                    {id: "deck3", name: "卡组3 - 雷元素队"}
+                ];
+                
+                // 更新选择框
+                updateSelectOptions('deck1Id', decks, 'id', 'name');
+                updateSelectOptions('deck2Id', decks, 'id', 'name');
+                
+                document.getElementById('authStatus').innerText = '卡组列表已加载（使用默认选项）';
+            }
+        }
+        
+        // 动态加载游戏会话列表
+        async function loadGameSessions() {
+            try {
+                // 获取用户参与的游戏历史记录作为游戏会话列表
+                const response = await apiRequest('/api/game_sessions', 'GET');
+                
+                // 注意：标准实现中可能没有直接获取游戏会话列表的API
+                // 这里使用游戏历史记录来模拟，实际需要后端实现相应API
+                gameSessions = response.game_sessions || response.games || [];
+                
+                // 如果API响应中没有游戏会话数据，使用模拟数据
+                if (!gameSessions || gameSessions.length === 0) {
+                    gameSessions = [
+                        {id: "game1", name: "游戏会话1"},
+                        {id: "game2", name: "游戏会话2"},
+                        {id: "game3", name: "游戏会话3"}
+                    ];
+                }
+                
+                const formattedSessions = gameSessions.map(session => ({
+                    id: session.id || session.game_id,
+                    name: session.name || session.game_id || `游戏 ${session.id || session.game_id}`
+                }));
+                
+                // 更新所有游戏相关的选择框
+                updateSelectOptions('gameSessionId', formattedSessions, 'id', 'name');
+                updateSelectOptions('actionGameSessionId', formattedSessions, 'id', 'name');
+                updateSelectOptions('endGameSessionId', formattedSessions, 'id', 'name');
+                updateSelectOptions('spectateGameSessionId', formattedSessions, 'id', 'name');
+                
+                document.getElementById('authStatus').innerText = '游戏会话列表已刷新';
+            } catch (error) {
+                console.warn('获取游戏会话列表失败，使用默认选项:', error.message);
+                // 使用模拟数据
+                gameSessions = [
+                    {id: "game1", name: "游戏会话1"},
+                    {id: "game2", name: "游戏会话2"},
+                    {id: "game3", name: "游戏会话3"}
+                ];
+                
+                // 更新所有游戏相关的选择框
+                updateSelectOptions('gameSessionId', gameSessions, 'id', 'name');
+                updateSelectOptions('actionGameSessionId', gameSessions, 'id', 'name');
+                updateSelectOptions('endGameSessionId', gameSessions, 'id', 'name');
+                updateSelectOptions('spectateGameSessionId', gameSessions, 'id', 'name');
+                
+                document.getElementById('authStatus').innerText = '游戏会话列表已加载（使用默认选项）';
+            }
+        }
+        
+        // 动态加载回放列表
+        async function loadReplays() {
+            try {
+                // 获取回放列表
+                const response = await apiRequest('/api/replays');
+                replays = response.replays || [];
+                
+                // 更新选择框
+                updateSelectOptions('replayId', replays, 'replay_id', 'replay_id');
+                
+                document.getElementById('authStatus').innerText = '回放列表已刷新';
+            } catch (error) {
+                document.getElementById('authStatus').innerText = `加载回放列表时出错: ${error.message}`;
+            }
+        }
+        
+        // 更新选择框选项的通用函数
+        function updateSelectOptions(selectId, items, valueField, textField) {
+            const select = document.getElementById(selectId);
+            if (!select) return;
+            
+            // 保存当前选择（如果有的话）
+            const currentSelection = select.value;
+            
+            // 清空现有选项（保留刷新选项）
+            Array.from(select.options).forEach(option => {
+                if (option.value !== 'refresh') {
+                    select.removeChild(option);
+                }
+            });
+            
+            // 添加新选项
+            items.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item[valueField];
+                option.textContent = item[textField];
+                select.appendChild(option);
+            });
+            
+            // 恢复之前的选项（如果仍然存在）
+            if (items.some(item => item[valueField] === currentSelection)) {
+                select.value = currentSelection;
+            }
+        }
+        
+        // 处理用户选择
+        function handlePlayer2Select(select) {
+            if (select.value === 'refresh') {
+                loadUsers();
+                select.value = '';
+            } else {
+                document.getElementById('player2IdText').value = select.value;
+            }
+        }
+        
+        // 处理卡组1选择
+        function handleDeck1Select(select) {
+            if (select.value === 'refresh') {
+                loadUserDecks();
+                select.value = '';
+            } else {
+                document.getElementById('deck1IdText').value = select.value;
+            }
+        }
+        
+        // 处理卡组2选择
+        function handleDeck2Select(select) {
+            if (select.value === 'refresh') {
+                loadUserDecks();
+                select.value = '';
+            } else {
+                document.getElementById('deck2IdText').value = select.value;
+            }
+        }
+        
+        // 处理游戏会话选择
+        function handleGameSessionSelect(select) {
+            if (select.value === 'refresh') {
+                loadGameSessions();
+                select.value = '';
+            } else {
+                document.getElementById('gameSessionIdText').value = select.value;
+            }
+        }
+        
+        // 处理操作游戏会话选择
+        function handleActionGameSessionSelect(select) {
+            if (select.value === 'refresh') {
+                loadGameSessions();
+                select.value = '';
+            } else {
+                document.getElementById('actionGameSessionIdText').value = select.value;
+            }
+        }
+        
+        // 处理结束游戏选择
+        function handleEndGameSelect(select) {
+            if (select.value === 'refresh') {
+                loadGameSessions();
+                select.value = '';
+            } else {
+                document.getElementById('endGameSessionIdText').value = select.value;
+            }
+        }
+        
+        // 处理回放选择
+        function handleReplaySelect(select) {
+            if (select.value === 'refresh') {
+                loadReplays();
+                select.value = '';
+            } else {
+                document.getElementById('replayIdText').value = select.value;
+            }
+        }
+        
+        // 处理观战选择
+        function handleSpectateSelect(select) {
+            if (select.value === 'refresh') {
+                loadGameSessions();
+                select.value = '';
+            } else {
+                document.getElementById('spectateGameSessionIdText').value = select.value;
+            }
+        }
+        
+        // 更新操作载荷助手
+        function updatePayloadHelper() {
+            // 这里可以根据选择的操作类型显示不同的载荷示例
+            // 目前我们通过点击示例来填充
+        }
+        
+        // 填充操作载荷示例
+        function fillPayloadExample(example) {
+            document.getElementById('actionPayload').value = example;
+        }
+        
+        // 创建游戏会话
+        async function createGameSession() {
+            // 尝试从选择框获取值，如果为空则使用文本框
+            const player2Id = document.getElementById('player2Id').value || document.getElementById('player2IdText').value;
+            const deck1Id = document.getElementById('deck1Id').value || document.getElementById('deck1IdText').value;
+            const deck2Id = document.getElementById('deck2Id').value || document.getElementById('deck2IdText').value;
+            
+            try {
+                const response = await apiRequest('/api/game_sessions', 'POST', {
+                    player2_id: player2Id || undefined,
+                    deck1_id: deck1Id,
+                    deck2_id: deck2Id || undefined
+                });
+                
+                document.getElementById('createGameResponse').innerText = JSON.stringify(response, null, 2);
+                
+                // 刷新游戏会话列表
+                loadGameSessions();
+            } catch (error) {
+                document.getElementById('createGameResponse').innerText = `错误: ${error.message}`;
+            }
+        }
+
+        // 获取游戏状态
+        async function getGameState() {
+            // 尝试从选择框获取值，如果为空则使用文本框
+            const gameSessionId = document.getElementById('gameSessionId').value || document.getElementById('gameSessionIdText').value;
+            
+            if (!gameSessionId) {
+                document.getElementById('getGameStateResponse').innerText = '请输入游戏会话ID';
+                return;
+            }
+            
+            try {
+                const response = await apiRequest(`/api/game_sessions/${gameSessionId}`);
+                
+                document.getElementById('getGameStateResponse').innerText = '游戏状态获取成功';
+                
+                // 显示游戏状态详情
+                const gameStateDisplay = document.getElementById('gameStateDisplay');
+                gameStateDisplay.innerText = JSON.stringify(response.game_state, null, 2);
+                gameStateDisplay.classList.remove('hidden');
+            } catch (error) {
+                document.getElementById('getGameStateResponse').innerText = `错误: ${error.message}`;
+                document.getElementById('gameStateDisplay').classList.add('hidden');
+            }
+        }
+
+        // 提交玩家操作
+        async function submitAction() {
+            // 尝试从选择框获取值，如果为空则使用文本框
+            const gameSessionId = document.getElementById('actionGameSessionId').value || document.getElementById('actionGameSessionIdText').value;
+            const actionType = document.getElementById('actionType').value;
+            const actionPayloadStr = document.getElementById('actionPayload').value;
+            
+            if (!gameSessionId) {
+                document.getElementById('submitActionResponse').innerText = '请输入游戏会话ID';
+                return;
+            }
+            
+            let actionPayload = {};
+            if (actionPayloadStr) {
+                try {
+                    actionPayload = JSON.parse(actionPayloadStr);
+                } catch (e) {
+                    document.getElementById('submitActionResponse').innerText = `操作载荷JSON格式错误: ${e.message}`;
+                    return;
+                }
+            }
+            
+            try {
+                const response = await apiRequest(`/api/game_sessions/${gameSessionId}/actions`, 'POST', {
+                    action: actionType,
+                    payload: actionPayload
+                });
+                
+                document.getElementById('submitActionResponse').innerText = JSON.stringify(response, null, 2);
+            } catch (error) {
+                document.getElementById('submitActionResponse').innerText = `错误: ${error.message}`;
+            }
+        }
+
+        // 结束游戏
+        async function endGame() {
+            // 尝试从选择框获取值，如果为空则使用文本框
+            const gameSessionId = document.getElementById('endGameSessionId').value || document.getElementById('endGameSessionIdText').value;
+            
+            if (!gameSessionId) {
+                document.getElementById('endGameResponse').innerText = '请输入游戏会话ID';
+                return;
+            }
+            
+            try {
+                const response = await apiRequest(`/api/game_sessions/${gameSessionId}/end`, 'POST');
+                
+                document.getElementById('endGameResponse').innerText = JSON.stringify(response, null, 2);
+            } catch (error) {
+                document.getElementById('endGameResponse').innerText = `错误: ${error.message}`;
+            }
+        }
+
+        // 获取回放列表
+        async function getReplayList() {
+            try {
+                const response = await apiRequest('/api/replays');
+                
+                document.getElementById('replayListResponse').innerText = JSON.stringify(response, null, 2);
+                
+                // 更新回放列表
+                replays = response.replays || [];
+                updateSelectOptions('replayId', replays, 'replay_id', 'replay_id');
+            } catch (error) {
+                document.getElementById('replayListResponse').innerText = `错误: ${error.message}`;
+            }
+        }
+
+        // 获取特定回放
+        async function getReplay() {
+            // 尝试从选择框获取值，如果为空则使用文本框
+            const replayId = document.getElementById('replayId').value || document.getElementById('replayIdText').value;
+            
+            if (!replayId) {
+                document.getElementById('replayResponse').innerText = '请输入回放ID';
+                return;
+            }
+            
+            try {
+                const response = await apiRequest(`/api/replays/${replayId}`);
+                
+                document.getElementById('replayResponse').innerText = JSON.stringify(response, null, 2);
+            } catch (error) {
+                document.getElementById('replayResponse').innerText = `错误: ${error.message}`;
+            }
+        }
+
+        // 加入观战
+        async function joinSpectate() {
+            // 尝试从选择框获取值，如果为空则使用文本框
+            const gameSessionId = document.getElementById('spectateGameSessionId').value || document.getElementById('spectateGameSessionIdText').value;
+            
+            if (!gameSessionId) {
+                document.getElementById('spectateResponse').innerText = '请输入游戏会话ID';
+                return;
+            }
+            
+            try {
+                const response = await apiRequest(`/api/spectator/${gameSessionId}/join`, 'POST');
+                
+                document.getElementById('spectateResponse').innerText = JSON.stringify(response, null, 2);
+            } catch (error) {
+                document.getElementById('spectateResponse').innerText = `错误: ${error.message}`;
+            }
+        }
+
+        // 获取可观看游戏
+        async function getActiveGames() {
+            try {
+                const response = await apiRequest('/api/spectator/active_games');
+                
+                document.getElementById('activeGamesResponse').innerText = JSON.stringify(response, null, 2);
+                
+                // 更新游戏列表
+                const games = response.active_games || [];
+                updateSelectOptions('spectateGameSessionId', games, 'game_id', 'game_id');
+            } catch (error) {
+                document.getElementById('activeGamesResponse').innerText = `错误: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>

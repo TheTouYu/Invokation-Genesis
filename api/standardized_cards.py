@@ -734,19 +734,26 @@ def filter_cards_endpoint():
             "tags": request.args.getlist("tag"),  # 支持多个标签
         }
 
+        # 分页参数
+        page = request.args.get("page", 1, type=int)
+        per_page = min(request.args.get("per_page", 12, type=int), 100)  # 限制最大每页数量
+
         # 构建查询
         query = CardData.query.filter(CardData.is_active == True)
 
         # 应用过滤条件
         query = apply_filters(query, filters, CardData)
 
-        # 获取所有符合条件的卡牌
-        cards = query.all()
+        # 分页查询
+        paginated_cards = query.paginate(page=page, per_page=per_page, error_out=False)
+        result = [extract_card_info(card) for card in paginated_cards.items]
 
-        # 转换为标准化格式
-        result = [extract_card_info(card) for card in cards]
-
-        return jsonify({"cards": result, "total": len(result)}), 200
+        return jsonify({
+            "cards": result,
+            "total": paginated_cards.total,
+            "pages": paginated_cards.pages,
+            "current_page": page
+        }), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 

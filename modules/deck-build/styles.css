@@ -1,0 +1,509 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+    margin: 0;
+    padding: 20px;
+}
+.container {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+    padding: 25px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+h1 {
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 2.2em;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+.section {
+    background: #f8fafc;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    border: 1px solid #e2e8f0;
+}
+h3 {
+    color: #34495e;
+    margin-top: 0;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+}
+.card-item {
+    background: white;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    min-width: 200px;
+}
+.card-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border-color: #3498db;
+}
+.card-item.selected {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    color: white;
+    border-color: #2980b9;
+}
+.card-item.selected .card-count {
+    color: white;
+}
+.card-item.selected .card-details {
+    color: #e8f4fc;
+}
+.deck-preview {
+    background: #e8f5e8;
+    border: 1px solid #c3e6cb;
+    border-radius: 8px;
+    padding: 20px;
+}
+.validation-result {
+    border-radius: 8px;
+    padding: 20px;
+}
+.valid {
+    background: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+}
+.invalid {
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+}
+button {
+    padding: 12px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+.validate-btn {
+    background: linear-gradient(135deg, #28a745 0%, #218838 100%);
+    color: white;
+}
+.reset-btn {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    color: white;
+}
+.random-btn {
+    background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+    color: white;
+}
+input, select {
+    padding: 10px;
+    border: 1px solid #cbd5e0;
+    border-radius: 4px;
+    font-size: 14px;
+}
+.deck-info-section {
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+    border: 1px solid #90caf9;
+}
+
+.stats {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 15px;
+    background: linear-gradient(135deg, #e3f9ff 0%, #d1ecff 100%);
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid #7abaff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.error {
+    color: #e74c3c;
+    font-weight: bold;
+}
+.success {
+    color: #27ae60;
+    font-weight: bold;
+}
+.tabs {
+    display: flex;
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+    border-radius: 8px 8px 0 0;
+    overflow: hidden;
+    margin-bottom: -1px;
+}
+.tab {
+    padding: 15px 25px;
+    cursor: pointer;
+    background: rgba(227, 242, 253, 0.7);
+    border-right: 1px solid #bbdefb;
+    font-weight: 600;
+    color: #1976d2;
+    transition: all 0.3s ease;
+    flex: 1;
+    text-align: center;
+}
+.tab:last-child {
+    border-right: none;
+}
+.tab:hover {
+    background: linear-gradient(135deg, #64b5f6 0%, #2196f3 100%);
+    color: white;
+    transform: translateY(-2px);
+}
+.tab.active {
+    background: linear-gradient(135deg, white 0%, #f0f8ff 100%);
+    color: #1565c0;
+    border-bottom: 4px solid #2196f3;
+}
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.character-filters {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 20px;
+    border-radius: 10px;
+    margin: 15px 0;
+    border: 1px solid #dee2e6;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: end;
+}
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+    min-width: 140px;
+}
+.filter-group label {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 0.9em;
+}
+.filter-group select, .filter-group input {
+    min-width: 140px;
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1px solid #bdc3c7;
+    background-color: white;
+    font-size: 14px;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+}
+.filter-group select:focus, .filter-group input:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
+.filter-group button {
+    margin: 2px !important;
+    margin-top: 5px !important;
+    padding: 8px 12px !important;
+    min-width: auto;
+}
+
+/* 卡牌选择区域 */
+.card-selection {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 14px;
+    margin-top: 15px;
+    max-height: 600px;  /* 限制最大高度 */
+    overflow-y: auto;   /* 添加垂直滚动条 */
+    padding: 10px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+}
+
+/* 随机按钮样式 */
+.random-btn {
+    background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+    color: white;
+}
+
+.random-btn:hover {
+    background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
+}
+
+/* 其他卡牌UI美化 */
+.card-type-info {
+    font-size: 0.9em;
+    color: #e74c3c;
+    font-weight: bold;
+    margin: 4px 0;
+}
+.card-description {
+    font-size: 0.82em;
+    color: #7f8c8d;
+    margin: 6px 0;
+    line-height: 1.4;
+    min-height: 32px;
+}
+
+/* 标签按钮样式 */
+.tag-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #bdc3c7 0%, #95a5a6 100%);
+    color: #2c3e50;
+    border: none;
+    border-radius: 15px;
+    padding: 6px 14px;
+    margin: 4px;
+    cursor: pointer;
+    font-size: 0.82em;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.tag-btn:hover {
+    background: linear-gradient(135deg, #a0a7ae 0%, #7f8c8c 100%);
+    transform: translateY(-1px);
+}
+
+.tag-btn-selected {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    color: white;
+}
+
+.tag-btn-selected:hover {
+    background: linear-gradient(135deg, #2980b9 0%, #1c6ea4 100%);
+}
+
+/* 扩展角色卡样式 */
+.expanded-character {
+    min-height: 190px;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.2s ease;
+}
+
+.character-header {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.character-name {
+    font-size: 1.25em;
+    color: #e67e22;
+    font-weight: bold;
+}
+
+.character-info {
+    font-size: 0.95em;
+    color: #7f8c8d;
+    margin-top: 5px;
+}
+
+.character-details {
+    flex-grow: 1;
+    overflow-y: auto;
+    max-height: 130px;
+}
+
+.skills-section {
+    margin-top: 8px;
+}
+
+.skills-section ul {
+    margin: 5px 0;
+    padding-left: 20px;
+}
+
+.skills-section li {
+    margin-bottom: 8px;
+    font-size: 0.85em;
+    line-height: 1.35;
+}
+
+/* 快速搜索按钮样式 */
+.quick-search-btn {
+    background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 6px 12px;
+    margin: 4px;
+    cursor: pointer;
+    font-size: 0.82em;
+}
+
+.quick-search-btn:hover {
+    background: linear-gradient(135deg, #8e44ad 0%, #7d3c98 100%);
+    transform: translateY(-1px);
+}
+
+/* 卡牌选择区域 */
+.card-selection {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 14px;
+    margin-top: 15px;
+    max-height: 600px;  /* 限制最大高度 */
+    overflow-y: auto;   /* 添加垂直滚动条 */
+    padding: 10px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+}
+
+/* 随机按钮样式 */
+.random-btn {
+    background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+    color: white;
+}
+
+.random-btn:hover {
+    background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
+}
+
+/* 分页按钮样式 */
+.pagination button {
+    background: linear-gradient(135deg, #7f8c8d 0%, #95a5a6 100%);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 15px;
+    margin: 0 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.pagination button:hover {
+    background: linear-gradient(135deg, #95a5a6 0%, #bdc3c7 100%);
+    transform: translateY(-1px);
+}
+
+.pagination button:disabled {
+    background: #bdc3c7;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.pagination span {
+    font-weight: bold;
+    color: #2c3e50;
+    margin: 0 15px;
+    vertical-align: middle;
+}
+
+/* Login section styles */
+#loginForm {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+#loginForm input {
+    padding: 8px;
+    border: 1px solid #cbd5e0;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+#loginForm button, #userInfo button {
+    padding: 8px 15px;
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#userInfo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#loginStatus {
+    margin-top: 10px;
+}
+
+.success-message {
+    color: #27ae60;
+    font-weight: bold;
+}
+
+.error-message {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+/* 卡组保存区域样式 */
+.deck-save-section {
+    background: linear-gradient(135deg, #e8f5e8 0%, #d1f0d1 100%);
+    border: 1px solid #a3d8a3;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.deck-save-form {
+    margin-top: 10px;
+}
+
+.deck-save-form div {
+    margin-bottom: 10px;
+}
+
+.deck-save-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.deck-save-form input, .deck-save-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #bdc3c7;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.deck-save-form textarea {
+    height: 60px;
+    resize: vertical;
+}
+
+.save-btn {
+    background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.save-btn:hover {
+    background: linear-gradient(135deg, #27ae60 0%, #219653 100%);
+}
+
+/* 标签页面的最大长度 */
+#tagButtonsContainer {
+    max-width: 100%;
+    overflow-x: auto;
+    padding: 5px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}

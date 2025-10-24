@@ -74,6 +74,12 @@ def create_app():
             logging.warning(f"Could not import local game blueprint: {e}")
         
         try:
+            from api.users import users_bp
+            app.register_blueprint(users_bp, url_prefix='/api')
+        except ImportError as e:
+            logging.warning(f"Could not import users blueprint: {e}")
+        
+        try:
             from api.deck_builder import register_deck_builder_routes
             register_deck_builder_routes(app)
         except ImportError as e:
@@ -86,9 +92,40 @@ def create_app():
     @app.route('/api/test', methods=['GET'])
     def api_test_page():
             """提供API测试页面"""
-            with open('api_test_page.html', 'r', encoding='utf-8') as f:
+            with open('modules/api_test/index.html', 'r', encoding='utf-8') as f:
                 test_page_html = f.read()
             return test_page_html, 200, {'Content-Type': 'text/html'}
+
+    @app.route('/game/test', methods=['GET'])
+    def game_api_test_page():
+            """提供游戏API测试页面"""
+            with open('modules/game_test/index.html', 'r', encoding='utf-8') as f:
+                test_page_html = f.read()
+            return test_page_html, 200, {'Content-Type': 'text/html'}
+        
+    # 静态文件路由
+    @app.route('/modules/<path:filename>')
+    def modules_static(filename):
+        from flask import send_from_directory
+        return send_from_directory('modules', filename)
+        
+    # 游戏测试静态文件路由
+    @app.route('/game_test_static/<path:filename>')
+    def game_test_static(filename):
+        from flask import send_from_directory
+        return send_from_directory('modules/game_test', filename)
+    
+    # API测试静态文件路由
+    @app.route('/api_test_static/<path:filename>')
+    def api_test_static(filename):
+        from flask import send_from_directory
+        return send_from_directory('modules/api_test', filename)
+    
+    # Deck构建静态文件路由
+    @app.route('/deck_build_static/<path:filename>')
+    def deck_build_static(filename):
+        from flask import send_from_directory
+        return send_from_directory('modules/deck-build', filename)
     return app
 
 # 应用实例在运行时创建，而不是在导入时创建

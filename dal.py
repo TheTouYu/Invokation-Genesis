@@ -42,8 +42,8 @@ class UserDAL:
     def get_user_by_id(user_id: str) -> Optional[object]:
         """Get user by ID"""
         try:
-            User, CardData, Deck, GameHistory = _get_models()
-            return User.query.filter_by(id=user_id).first()
+            from models.db_models import model_container
+            return model_container.User.query.filter_by(id=user_id).first()
         except SQLAlchemyError as e:
             logging.error(f"Error getting user by ID: {e}")
             return None
@@ -104,6 +104,26 @@ class UserDAL:
             db_manager.db.session.rollback()
             logging.error(f"Error deleting user: {e}")
             return False
+    
+    @staticmethod
+    def get_all_users(limit: int = 20, offset: int = 0) -> List[object]:
+        """Get all users with pagination"""
+        try:
+            User, CardData, Deck, GameHistory = _get_models()
+            return User.query.offset(offset).limit(limit).all()
+        except SQLAlchemyError as e:
+            logging.error(f"Error getting all users: {e}")
+            return []
+    
+    @staticmethod
+    def get_all_users_count() -> int:
+        """Get total count of users"""
+        try:
+            User, CardData, Deck, GameHistory = _get_models()
+            return User.query.count()
+        except SQLAlchemyError as e:
+            logging.error(f"Error getting users count: {e}")
+            return 0
 
 
 class CardDataDAL:
@@ -365,6 +385,93 @@ class GameHistoryDAL:
             return []
 
 
+class GameActionLogDAL:
+    """Data Access Layer for GameActionLog operations"""
+    
+    @staticmethod
+    def create_action_log(
+        game_id: str,
+        player_id: str,
+        action_type: str,
+        action_payload: dict,
+        turn_number: int,
+        action_number: int,
+        game_phase: str,
+        game_state_snapshot: Optional[dict] = None
+    ) -> object:
+        """Create a new game action log record - PLACEHOLDER IMPLEMENTATION"""
+        # This is a placeholder implementation since the model doesn't exist
+        pass
+    
+    @staticmethod
+    def get_action_logs_by_game(game_id: str) -> List[object]:
+        """Get all action logs for a specific game - PLACEHOLDER IMPLEMENTATION"""
+        # This is a placeholder implementation since the model doesn't exist
+        return []
+
+    @staticmethod
+    def get_action_logs_by_player(player_id: str, limit: int = 50) -> List[object]:
+        """Get action logs for a specific player - PLACEHOLDER IMPLEMENTATION"""
+        # This is a placeholder implementation since the model doesn't exist
+        return []
+
+
+class ReplayDataDAL:
+    """Data Access Layer for ReplayData operations"""
+    
+    @staticmethod
+    def create_replay_data(
+        game_id: str,
+        replay_data: dict,
+        compressed: bool = False,
+        duration: Optional[int] = None
+    ) -> object:
+        """Create a new replay data record - PLACEHOLDER IMPLEMENTATION"""
+        # This is a placeholder implementation since the model doesn't exist
+        pass
+    
+    @staticmethod
+    def get_replay_by_game_id(game_id: str) -> Optional[object]:
+        """Get replay data by game ID - PLACEHOLDER IMPLEMENTATION"""
+        # This is a placeholder implementation since the model doesn't exist
+        return None
+    
+    @staticmethod
+    def get_replay_by_id(replay_id: str) -> Optional[object]:
+        """Get replay data by ID - PLACEHOLDER IMPLEMENTATION"""
+        # This is a placeholder implementation since the model doesn't exist
+        return None
+
+
+class GameStateSnapshotDAL:
+    """Data Access Layer for GameStateSnapshot operations"""
+    
+    @staticmethod
+    def create_snapshot(
+        game_id: str,
+        snapshot_name: str,
+        game_state_data: dict,
+        turn_number: Optional[int] = None,
+        player_id: Optional[str] = None,
+        note: Optional[str] = None
+    ) -> object:
+        """Create a new game state snapshot - PLACEHOLDER IMPLEMENTATION"""
+        # This is a placeholder implementation since the model doesn't exist
+        pass
+    
+    @staticmethod
+    def get_snapshot_by_id(snapshot_id: str) -> Optional[object]:
+        """Get game state snapshot by ID - PLACEHOLDER IMPLEMENTATION"""
+        # This is a placeholder implementation since the model doesn't exist
+        return None
+    
+    @staticmethod
+    def get_snapshots_by_game(game_id: str) -> List[object]:
+        """Get all snapshots for a specific game - PLACEHOLDER IMPLEMENTATION"""
+        # This is a placeholder implementation since the model doesn't exist
+        return []
+
+
 class DatabaseDAL:
     """Main Database DAL class that encompasses all specific DALs"""
     
@@ -373,6 +480,9 @@ class DatabaseDAL:
         self.cards = CardDataDAL()
         self.decks = DeckDAL()
         self.game_history = GameHistoryDAL()
+        self.game_action_log = GameActionLogDAL()
+        self.replay_data = ReplayDataDAL()
+        self.game_state_snapshot = GameStateSnapshotDAL()
     
     @staticmethod
     def init_db():

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>七圣召唤 - 卡组构建器</title>
+    <link rel="stylesheet" href="/deck_build_static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>七圣召唤 - 卡组构建器</h1>
+        
+        <!-- Login Section -->
+        <div class="section" id="loginSection">
+            <h3>用户认证</h3>
+            <div id="loginForm">
+                <label>用户名: <input type="text" id="usernameInput" value="test"></label>
+                <label>密码: <input type="password" id="passwordInput" value="test"></label>
+                <button onclick="loginUser()">登录</button>
+            </div>
+            <div id="userInfo" style="display:none;">
+                <p>已登录: <span id="currentUsername"></span> | 
+                <button onclick="logoutUser()">登出</button></p>
+            </div>
+            <div id="loginStatus"></div>
+        </div>
+        
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('character')">角色选择</div>
+            <div class="tab" onclick="switchTab('other')">行动牌</div>
+        </div>
+        
+        <div id="characterTab" class="tab-content active">
+            <div class="section">
+                <h3>角色选择</h3>
+                <div>
+                    <label>搜索角色: <input type="text" id="characterSearchInput" placeholder="输入角色名称..." onkeyup="searchCharacterCards()"></label>
+                    <div class="character-filters">
+                        <div class="filter-group">
+                            <label>国家:</label>
+                            <select id="countryFilter" onchange="filterCharacterCards()">
+                                <option value="">全部国家</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>元素:</label>
+                            <select id="elementFilter" onchange="filterCharacterCards()">
+                                <option value="">全部元素</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>武器类型:</label>
+                            <select id="weaponTypeFilter" onchange="filterCharacterCards()">
+                                <option value="">全部武器</option>
+                            </select>
+                        </div>
+                        <button class="random-btn" onclick="selectRandomCharacter()">随机选择角色</button>
+                        <button class="random-btn" onclick="selectRandomCharacter(3)">随机选择3个角色</button>
+                    </div>
+                </div>
+                <div id="characterCardSelection" class="card-selection">
+                    <!-- 角色卡牌将在这里显示 -->
+                </div>
+                <div id="characterPagination" class="pagination" style="text-align: center; margin-top: 20px; display: none;">
+                    <button onclick="changeCharacterPage(-1)">上一页</button>
+                    <span id="characterPageInfo"></span>
+                    <button onclick="changeCharacterPage(1)">下一页</button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="otherTab" class="tab-content">
+            <div class="section">
+                <h3>行动牌选择</h3>
+                <div>
+                    <label>搜索卡牌: <input type="text" id="searchInput" placeholder="输入卡牌名称..." onkeyup="searchCards()"></label>
+                    <label>费用: 
+                        <select id="costFilter" onchange="filterCards()">
+                            <option value="">全部费用</option>
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="other">其他</option>
+                        </select>
+                    </label>
+                    <label>特殊标签: 
+                        <div id="tagButtonsContainer" style="display: inline-block;">
+                            <!-- 标签按钮将由JavaScript动态生成 -->
+                        </div>
+                    </label>
+                    <!-- 添加默认搜索按钮 -->
+                    <div style="margin-top: 10px;">
+                        <button type="button" onclick="quickSearch('充能')" class="quick-search-btn">充能</button>
+                        <button type="button" onclick="quickSearch('天赋')" class="quick-search-btn">天赋</button>
+                        <button type="button" onclick="quickSearch('舍弃')" class="quick-search-btn">舍弃</button>
+                        <button type="button" onclick="quickSearch('夜魂值')" class="quick-search-btn">夜魂值</button>
+                        <button type="button" onclick="quickSearch('手牌')" class="quick-search-btn">手牌</button>
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <button class="random-btn" onclick="selectRandomCard()">随机选择行动牌</button>
+                        <button class="random-btn" onclick="selectRandomCard(30)">随机选择30张行动牌</button>
+                    </div>
+                </div>
+                <div id="cardSelection" class="card-selection">
+                    <!-- Cards will be populated here -->
+                </div>
+                <div id="cardPagination" class="pagination" style="text-align: center; margin-top: 20px; display: none;">
+                    <button onclick="changeCardPage(-1)">上一页</button>
+                    <span id="cardPageInfo"></span>
+                    <button onclick="changeCardPage(1)">下一页</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 卡组信息显示在顶部 -->
+        <div class="section deck-info-section">
+            <h3>卡组信息</h3>
+            <div class="stats">
+                <div>角色牌: <span id="charCount">0</span>/3 (每个角色限1张)</div>
+                <div>行动牌: <span id="actionCount">0</span>/30 (每个行动牌限2张)</div>
+                <div>卡组总数: <span id="totalCount">0</span>/30 (不含角色牌)</div>
+            </div>
+            <div id="deckPreview" class="deck-preview">
+                <p>当前卡组内容:</p>
+                <div id="currentDeck">暂无卡牌</div>
+            </div>
+            
+            <div class="controls">
+                <button class="validate-btn" onclick="validateDeck()">验证卡组</button>
+                <button class="reset-btn" onclick="resetDeck()">重置卡组</button>
+                <button class="random-btn" onclick="scrollToBottom()">滑到底部</button>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h3>验证结果</h3>
+            <div id="validationResult" class="validation-result">
+                选择卡牌并点击"验证卡组"来检查卡组是否符合规则。
+            </div>
+        </div>
+        
+        <!-- 卡组保存区域 -->
+        <div class="section deck-save-section">
+            <h3>保存卡组</h3>
+            <div id="saveDeckStatus"></div>
+            <div class="deck-save-form">
+                <div>
+                    <label for="deckName">卡组名称:</label>
+                    <input type="text" id="deckName" placeholder="输入卡组名称">
+                </div>
+                <div>
+                    <label for="deckDescription">卡组描述:</label>
+                    <textarea id="deckDescription" placeholder="输入卡组描述（可选）"></textarea>
+                </div>
+                <button class="save-btn" onclick="saveDeck()">创建卡组</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 加载模块化的JavaScript文件 -->
+    <script src="/deck_build_static/utils.js"></script>
+    <script src="/deck_build_static/card_loader.js"></script>
+    <script src="/deck_build_static/card_display.js"></script>
+    <script src="/deck_build_static/card_selection.js"></script>
+    <script src="/deck_build_static/deck_management.js"></script>
+    <script src="/deck_build_static/deck_validation.js"></script>
+    <script src="/deck_build_static/ui_interaction.js"></script>
+    <script src="/deck_build_static/api_interaction.js"></script>
+    <script src="/deck_build_static/init.js"></script>
+</body>
+</html>

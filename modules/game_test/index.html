@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>七圣召唤游戏引擎API测试页面 - 模块化版</title>
+    <link rel="stylesheet" href="/game_test_static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>七圣召唤游戏引擎API测试页面</h1>
+        
+        <div class="info-box">
+            <strong>使用说明：</strong>在使用本测试页面前，请确保已通过认证接口获取有效的JWT令牌。
+            可通过 <code>/api/auth/login</code> 接口获取令牌。
+        </div>
+        
+        <div class="section">
+            <h2>用户登录</h2>
+            <div class="info-box">
+                请先登录获取JWT令牌，系统将自动保存到本地存储中。
+            </div>
+            <div class="form-group">
+                <label for="username">用户名:</label>
+                <input type="text" id="username" placeholder="输入用户名" value="test0">
+            </div>
+            <div class="form-group">
+                <label for="password">密码:</label>
+                <input type="password" id="password" placeholder="输入密码" value="test">
+            </div>
+            <button onclick="login()">登录并获取Token</button>
+            <div id="loginStatus" class="response"></div>
+        </div>
+        
+        <div class="section">
+            <h2>认证信息</h2>
+            <div class="info-box">
+                或者直接输入JWT令牌，系统将自动保存到本地存储中。
+            </div>
+            <div class="form-group">
+                <label for="jwtToken">JWT Token:</label>
+                <input type="text" id="jwtToken" placeholder="输入JWT认证令牌">
+            </div>
+            <button onclick="saveToken()">保存Token</button>
+            <button onclick="loadInitialData()">加载初始数据</button>
+            <div id="authStatus" class="response"></div>
+        </div>
+        
+        <div class="section">
+            <h2>创建游戏会话</h2>
+            <div class="info-box">
+                此接口用于创建一个新的游戏会话。如果是AI对战，可不填写对手ID。
+                仅需提供有效的用户ID和卡组ID即可创建游戏。
+            </div>
+            <div class="form-group">
+                <label for="player2Id">对手ID (留空表示AI对战):</label>
+                <select id="player2Id" onchange="handlePlayer2Select(this)">
+                    <option value="">选择对手 (AI对战)</option>
+                    <option value="refresh">刷新用户列表</option>
+                    <!-- 动态用户选项将通过JavaScript添加 -->
+                </select>
+                <input type="text" id="player2IdText" placeholder="或输入对手用户ID" style="margin-top: 5px;">
+                <button type="button" onclick="loadUsers()" style="margin-top: 5px;">刷新用户列表</button>
+            </div>
+            <div class="form-group">
+                <label for="deck1Id">玩家1卡组ID:</label>
+                <select id="deck1Id" onchange="handleDeck1Select(this)">
+                    <option value="">选择玩家1的卡组</option>
+                    <option value="refresh">刷新卡组列表</option>
+                    <!-- 动态卡组选项将通过JavaScript添加 -->
+                </select>
+                <input type="text" id="deck1IdText" placeholder="或输入玩家1的卡组ID" style="margin-top: 5px;">
+            </div>
+            <div class="form-group">
+                <label for="deck2Id">玩家2卡组ID (AI对战可选):</label>
+                <select id="deck2Id" onchange="handleDeck2Select(this)">
+                    <option value="">选择玩家2的卡组</option>
+                    <option value="refresh">刷新卡组列表</option>
+                    <!-- 动态卡组选项将通过JavaScript添加 -->
+                </select>
+                <input type="text" id="deck2IdText" placeholder="或输入玩家2的卡组ID" style="margin-top: 5px;">
+            </div>
+            <button onclick="createGameSession()">创建游戏会话</button>
+            <div id="createGameResponse" class="response"></div>
+        </div>
+        
+        <div class="section">
+            <h2>获取游戏状态</h2>
+            <div class="info-box">
+                获取指定游戏会话的当前状态。需要提供有效的游戏会话ID。
+            </div>
+            <div class="form-group">
+                <label for="gameSessionId">游戏会话ID:</label>
+                <select id="gameSessionId" onchange="handleGameSessionSelect(this)">
+                    <option value="">选择游戏会话</option>
+                    <option value="refresh">刷新游戏列表</option>
+                    <!-- 动态游戏选项将通过JavaScript添加 -->
+                </select>
+                <input type="text" id="gameSessionIdText" placeholder="或输入游戏会话ID" style="margin-top: 5px;">
+            </div>
+            <button onclick="getGameState()">获取游戏状态</button>
+            <div id="getGameStateResponse" class="response"></div>
+            <div id="gameStateDisplay" class="game-state-display hidden"></div>
+        </div>
+        
+        <div class="section">
+            <h2>提交玩家操作</h2>
+            <div class="info-box">
+                提交玩家在当前游戏中的操作。请确保提供的载荷格式正确，
+                并与所选操作类型匹配。
+            </div>
+            <div class="form-group">
+                <label for="actionGameSessionId">游戏会话ID:</label>
+                <select id="actionGameSessionId" onchange="handleActionGameSessionSelect(this)">
+                    <option value="">选择游戏会话</option>
+                    <option value="refresh">刷新游戏列表</option>
+                    <!-- 动态游戏选项将通过JavaScript添加 -->
+                </select>
+                <input type="text" id="actionGameSessionIdText" placeholder="或输入游戏会话ID" style="margin-top: 5px;">
+            </div>
+            <div class="form-group">
+                <label for="actionType">操作类型:</label>
+                <select id="actionType" onchange="updatePayloadHelper()">
+                    <option value="PLAY_CARD">打出卡牌</option>
+                    <option value="USE_SKILL">使用技能</option>
+                    <option value="SWITCH_CHARACTER">切换角色</option>
+                    <option value="PASS">结束回合</option>
+                    <option value="REROLL_DICE">重投骰子</option>
+                    <option value="ELEMENTAL_TUNING">元素调和</option>
+                    <option value="REPLACE_CARDS">替换手牌</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="actionPayload">操作载荷 (JSON格式):</label>
+                <textarea id="actionPayload" rows="4" placeholder='例如: {"card_id": "card123"} 或 {"skill_id": "skill456"}'></textarea>
+            </div>
+            <div class="payload-helper">
+                <strong>操作载荷示例:</strong>
+                <div class="payload-example" onclick='fillPayloadExample("{\"card_id\": \"card123\"}")'>打出卡牌示例</div>
+                <div class="payload-example" onclick='fillPayloadExample("{\"skill_id\": \"skill456\"}")'>使用技能示例</div>
+                <div class="payload-example" onclick='fillPayloadExample("{\"character_index\": 1}")'>切换角色示例</div>
+                <div class="payload-example" onclick='fillPayloadExample("{\"dice_indices\": [0, 1]}")'>重投骰子示例</div>
+                <div class="payload-example" onclick='fillPayloadExample("{\"card_index\": 0}")'>元素调和示例</div>
+                <div class="payload-example" onclick='fillPayloadExample("{\"card_ids\": ["card1", "card2"]}")'>替换手牌示例</div>
+            </div>
+            <button onclick="submitAction()">提交操作</button>
+            <div id="submitActionResponse" class="response"></div>
+        </div>
+        
+        <div class="section">
+            <h2>结束游戏</h2>
+            <div class="info-box">
+                强制结束指定的游戏会话。
+            </div>
+            <div class="form-group">
+                <label for="endGameSessionId">游戏会话ID:</label>
+                <select id="endGameSessionId" onchange="handleEndGameSelect(this)">
+                    <option value="">选择游戏会话</option>
+                    <option value="refresh">刷新游戏列表</option>
+                    <!-- 动态游戏选项将通过JavaScript添加 -->
+                </select>
+                <input type="text" id="endGameSessionIdText" placeholder="或输入游戏会话ID" style="margin-top: 5px;">
+            </div>
+            <button onclick="endGame()">结束游戏</button>
+            <div id="endGameResponse" class="response"></div>
+        </div>
+        
+        <div class="section">
+            <h2>获取回放列表</h2>
+            <div class="info-box">
+                获取当前用户参与的所有游戏回放列表。
+            </div>
+            <button onclick="getReplayList()">获取回放列表</button>
+            <button class="secondary-btn" onclick="loadUserDecks()">刷新卡组列表</button>
+            <button class="secondary-btn" onclick="loadUsers()">刷新用户列表</button>
+            <div id="replayListResponse" class="response"></div>
+        </div>
+        
+        <div class="section">
+            <h2>获取特定回放</h2>
+            <div class="info-box">
+                获取指定ID的游戏回放详情。
+            </div>
+            <div class="form-group">
+                <label for="replayId">回放ID:</label>
+                <select id="replayId" onchange="handleReplaySelect(this)">
+                    <option value="">选择回放</option>
+                    <option value="refresh">刷新回放列表</option>
+                    <!-- 动态回放选项将通过JavaScript添加 -->
+                </select>
+                <input type="text" id="replayIdText" placeholder="或输入回放ID" style="margin-top: 5px;">
+            </div>
+            <button onclick="getReplay()">获取回放</button>
+            <div id="replayResponse" class="response"></div>
+        </div>
+        
+        <div class="section">
+            <h2>观战功能</h2>
+            <div class="info-box">
+                加入观战指定的游戏会话，或获取当前可观看的游戏列表。
+            </div>
+            <div class="form-group">
+                <label for="spectateGameSessionId">要观战的游戏会话ID:</label>
+                <select id="spectateGameSessionId" onchange="handleSpectateSelect(this)">
+                    <option value="">选择游戏会话</option>
+                    <option value="refresh">刷新游戏列表</option>
+                    <!-- 动态游戏选项将通过JavaScript添加 -->
+                </select>
+                <input type="text" id="spectateGameSessionIdText" placeholder="或输入游戏会话ID" style="margin-top: 5px;">
+            </div>
+            <button onclick="joinSpectate()">加入观战</button>
+            <div id="spectateResponse" class="response"></div>
+            
+            <button onclick="getActiveGames()" style="margin-top: 10px;">获取可观看游戏</button>
+            <div id="activeGamesResponse" class="response"></div>
+        </div>
+    </div>
+
+    <!-- 按正确顺序加载模块 -->
+    <script src="/game_test_static/utils.js"></script>
+    <script src="/game_test_static/user_deck_mgmt.js"></script>
+    <script src="/game_test_static/game_session_mgmt.js"></script>
+    <script src="/game_test_static/handlers.js"></script>
+    <script src="/game_test_static/api_operations.js"></script>
+</body>
+</html>
