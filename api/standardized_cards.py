@@ -873,7 +873,7 @@ def get_user_decks():
                     "id": deck.id,
                     "name": deck.name,
                     "description": deck.description,
-                    "cards": deck.card_ids if deck.card_ids else [],
+                    "cards": deck.cards if deck.cards else [],
                     "created_at": deck.created_at.isoformat(),
                     "updated_at": deck.updated_at.isoformat(),
                 }
@@ -1004,7 +1004,7 @@ def update_deck(deck_id):
         name = data.get("name", deck.name)
         description = data.get("description", deck.description)
         card_list = data.get(
-            "cards", (json.loads(deck.card_ids) if deck.card_ids and isinstance(deck.card_ids, str) else (deck.card_ids if deck.card_ids else []))
+            "cards", (json.loads(deck.cards) if deck.cards and isinstance(deck.cards, str) else (deck.cards if deck.cards else []))
         )
 
         # 使用新的验证系统验证卡组
@@ -1080,8 +1080,8 @@ def update_deck(deck_id):
                     "id": updated_deck.id,
                     "name": updated_deck.name,
                     "description": updated_deck.description,
-                    "cards": json.loads(updated_deck.card_ids) if updated_deck.card_ids and isinstance(updated_deck.card_ids, str) else (updated_deck.card_ids if updated_deck.card_ids else [])
-                    if updated_deck.card_ids
+                    "cards": json.loads(updated_deck.cards) if updated_deck.cards and isinstance(updated_deck.cards, str) else (updated_deck.cards if updated_deck.cards else [])
+                    if updated_deck.cards
                     else [],
                     "created_at": updated_deck.created_at.isoformat(),
                     "updated_at": updated_deck.updated_at.isoformat(),
@@ -1130,7 +1130,7 @@ def get_deck_by_id(deck_id):
             return jsonify({"error": "卡组不存在或无权限访问"}), 404
 
         # 获取卡组中的卡牌详情
-        card_list = (json.loads(deck.card_ids) if deck.card_ids and isinstance(deck.card_ids, str) else (deck.card_ids if deck.card_ids else []))
+        card_list = (json.loads(deck.cards) if deck.cards and isinstance(deck.cards, str) else (deck.cards if deck.cards else []))
 
         # 根据卡ID获取完整的卡牌信息
         cards_query = CardData.query.filter(CardData.id.in_(card_list)).all()
