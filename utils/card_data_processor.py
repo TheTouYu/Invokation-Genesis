@@ -4,7 +4,7 @@
 """
 import json
 import os
-import logging
+from utils.logger import get_logger
 from typing import List, Dict, Any
 from models.game_models import Card as GameCard
 import uuid
@@ -14,6 +14,7 @@ class CardDataProcessor:
     """卡牌数据处理器，统一处理从源数据到数据库的转换"""
     
     def __init__(self):
+        self.logger = get_logger(__name__)
         self.card_types_map = {
             "角色牌": "角色牌",
             "事件牌": "事件牌", 
@@ -233,7 +234,7 @@ class CardDataProcessor:
                 processed_card = self.standardize_character_card(char_data)
                 processed_cards.append(processed_card)
             except Exception as e:
-                logging.error(f"处理角色卡 {char_data.get('name', 'Unknown')} 时出错: {str(e)}")
+                self.logger.error(f"处理角色卡 {char_data.get('name', 'Unknown')} 时出错: {str(e)}")
                 continue
         
         return processed_cards
@@ -247,7 +248,7 @@ class CardDataProcessor:
                 processed_card = self.standardize_action_card(card_data, card_type)
                 processed_cards.append(processed_card)
             except Exception as e:
-                logging.error(f"处理{card_type} {card_data.get('name', 'Unknown')} 时出错: {str(e)}")
+                self.logger.error(f"处理{card_type} {card_data.get('name', 'Unknown')} 时出错: {str(e)}")
                 continue
         
         return processed_cards

@@ -8,7 +8,7 @@ from dal import db_dal
 from utils.decorators import token_required
 from models.game_models import Card
 import uuid
-import logging
+from utils.logger import get_logger
 
 local_game_bp = Blueprint('local_game', __name__)
 
@@ -18,7 +18,7 @@ game_engine = GameEngine()
 # 创建卡组验证系统实例
 deck_validation = DeckValidationSystem()
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 @local_game_bp.route('/api/game_sessions', methods=['POST'])

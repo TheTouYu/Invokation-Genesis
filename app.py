@@ -1,5 +1,6 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request, g
 import logging
+import uuid
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from flask_socketio import SocketIO
@@ -18,6 +19,7 @@ def create_app():
     app.config["JWT_SECRET_KEY"] = os.environ.get(
         "JWT_SECRET_KEY", "super-secret-key-for-development"
     )
+    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = 7 * 24 * 60 * 60  # 一周（以秒为单位）
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
     # 初始化数据库管理器
@@ -30,6 +32,56 @@ def create_app():
 
     # 配置日志
     logging.basicConfig(level=logging.INFO)
+
+    # 导入日志工具
+    from utils.logger import (
+        RequestIdFilter,
+        add_request_id_to_context,
+        setup_sqlalchemy_logger,
+        CustomFormatter,
+    )
+
+    # 为根记录器添加request_id过滤器
+    request_id_filter = RequestIdFilter()
+    logging.getLogger().addFilter(request_id_filter)
+
+    # 为根记录器设置自定义格式化器
+    formatter = CustomFormatter(
+        "%(asctime)s - %(name)s - %(levelname)s - [Request-ID: %(request_id)s] - %(message)s"
+    )
+    for handler in logging.getLogger().handlers:
+        handler.setFormatter(formatter)
+
+    # 为Flask的app logger也添加过滤器和格式化器
+    app.logger.addFilter(request_id_filter)
+    for handler in app.logger.handlers:
+        handler.setFormatter(formatter)
+
+    # 在应用上下文中添加中间件
+    @app.before_request
+    def add_request_id():
+        add_request_id_to_context()
+        # 确保当前请求ID在上下文中可用
+        from utils.logger import _request_id_var
+
+        request_id = getattr(g, "request_id", "N/A")
+        print(f"set logging request_id: {request_id}")
+        _request_id_var.set(request_id)
+        # 设置SQLAlchemy日志记录器，包含request_id
+        setup_sqlalchemy_logger()
+
+    @app.before_request
+    def log_request_info():
+        app.logger.info(
+            f"Request: {request.method} {request.url}, Headers: {dict(request.headers)}"
+        )
+
+    @app.after_request
+    def log_response_info(response):
+        app.logger.info(
+            f"Response: Status {response.status_code}, Content-Type: {response.content_type}"
+        )
+        return response
 
     # 在应用上下文中导入模型和蓝图
     with app.app_context():
@@ -52,6 +104,30 @@ def create_app():
         Deck = model_container.Deck
         GameHistory = model_container.GameHistory
 
+        # 直接为SQLAlchemy引擎的日志记录器设置RequestIdFilter
+        from utils.logger import RequestIdFilter
+        import logging as log_module
+
+        # 获取SQLAlchemy引擎的日志记录器
+        sql_logger = log_module.getLogger("sqlalchemy.engine")
+
+        # 确保只有一个RequestIdFilter实例
+        existing_filters = [
+            f for f in sql_logger.filters if isinstance(f, RequestIdFilter)
+        ]
+        if not existing_filters:
+            # 添加RequestIdFilter到SQLAlchemy日志记录器
+            sql_logger.addFilter(RequestIdFilter())
+
+        # 为SQLAlchemy引擎的日志记录器设置自定义格式化器
+        from utils.logger import CustomFormatter
+
+        formatter = CustomFormatter(
+            "%(asctime)s - %(name)s - %(levelname)s - [Request-ID: %(request_id)s] - %(message)s"
+        )
+        for handler in sql_logger.handlers:
+            handler.setFormatter(formatter)
+
         # 导入并注册蓝图
         try:
             from api.auth import auth_bp
@@ -60,11 +136,11 @@ def create_app():
         except ImportError as e:
             logging.warning(f"Could not import auth blueprint: {e}")
 
-        # 使用新的标准化API蓝图 (v1)
+        # 使用新的标准化API蓝图 (v2)
         try:
-            from api.standardized_cards import cards_bp
+            from api.v2.cards import cards_bp
 
-            app.register_blueprint(cards_bp, url_prefix="/api/v1")
+            app.register_blueprint(cards_bp, url_prefix="/api/v2")
         except ImportError as e:
             logging.error(f"Could not import standardized cards blueprint: {e}")
 

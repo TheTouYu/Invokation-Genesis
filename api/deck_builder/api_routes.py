@@ -3,7 +3,7 @@
 使用数据库作为统一数据源，替代原有的文件读取方式
 """
 
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, g
 import json
 from utils.deck_validator import validate_deck_composition
 from utils.card_data_processor import (
@@ -13,6 +13,7 @@ from utils.card_data_processor import (
 )
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from dal import db_dal
+from utils.logger import get_logger, log_api_call
 
 deck_builder_api = Blueprint("deck_builder_api", __name__)
 
@@ -73,12 +74,19 @@ def extract_element_from_region(region):
 
 
 @deck_builder_api.route("/api/deck/validate", methods=["POST"])
+@log_api_call
 def validate_deck_api():
     """验证一个卡组组成基于游戏规则"""
+    logger = get_logger(__name__)
+    request_id = getattr(g, 'request_id', 'N/A')
+    logger.info(f"Deck validation request, Request-ID: {request_id}")
+    
     try:
         data = request.get_json()
         character_ids = data.get("characters", [])
         card_ids = data.get("cards", [])
+
+        logger.info(f"Validating deck with {len(character_ids)} characters and {len(card_ids)} cards, Request-ID: {request_id}")
 
         # 转换为验证器期望的格式
         deck_data = {
@@ -89,6 +97,8 @@ def validate_deck_api():
 
         # 使用现有的验证函数
         validation_result = validate_deck_composition(deck_data)
+        
+        logger.info(f"Deck validation completed with result: {validation_result['is_valid']}, Request-ID: {request_id}")
 
         return jsonify(
             {
@@ -131,6 +141,7 @@ def validate_deck_api():
         )
 
     except Exception as e:
+        logger.error(f"Deck validation failed with error: {str(e)}, Request-ID: {request_id}")
         return jsonify(
             {
                 "valid": False,

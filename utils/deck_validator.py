@@ -5,6 +5,7 @@
 from typing import List, Dict, Any
 from game_engine.deck_validation import DeckValidationSystem
 from models.game_models import Card
+from utils.logger import get_logger
 
 
 def validate_deck_api(deck: List[Dict[str, Any]]) -> Dict[str, Any]:
@@ -86,6 +87,9 @@ def validate_deck_composition(deck_data: Dict[str, Any]) -> Dict[str, Any]:
     Returns:
         验证结果字典
     """
+    logger = get_logger(__name__)
+    logger.info(f"Starting deck validation for {len(deck_data.get('character_ids', []))} characters and {len(deck_data.get('card_ids', []))} cards")
+    
     try:
         # 先检查是否可以导入数据库模型
         try:
@@ -97,16 +101,20 @@ def validate_deck_composition(deck_data: Dict[str, Any]) -> Dict[str, Any]:
             # 从数据库中获取角色卡信息 - 使用ID进行查询
             character_cards = []
             if deck_data.get('character_ids'):
+                logger.info(f"Querying {len(deck_data['character_ids'])} character cards from database")
                 character_cards = CardData.query.filter(
                     CardData.id.in_(deck_data['character_ids'])
                 ).all()
+                logger.info(f"Found {len(character_cards)} character cards in database")
             
             # 从数据库中获取其他卡牌信息 - 使用ID进行查询
             action_cards = []
             if deck_data.get('card_ids'):
+                logger.info(f"Querying {len(deck_data['card_ids'])} action cards from database")
                 action_cards = CardData.query.filter(
                     CardData.id.in_(deck_data['card_ids'])
                 ).all()
+                logger.info(f"Found {len(action_cards)} action cards in database")
 
             # 将数据库对象转换为Card对象
             all_cards = []
@@ -149,7 +157,7 @@ def validate_deck_composition(deck_data: Dict[str, Any]) -> Dict[str, Any]:
                             try:
                                 skills_data = json.loads(card.skills)
                             except json.JSONDecodeError:
-                                print(f"Error parsing skills for {card.name}: not valid JSON")
+                                logger.warning(f"Error parsing skills for {card.name}: not valid JSON")
                                 skills_data = []
                         
                         # Look for element in the first skill's cost
@@ -195,7 +203,7 @@ def validate_deck_composition(deck_data: Dict[str, Any]) -> Dict[str, Any]:
                                                 element_type = element_type_candidate
                                         break
                     except Exception as e:
-                        print(f"Error extracting element from skills: {e}")
+                        logger.error(f"Error extracting element from skills: {e}")
                         import traceback
                         traceback.print_exc()
                         pass  # Keep element_type as whatever was found from db_element_type
@@ -214,7 +222,9 @@ def validate_deck_composition(deck_data: Dict[str, Any]) -> Dict[str, Any]:
                 )
                 
                 # 添加多张相同的角色卡（如果用户选择了多张）
-                count = deck_data['character_ids'].count(card.id)  # Use card ID
+                str_card_id = str(card.id)  # Ensure string comparison
+                count = deck_data['character_ids'].count(str_card_id)
+                logger.debug(f"Adding {count} copies of character card {card.name} (ID: {card.id})")
                 for _ in range(count):
                     all_cards.append(card_obj)
             
@@ -230,9 +240,13 @@ def validate_deck_composition(deck_data: Dict[str, Any]) -> Dict[str, Any]:
                     character_subtype=getattr(card, 'character_subtype', None)
                 )
                 # 添加多张相同的行动卡（如果用户选择了多张）
-                count = deck_data['card_ids'].count(card.id)  # Use card ID
+                str_card_id = str(card.id)  # Ensure string comparison
+                count = deck_data['card_ids'].count(str_card_id)
+                logger.debug(f"Adding {count} copies of action card {card.name} (ID: {card.id})")
                 for _ in range(count):
                     all_cards.append(card_obj)
+
+            logger.info(f"Total cards prepared for validation: {len(all_cards)}")
 
             # 创建验证系统实例并验证
             validator = DeckValidationSystem()
@@ -262,13 +276,16 @@ def validate_deck_composition(deck_data: Dict[str, Any]) -> Dict[str, Any]:
             if 'errors' not in result:
                 result['errors'] = []
             
+            logger.info(f"Deck validation completed with result: {result['is_valid']}")
             return result
         
-        except ImportError:
+        except ImportError as e:
+            logger.error(f"Could not import database models, using simplified validation: {e}")
             # 如果无法导入数据库模型，使用简化验证
             return _validate_deck_by_id_counts(deck_data)
     
     except Exception as e:
+        logger.error(f"Deck validation failed: {str(e)}")
         return {
             "is_valid": False,
             "errors": [f"验证过程中出现错误: {str(e)}"],

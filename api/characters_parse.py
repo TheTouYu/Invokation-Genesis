@@ -2,11 +2,13 @@ import requests
 from bs4 import BeautifulSoup
 from .utis import _parse_costs
 import re
-import logging
+from utils.logger import get_logger
 
 
 # 配置
 ROLE_TAB_SELECTOR = "div.resp-tab-content:nth-child(1)"  # 第一个 Tab：角色牌
+
+logger = get_logger(__name__)
 
 
 def fetch_html(url: str) -> str:
@@ -19,7 +21,7 @@ def fetch_html(url: str) -> str:
         resp.encoding = "utf-8"
         return resp.text
     except Exception as e:
-        logging.error(f"Failed to fetch {url}: {e}")
+        logger.error(f"Failed to fetch {url}: {e}")
         raise
 
 
@@ -41,7 +43,7 @@ def parse_characters(html: str):
 
     cards = tab_container.select(".kapai-data")
     if not cards:
-        logging.warning("未找到任何 .kapai-data 角色卡片")
+        logger.warning("未找到任何 .kapai-data 角色卡片")
 
     characters = []
     for card in cards:
@@ -95,7 +97,7 @@ def parse_characters(html: str):
                 }
             )
         except Exception as e:
-            logging.exception(f"解析角色卡失败: {e}")
+            logger.exception(f"解析角色卡失败: {e}")
             continue  # 跳过错误卡片，继续处理
 
     return characters

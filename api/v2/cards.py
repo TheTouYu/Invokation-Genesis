@@ -3,9 +3,10 @@ API v2 - 主要卡牌功能
 """
 import json
 import random
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, g
 from flask_jwt_extended import jwt_required
 from .utils import get_models, extract_card_info, apply_filters
+from utils.logger import get_logger, log_api_call
 
 
 cards_bp = Blueprint("standardized_cards_v2", __name__)
@@ -13,6 +14,7 @@ cards_bp = Blueprint("standardized_cards_v2", __name__)
 
 @cards_bp.route("/cards", methods=["GET"])
 @jwt_required()
+@log_api_call
 def get_all_cards():
     """
     获取卡牌数据 - 支持多种过滤条件和分页
@@ -29,6 +31,11 @@ def get_all_cards():
     - page: 页码 (默认 1)
     - per_page: 每页数量 (默认 20, 最大 100)
     """
+    logger = get_logger(__name__)
+    request_id = getattr(g, 'request_id', 'N/A')
+    
+    logger.info(f"Fetch cards request with filters: {dict(request.args)}, Request-ID: {request_id}")
+    
     try:
         # 获取查询参数
         filters = {
@@ -48,6 +55,8 @@ def get_all_cards():
             request.args.get("per_page", 20, type=int), 100
         )  # 限制最大每页数量
 
+        logger.info(f"Fetching cards with page: {page}, per_page: {per_page}, Request-ID: {request_id}")
+
         # 构建查询
         CardData, Deck = get_models()
         query = CardData.query.filter(CardData.is_active == True)
@@ -60,6 +69,8 @@ def get_all_cards():
 
         # 转换为标准化格式
         result = [extract_card_info(card) for card in cards.items]
+        
+        logger.info(f"Successfully fetched {len(result)} cards, Request-ID: {request_id}")
 
         return jsonify(
             {
@@ -73,33 +84,49 @@ def get_all_cards():
             }
         ), 200
     except Exception as e:
+        logger.error(f"Failed to fetch cards: {str(e)}, Request-ID: {request_id}")
         return jsonify({"error": str(e)}), 500
 
 
 @cards_bp.route("/cards/<card_id>", methods=["GET"])
 @jwt_required()
+@log_api_call
 def get_card_by_id(card_id):
     """
     根据ID获取特定卡牌信息
     """
+    logger = get_logger(__name__)
+    request_id = getattr(g, 'request_id', 'N/A')
+    
+    logger.info(f"Fetch card by ID: {card_id}, Request-ID: {request_id}")
+    
     try:
         CardData, Deck = get_models()
         card = CardData.query.filter_by(id=card_id, is_active=True).first()
         if not card:
+            logger.warning(f"Card with ID {card_id} not found, Request-ID: {request_id}")
             return jsonify({"error": "卡牌不存在"}), 404
 
         card_data = extract_card_info(card)
+        logger.info(f"Successfully fetched card: {card.name}, Request-ID: {request_id}")
         return jsonify({"card": card_data}), 200
     except Exception as e:
+        logger.error(f"Failed to fetch card {card_id}: {str(e)}, Request-ID: {request_id}")
         return jsonify({"error": str(e)}), 500
 
 
 @cards_bp.route("/cards/types", methods=["GET"])
 @jwt_required()
+@log_api_call
 def get_card_types():
     """
     获取所有卡牌类型列表
     """
+    logger = get_logger(__name__)
+    request_id = getattr(g, 'request_id', 'N/A')
+    
+    logger.info(f"Fetch card types request, Request-ID: {request_id}")
+    
     try:
         CardData, Deck = get_models()
         from database_manager import db_manager
@@ -112,17 +139,25 @@ def get_card_types():
             .all()
         )
         type_list = [t[0] for t in types if t[0]]
+        logger.info(f"Successfully fetched {len(type_list)} card types, Request-ID: {request_id}")
         return jsonify({"types": type_list}), 200
     except Exception as e:
+        logger.error(f"Failed to fetch card types: {str(e)}, Request-ID: {request_id}")
         return jsonify({"error": str(e)}), 500
 
 
 @cards_bp.route("/cards/elements", methods=["GET"])
 @jwt_required()
+@log_api_call
 def get_card_elements():
     """
     获取所有元素类型列表
     """
+    logger = get_logger(__name__)
+    request_id = getattr(g, 'request_id', 'N/A')
+    
+    logger.info(f"Fetch card elements request, Request-ID: {request_id}")
+    
     try:
         CardData, Deck = get_models()
         from database_manager import db_manager
@@ -135,17 +170,25 @@ def get_card_elements():
             .all()
         )
         element_list = [e[0] for e in elements if e[0]]
+        logger.info(f"Successfully fetched {len(element_list)} card elements, Request-ID: {request_id}")
         return jsonify({"elements": element_list}), 200
     except Exception as e:
+        logger.error(f"Failed to fetch card elements: {str(e)}, Request-ID: {request_id}")
         return jsonify({"error": str(e)}), 500
 
 
 @cards_bp.route("/cards/countries", methods=["GET"])
 @jwt_required()
+@log_api_call
 def get_card_countries():
     """
     获取所有国家列表
     """
+    logger = get_logger(__name__)
+    request_id = getattr(g, 'request_id', 'N/A')
+    
+    logger.info(f"Fetch card countries request, Request-ID: {request_id}")
+    
     try:
         CardData, Deck = get_models()
         # 从weapon_type和character_subtype字段中提取国家信息
@@ -177,17 +220,25 @@ def get_card_countries():
                     if country in card.character_subtype:
                         countries.add(country)
 
+        logger.info(f"Successfully fetched {len(countries)} card countries, Request-ID: {request_id}")
         return jsonify({"countries": sorted(list(countries))}), 200
     except Exception as e:
+        logger.error(f"Failed to fetch card countries: {str(e)}, Request-ID: {request_id}")
         return jsonify({"error": str(e)}), 500
 
 
 @cards_bp.route("/cards/weapon_types", methods=["GET"])
 @jwt_required()
+@log_api_call
 def get_weapon_types():
     """
     获取所有武器类型列表
     """
+    logger = get_logger(__name__)
+    request_id = getattr(g, 'request_id', 'N/A')
+    
+    logger.info(f"Fetch weapon types request, Request-ID: {request_id}")
+    
     try:
         CardData, Deck = get_models()
         from database_manager import db_manager
@@ -218,17 +269,25 @@ def get_weapon_types():
             if any(keyword in wt for keyword in weapon_type_keywords)
         ]
 
+        logger.info(f"Successfully fetched {len(valid_weapons)} weapon types, Request-ID: {request_id}")
         return jsonify({"weapon_types": sorted(valid_weapons)}), 200
     except Exception as e:
+        logger.error(f"Failed to fetch weapon types: {str(e)}, Request-ID: {request_id}")
         return jsonify({"error": str(e)}), 500
 
 
 @cards_bp.route("/cards/tags", methods=["GET"])
 @jwt_required()
+@log_api_call
 def get_card_tags():
     """
     获取所有卡牌标签 - 用于过滤和搜索
     """
+    logger = get_logger(__name__)
+    request_id = getattr(g, 'request_id', 'N/A')
+    
+    logger.info(f"Fetch card tags request, Request-ID: {request_id}")
+    
     try:
         CardData, Deck = get_models()
         cards = CardData.query.filter(CardData.is_active == True).all()
@@ -281,13 +340,16 @@ def get_card_tags():
                 except (json.JSONDecodeError, TypeError):
                     pass
 
+        logger.info(f"Successfully fetched {len(tags)} card tags, Request-ID: {request_id}")
         return jsonify({"tags": sorted(list(tags))}), 200
     except Exception as e:
+        logger.error(f"Failed to fetch card tags: {str(e)}, Request-ID: {request_id}")
         return jsonify({"error": str(e)}), 500
 
 
 @cards_bp.route("/cards/random", methods=["GET"])
 @jwt_required()
+@log_api_call
 def get_random_cards():
     """
     获取随机卡牌，支持过滤条件
@@ -298,6 +360,11 @@ def get_random_cards():
     - weapon_type: 武器类型
     - count: 获取数量 (默认 1)
     """
+    logger = get_logger(__name__)
+    request_id = getattr(g, 'request_id', 'N/A')
+    
+    logger.info(f"Fetch random cards request with filters: {dict(request.args)}, Request-ID: {request_id}")
+    
     try:
         CardData, Deck = get_models()
         # 获取查询参数
@@ -309,6 +376,7 @@ def get_random_cards():
         }
 
         count = int(request.args.get("count", 1))
+        logger.info(f"Randomly selecting {count} cards, Request-ID: {request_id}")
 
         # 构建查询
         query = CardData.query.filter(CardData.is_active == True)
@@ -327,8 +395,10 @@ def get_random_cards():
         # 转换为标准化格式
         result = [extract_card_info(card) for card in selected_cards]
 
+        logger.info(f"Successfully fetched {len(result)} random cards, Request-ID: {request_id}")
         return jsonify({"cards": result, "total": len(result)}), 200
     except Exception as e:
+        logger.error(f"Failed to fetch random cards: {str(e)}, Request-ID: {request_id}")
         return jsonify({"error": str(e)}), 500
 
 

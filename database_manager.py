@@ -5,6 +5,9 @@ Database management module for centralized database operations
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 import os
+from sqlalchemy import event
+from flask import g
+from utils.logger import set_thread_request_id, get_current_request_id
 
 
 class DatabaseManager:

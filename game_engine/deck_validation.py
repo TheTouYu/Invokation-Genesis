@@ -5,6 +5,7 @@ from typing import List, Dict, Any
 from models.game_models import Card, CharacterCard
 from models.enums import CardType
 import logging
+from utils.logger import get_logger
 
 
 class DeckValidationSystem:
@@ -13,7 +14,7 @@ class DeckValidationSystem:
     """
     
     def __init__(self):
-        self.logger = logging.getLogger(__name__)
+        self.logger = get_logger(__name__)
     
     def validate_deck(self, deck: List[Card]) -> Dict[str, Any]:
         """
@@ -25,6 +26,7 @@ class DeckValidationSystem:
         Returns:
             验证结果字典，包含是否有效和错误信息
         """
+        self.logger.info(f"Starting deck validation for deck with {len(deck)} cards")
         result = {
             "is_valid": True,
             "errors": [],
@@ -42,22 +44,28 @@ class DeckValidationSystem:
         character_cards = [card for card in deck if isinstance(card, CharacterCard) or card.card_type == CardType.CHARACTER]
         action_cards = [card for card in deck if not isinstance(card, CharacterCard) and card.card_type != CardType.CHARACTER]
         
+        self.logger.debug(f"Deck contains {len(character_cards)} character cards and {len(action_cards)} action cards")
+        
         # 验证角色卡数量 (3个不同角色，每个角色只能1张)
         unique_characters = set(c.id for c in character_cards)
         if len(unique_characters) != 3:  # 3个不同角色
             unique_count = len(unique_characters)
+            self.logger.info(f"Character count validation failed: expected 3, got {unique_count}")
             result["errors"].append(f"角色卡应为3个不同角色，当前为{unique_count}个")
             result["is_valid"] = False
             result["rules"]["character_count"] = {"valid": False, "message": f"角色数量为 {unique_count}/3"}
         else:
+            self.logger.info("Character count validation passed")
             result["rules"]["character_count"] = {"valid": True, "message": "角色数量为 3/3"}
         
         # 验证行动卡数量 (总共30张行动牌)
         if len(action_cards) != 30:
+            self.logger.info(f"Action card count validation failed: expected 30, got {len(action_cards)}")
             result["errors"].append(f"行动卡应为30张，当前为{len(action_cards)}张")
             result["is_valid"] = False
             result["rules"]["deck_size"] = {"valid": False, "message": f"行动卡数量为 {len(action_cards)}/30"}
         else:
+            self.logger.info("Action card count validation passed")
             result["rules"]["deck_size"] = {"valid": True, "message": f"行动卡数量为 {len(action_cards)}/30"}
         
         # 验证同名卡牌数量限制（除秘传牌外，每种行动牌最多2张）
@@ -71,6 +79,7 @@ class DeckValidationSystem:
         
         for name, count in card_counts.items():
             if count > 2:
+                self.logger.info(f"Card limit validation failed for {name}: got {count} copies (max 2)")
                 # 检查是否为秘传牌（通常每种只允许1张）
                 if '秘传' in name or 'Legacy' in name:
                     if count > 1:
@@ -82,14 +91,18 @@ class DeckValidationSystem:
         
         # 检查角色数量限制规则
         if len(unique_characters) <= 3:
+            self.logger.info("Character limit validation passed")
             result["rules"]["character_limit"] = {"valid": True, "message": "每个角色限1张"}
         else:
+            self.logger.info(f"Character limit validation failed: {len(unique_characters)} characters (max 3)")
             result["rules"]["character_limit"] = {"valid": False, "message": f"角色数量超出限制: {len(unique_characters)}/3"}
         
         # 检查卡牌数量限制规则
         if len(action_cards) <= 30:
+            self.logger.info("Card limit validation passed")
             result["rules"]["card_limit"] = {"valid": True, "message": "行动牌数量符合要求"}
         else:
+            self.logger.info(f"Action card limit validation failed: {len(action_cards)} cards (max 30)")
             result["rules"]["card_limit"] = {"valid": False, "message": f"行动牌数量超出限制: {len(action_cards)}/30"}
         
         # 验证天赋牌规则：卡组中包含对应角色牌
@@ -100,6 +113,7 @@ class DeckValidationSystem:
                     c.name == card.character_subtype for c in character_cards
                 )
                 if not has_matching_character:
+                    self.logger.info(f"Talent card validation failed for {card.name}: no matching character")
                     result["errors"].append(f"天赋牌「{card.name}」缺少对应的「{card.character_subtype}」角色")
                     result["is_valid"] = False
         
@@ -137,6 +151,7 @@ class DeckValidationSystem:
                         element_name in c.name)
                 ]
                 if len(matching_characters) < 2:
+                    self.logger.info(f"Element resonance validation failed for {card.name}: {len(matching_characters)}/2 required characters")
                     result["errors"].append(f"元素共鸣牌「{card.name}」需要至少2个{element_name}角色，当前只有{len(matching_characters)}个")
                     result["is_valid"] = False
         
@@ -150,6 +165,7 @@ class DeckValidationSystem:
                     if nation_name in c.name
                 ]
                 if len(matching_characters) < 2:
+                    self.logger.info(f"Nationality card validation failed for {card.name}: {len(matching_characters)}/2 required characters")
                     result["errors"].append(f"国家牌「{card.name}」需要至少2个{nation_name}角色，当前只有{len(matching_characters)}个")
                     result["is_valid"] = False
         
@@ -158,10 +174,13 @@ class DeckValidationSystem:
         nation_cards_check = [card for card in action_cards if '国家' in card.name or 'Nation' in card.name]
         
         if element_cards or nation_cards_check:
+            self.logger.info("Elemental synergy validation passed")
             result["rules"]["elemental_synergy"] = {"valid": True, "message": "元素协同检查通过"}
         else:
+            self.logger.info("No elemental synergy cards in deck")
             result["rules"]["elemental_synergy"] = {"valid": True, "message": "无需要元素协同的卡牌"}
         
+        self.logger.info(f"Deck validation completed with result: {result['is_valid']}")
         return result
     
     def _extract_element_from_card(self, card_name: str) -> str:

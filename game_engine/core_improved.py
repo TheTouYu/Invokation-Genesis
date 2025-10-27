@@ -4,7 +4,7 @@
 from typing import Dict, List, Optional, Any
 from models.game_models import GameState, PlayerState, Card, CharacterCard
 from models.enums import GamePhase, PlayerAction, ElementType, CharacterStatus, DamageType
-import logging
+from utils.logger import get_logger
 
 
 class GameEngine:
@@ -14,8 +14,7 @@ class GameEngine:
     
     def __init__(self):
         self.game_states: Dict[str, GameState] = {}  # 存储游戏会话状态
-        logging.basicConfig(level=logging.INFO)
-        self.logger = logging.getLogger(__name__)
+        self.logger = get_logger(__name__)
 
     def create_game_state(self, player1_id: str, player2_id: str, deck1: List[Card], deck2: List[Card]) -> str:
         """

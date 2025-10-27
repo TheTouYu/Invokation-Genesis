@@ -2,10 +2,11 @@
 API v2 - 卡组功能
 """
 import json
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, g
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from dal import db_dal
 from .utils import get_models, extract_card_info
+from utils.logger import get_logger, log_api_call
 
 
 decks_bp = Blueprint("decks_v2", __name__)
@@ -13,10 +14,16 @@ decks_bp = Blueprint("decks_v2", __name__)
 
 @decks_bp.route("/decks", methods=["GET"])
 @jwt_required()
+@log_api_call
 def get_user_decks():
     """
     获取当前用户的所有卡组
     """
+    logger = get_logger(__name__)
+    request_id = getattr(g, 'request_id', 'N/A')
+    
+    logger.info(f"Fetching user decks request, Request-ID: {request_id}")
+    
     try:
         current_user_id = get_jwt_identity()
 
@@ -34,18 +41,27 @@ def get_user_decks():
                     "updated_at": deck.updated_at.isoformat(),
                 }
             )
+        
+        logger.info(f"Successfully fetched {len(result)} decks for user {current_user_id}, Request-ID: {request_id}")
 
         return jsonify({"decks": result}), 200
     except Exception as e:
+        logger.error(f"Failed to fetch user decks: {str(e)}, Request-ID: {request_id}")
         return jsonify({"error": str(e)}), 500
 
 
 @decks_bp.route("/decks", methods=["POST"])
 @jwt_required()
+@log_api_call
 def create_deck():
     """
     创建新的卡组
     """
+    logger = get_logger(__name__)
+    request_id = getattr(g, 'request_id', 'N/A')
+    
+    logger.info(f"Create deck request, Request-ID: {request_id}")
+    
     try:
         CardData, Deck = get_models()
         current_user_id = get_jwt_identity()
@@ -56,6 +72,7 @@ def create_deck():
         card_list = data.get("cards", [])
 
         if not name:
+            logger.warning(f"Create deck request missing name, Request-ID: {request_id}")
             return jsonify({"error": "卡组名称不能为空"}), 400
 
         # 使用新的验证系统验证卡组
@@ -107,9 +124,12 @@ def create_deck():
             }
             card_data_for_validation.append(card_data)
 
+        logger.info(f"Validating deck with {len(card_list)} cards, Request-ID: {request_id}")
+        
         # 进行详细验证
         validation_result = validate_deck_api(card_data_for_validation)
         if not validation_result["is_valid"]:
+            logger.warning(f"Deck validation failed: {validation_result['errors']}, Request-ID: {request_id}")
             return jsonify(
                 {"error": "卡组验证失败", "details": validation_result["errors"]}
             ), 400
@@ -123,6 +143,8 @@ def create_deck():
                 description=description,
             )
 
+            logger.info(f"Successfully created deck {deck.id} for user {current_user_id}, Request-ID: {request_id}")
+            
             return jsonify(
                 {
                     "message": "卡组创建成功",
@@ -136,18 +158,26 @@ def create_deck():
                 }
             ), 201
         except Exception as e:
+            logger.error(f"Failed to create deck: {str(e)}, Request-ID: {request_id}")
             return jsonify({"error": f"创建卡组失败: {str(e)}"}), 500
 
     except Exception as e:
+        logger.error(f"Create deck request failed with error: {str(e)}, Request-ID: {request_id}")
         return jsonify({"error": str(e)}), 500
 
 
 @decks_bp.route("/decks/<string:deck_id>", methods=["PUT"])
 @jwt_required()
+@log_api_call
 def update_deck(deck_id):
     """
     更新卡组
     """
+    logger = get_logger(__name__)
+    request_id = getattr(g, 'request_id', 'N/A')
+    
+    logger.info(f"Update deck request for deck {deck_id}, Request-ID: {request_id}")
+    
     try:
         CardData, Deck = get_models()
         current_user_id = get_jwt_identity()
@@ -155,6 +185,7 @@ def update_deck(deck_id):
 
         deck = db_dal.decks.get_deck_by_id(deck_id)
         if not deck or deck.user_id != current_user_id:
+            logger.warning(f"Attempt to update non-existent or unauthorized deck {deck_id}, Request-ID: {request_id}")
             return jsonify({"error": "卡组不存在或无权限访问"}), 404
 
         name = data.get("name", deck.name)
@@ -213,9 +244,12 @@ def update_deck(deck_id):
             }
             card_data_for_validation.append(card_data)
 
+        logger.info(f"Validating deck with {len(card_list)} cards for update, Request-ID: {request_id}")
+        
         # 进行详细验证
         validation_result = validate_deck_api(card_data_for_validation)
         if not validation_result["is_valid"]:
+            logger.warning(f"Deck validation failed for update: {validation_result['errors']}, Request-ID: {request_id}")
             return jsonify(
                 {"error": "卡组验证失败", "details": validation_result["errors"]}
             ), 400
@@ -226,9 +260,13 @@ def update_deck(deck_id):
         )
 
         if not success:
+            logger.error(f"Failed to update deck {deck_id}, Request-ID: {request_id}")
             return jsonify({"error": "更新卡组失败"}), 500
 
         updated_deck = db_dal.decks.get_deck_by_id(deck_id)
+        
+        logger.info(f"Successfully updated deck {deck_id}, Request-ID: {request_id}")
+        
         return jsonify(
             {
                 "message": "卡组更新成功",
@@ -245,44 +283,63 @@ def update_deck(deck_id):
             }
         ), 200
     except Exception as e:
+        logger.error(f"Update deck request failed with error: {str(e)}, Request-ID: {request_id}")
         return jsonify({"error": str(e)}), 500
 
 
 @decks_bp.route("/decks/<string:deck_id>", methods=["DELETE"])
 @jwt_required()
+@log_api_call
 def delete_deck(deck_id):
     """
     删除卡组
     """
+    logger = get_logger(__name__)
+    request_id = getattr(g, 'request_id', 'N/A')
+    
+    logger.info(f"Delete deck request for deck {deck_id}, Request-ID: {request_id}")
+    
     try:
         current_user_id = get_jwt_identity()
 
         deck = db_dal.decks.get_deck_by_id(deck_id)
         if not deck or deck.user_id != current_user_id:
+            logger.warning(f"Attempt to delete non-existent or unauthorized deck {deck_id}, Request-ID: {request_id}")
             return jsonify({"error": "卡组不存在或无权限访问"}), 404
 
         success = db_dal.decks.delete_deck(deck_id)
 
         if not success:
+            logger.error(f"Failed to delete deck {deck_id}, Request-ID: {request_id}")
             return jsonify({"error": "删除卡组失败"}), 500
 
+        logger.info(f"Successfully deleted deck {deck_id}, Request-ID: {request_id}")
+        
         return jsonify({"message": "卡组删除成功"}), 200
     except Exception as e:
+        logger.error(f"Delete deck request failed with error: {str(e)}, Request-ID: {request_id}")
         return jsonify({"error": str(e)}), 500
 
 
 @decks_bp.route("/decks/<string:deck_id>", methods=["GET"])
 @jwt_required()
+@log_api_call
 def get_deck_by_id(deck_id):
     """
     获取特定卡组详情
     """
+    logger = get_logger(__name__)
+    request_id = getattr(g, 'request_id', 'N/A')
+    
+    logger.info(f"Fetch specific deck request for deck {deck_id}, Request-ID: {request_id}")
+    
     try:
         CardData, Deck = get_models()
         current_user_id = get_jwt_identity()
 
         deck = db_dal.decks.get_deck_by_id(deck_id)
         if not deck or deck.user_id != current_user_id:
+            logger.warning(f"Attempt to access non-existent or unauthorized deck {deck_id}, Request-ID: {request_id}")
             return jsonify({"error": "卡组不存在或无权限访问"}), 404
 
         # 获取卡组中的卡牌详情
@@ -437,6 +494,8 @@ def get_deck_by_id(deck_id):
 
             card_details.append(result_card)
 
+        logger.info(f"Successfully fetched deck {deck_id} with {len(card_details)} cards, Request-ID: {request_id}")
+        
         return jsonify(
             {
                 "deck": {
@@ -450,15 +509,22 @@ def get_deck_by_id(deck_id):
             }
         ), 200
     except Exception as e:
+        logger.error(f"Fetch specific deck request failed with error: {str(e)}, Request-ID: {request_id}")
         return jsonify({"error": str(e)}), 500
 
 
 @decks_bp.route("/decks/validate", methods=["POST"])
 @jwt_required()
+@log_api_call
 def validate_deck():
     """
     验证卡组是否符合规则
     """
+    logger = get_logger(__name__)
+    request_id = getattr(g, 'request_id', 'N/A')
+    
+    logger.info(f"Validate deck request with {len(request.get_json().get('cards', []))} cards, Request-ID: {request_id}")
+    
     try:
         CardData, Deck = get_models()
         data = request.get_json()
@@ -511,11 +577,16 @@ def validate_deck():
             }
             card_data_for_validation.append(card_data)
 
+        logger.info(f"Validating deck with {len(card_list)} cards, Request-ID: {request_id}")
+        
         # 进行详细验证
         validation_result = validate_deck_api(card_data_for_validation)
 
+        logger.info(f"Deck validation completed with result: {validation_result['is_valid']}, Request-ID: {request_id}")
+        
         return jsonify(validation_result), 200
     except Exception as e:
+        logger.error(f"Deck validation failed with error: {str(e)}, Request-ID: {request_id}")
         return jsonify(
             {"error": str(e), "is_valid": False, "errors": ["验证过程中发生错误"]}
         ), 500

@@ -6,7 +6,7 @@ from models.game_models import GameState, PlayerState, Card, CharacterCard
 from models.enums import GamePhase, PlayerAction, ElementType, CharacterStatus, DamageType
 from game_engine.element_reactions import ElementReactionSystem
 from game_engine.deck_validation import DeckValidationSystem
-import logging
+from utils.logger import get_logger
 
 
 class GameEngine:
@@ -18,8 +18,7 @@ class GameEngine:
         self.game_states: Dict[str, GameState] = {}  # 存储游戏会话状态
         self.element_reaction_system = ElementReactionSystem()  # 元素反应系统
         self.deck_validation_system = DeckValidationSystem()  # 卡组验证系统
-        logging.basicConfig(level=logging.INFO)
-        self.logger = logging.getLogger(__name__)
+        self.logger = get_logger(__name__)
 
     def create_game_state(self, player1_id: str, player2_id: str, deck1: List[Card], deck2: List[Card]) -> str:
         """
